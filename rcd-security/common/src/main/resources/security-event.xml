@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Публикатор событий аутентифкаиции -->
+    <bean id="authenticationEventPublisher" class="org.springframework.security.authentication.DefaultAuthenticationEventPublisher"/>
+    <!-- Слушатель логирования событий аутентификации -->
+    <bean id="authenticationEventListener" class="ru.hflabs.rcd.security.event.AuthenticationEventListener"/>
+
+</beans>

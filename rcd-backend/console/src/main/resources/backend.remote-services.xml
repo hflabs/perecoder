@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+    <!-- Сервис конфигурации динамических свойств -->
+    <bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="systemPropertiesMode">
+            <util:constant static-field="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+        </property>
+    </bean>
+
+    <!-- Абстрактный класс для работы с RMI -->
+    <bean id="rmiRemoteService" class="org.springframework.remoting.rmi.RmiProxyFactoryBean" parent="remoteInvocationBasedAccessor" abstract="true">
+        <property name="lookupStubOnStartup" value="false"/>
+        <property name="refreshStubOnConnectFailure" value="true"/>
+    </bean>
+
+    <!-- Сервис реализации HTTP запросов -->
+    <bean id="httpInvokerRequestExecutor" class="ru.hflabs.util.spring.remoting.httpinvoker.GzipHttpInvokerRequestExecutor"/>
+
+    <!-- Абстрактный класс для работы с RMI over HTTP -->
+    <bean id="httpRemoteService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean" parent="remoteInvocationBasedAccessor" abstract="true">
+        <property name="httpInvokerRequestExecutor" ref="httpInvokerRequestExecutor"/>
+    </bean>
+
+    <!-- Сервис системной информации -->
+    <bean id="remoteVersionService" parent="proxyRemoteService">
+        <property name="target">
+            <bean parent="${server.protocol}RemoteService">
+                <property name="serviceUrl" value="${server.protocol}://${server.host}:${server.port}/rcd/rmi/services/VersionService"/>
+                <property name="serviceInterface" value="ru.hflabs.rcd.service.IVersionService"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Сервис аутентификации -->
+    <bean id="remoteAuthenticationService" parent="proxyRemoteService">
+        <property name="target">
+            <bean parent="${server.protocol}RemoteService">
+                <property name="serviceUrl" value="${server.protocol}://${server.host}:${server.port}/rcd/rmi/services/AuthenticationService"/>
+                <property name="serviceInterface" value="org.springframework.security.authentication.AuthenticationManager"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Сервис управления документами -->
+    <bean id="remoteManagerService" parent="proxyRemoteService">
+        <property name="target">
+            <bean parent="${server.protocol}RemoteService">
+                <property name="serviceUrl" value="${server.protocol}://${server.host}:${server.port}/rcd/rmi/services/ManagerService"/>
+                <property name="serviceInterface" value="ru.hflabs.rcd.service.IManagerService"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Сервис работы с группами справочников -->
+    <bean id="remoteGroupService" parent="proxyRemoteService">
+        <property name="target">
+            <bean parent="${server.protocol}RemoteService">
+                <property name="serviceUrl" value="${server.protocol}://${server.host}:${server.port}/rcd/rmi/services/GroupService"/>
+                <property name="serviceInterface" value="ru.hflabs.rcd.service.document.IGroupService"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Сервис работы со справочниками -->
+    <bean id="remoteDictionaryService" parent="proxyRemoteService">
+        <property name="target">
+            <bean parent="${server.protocol}RemoteService">
+                <property name="serviceUrl" value="${server.protocol}://${server.host}:${server.port}/rcd/rmi/services/DictionaryService"/>
+                <property name="serviceInterface" value="ru.hflabs.rcd.service.document.IDictionaryService"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Сервис работы с МЕТА-полями справочника -->
+    <bean id="remoteMetaFieldServiceService" parent="proxyRemoteService">
+        <property name="target">
+            <bean parent="${server.protocol}RemoteService">
+                <property name="serviceUrl" value="${server.protocol}://${server.host}:${server.port}/rcd/rmi/services/MetaFieldService"/>
+                <property name="serviceInterface" value="ru.hflabs.rcd.service.document.IMetaFieldService"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Сервис работы с записями справочника -->
+    <bean id="remoteRecordService" parent="proxyRemoteService">
+        <property name="target">
+            <bean parent="${server.protocol}RemoteService">
+                <property name="serviceUrl" value="${server.protocol}://${server.host}:${server.port}/rcd/rmi/services/RecordService"/>
+                <property name="serviceInterface" value="ru.hflabs.rcd.service.document.IRecordService"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Сервис работы с наборами правил перекодировки -->
+    <bean id="remoteRecodeRuleSetService" parent="proxyRemoteService">
+        <property name="target">
+            <bean parent="${server.protocol}RemoteService">
+                <property name="serviceUrl" value="${server.protocol}://${server.host}:${server.port}/rcd/rmi/services/RecodeRuleSet"/>
+                <property name="serviceInterface" value="ru.hflabs.rcd.service.rule.IRecodeRuleSetService"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Сервис работы с правилами перекодировки -->
+    <bean id="remoteRecodeRuleService" parent="proxyRemoteService">
+        <property name="target">
+            <bean parent="${server.protocol}RemoteService">
+                <property name="serviceUrl" value="${server.protocol}://${server.host}:${server.port}/rcd/rmi/services/RecodeRule"/>
+                <property name="serviceInterface" value="ru.hflabs.rcd.service.IFilterService"/>
+            </bean>
+        </property>
+    </bean>
+
+</beans>

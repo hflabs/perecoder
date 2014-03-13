@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <xsd:include schemaLocation="rcd-model.xsd"/>
+
+    <xsd:element name="errorMessage" type="WError"/>
+
+    <xsd:element name="versionResponse" type="VersionResponse"/>
+
+    <xsd:element name="recodeRequest" type="RecodeRequest"/>
+    <xsd:element name="recodeByAliasRequest" type="RecodeByAliasRequest"/>
+    <xsd:element name="recodeResponse" type="RecodeResponse"/>
+
+    <xsd:element name="searchGroupsRequest" type="SearchGroupsRequest"/>
+    <xsd:element name="searchGroupsResponse" type="SearchGroupsResponse"/>
+
+    <xsd:element name="getDictionaryRequest" type="xsd:string"/>
+    <xsd:element name="getDictionaryResponse" type="WDictionary"/>
+
+    <xsd:element name="searchDictionariesRequest" type="SearchDictionariesRequest"/>
+    <xsd:element name="searchDictionariesResponse" type="SearchDictionariesResponse"/>
+
+    <xsd:element name="searchRecordsRequest" type="SearchRecordsRequest"/>
+    <xsd:element name="searchRecordsResponse" type="SearchRecordsResponse"/>
+
+    <xsd:element name="searchRulesRequest" type="SearchRulesRequest"/>
+    <xsd:element name="searchRulesResponse" type="SearchRulesResponse"/>
+
+    <xsd:complexType name="VersionResponse">
+        <xsd:sequence>
+            <xsd:element name="version" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>Build version</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="revision" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>Build revision</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="RecodeRequest">
+        <xsd:sequence>
+            <xsd:element name="criteria" type="WRecodeCriteria"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="RecodeByAliasRequest">
+        <xsd:sequence>
+            <xsd:element name="alias" type="xsd:string" nillable="false">
+                <xsd:annotation>
+                    <xsd:documentation>Rule set alias</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="fromValue" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>Recode source value</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="RecodeResponse">
+        <xsd:sequence>
+            <xsd:element name="value" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>Recode result value</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="SearchGroupsRequest">
+        <xsd:annotation>
+            <xsd:documentation>Groups request</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="criteria" type="WSearchCriteria" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="SearchGroupsResponse">
+        <xsd:annotation>
+            <xsd:documentation>Groups response</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="WSearchResponse">
+                <xsd:sequence>
+                    <xsd:element name="group" type="WGroup" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="SearchDictionariesRequest">
+        <xsd:annotation>
+            <xsd:documentation>Search dictionaries request</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="criteria" type="WSearchCriteria" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="SearchDictionariesResponse">
+        <xsd:annotation>
+            <xsd:documentation>Dictionaries response</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="WSearchResponse">
+                <xsd:sequence>
+                    <xsd:element name="dictionary" type="WDictionary" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="SearchRecordsRequest">
+        <xsd:annotation>
+            <xsd:documentation>Search dictionary records request by dictionary ID or name</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="dictionary" type="WDictionaryDefinition"/>
+            <xsd:element name="criteria" type="WSearchCriteria" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="SearchRecordsResponse">
+        <xsd:annotation>
+            <xsd:documentation>Dictionary records response</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="WSearchResponse">
+                <xsd:sequence>
+                    <xsd:element name="record" type="WRecord" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="SearchRulesRequest">
+        <xsd:annotation>
+            <xsd:documentation>Search rules between dictionaries request</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="ruleSet" type="WRuleDefinition"/>
+            <xsd:element name="criteria" type="WSearchCriteria" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="SearchRulesResponse">
+        <xsd:annotation>
+            <xsd:documentation>Rules between dictionaries response</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="WSearchResponse">
+                <xsd:sequence>
+                    <xsd:element name="alias" type="xsd:string"/>
+                    <xsd:element name="fromFieldName" type="xsd:string"/>
+                    <xsd:element name="toFieldName" type="xsd:string"/>
+                    <xsd:element name="defaultRecord" type="WRecord" minOccurs="0"/>
+                    <xsd:element name="rule" type="WRule" minOccurs="0" maxOccurs="unbounded"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+</xsd:schema>

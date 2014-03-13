@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.hflabs.rcd</groupId>
+        <artifactId>rcd-storage</artifactId>
+        <version>3.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>rcd-storage-common</artifactId>
+
+    <packaging>jar</packaging>
+
+    <name>HFLabs RCD common storage module</name>
+    <description>Модуль описывает базовые классы хранилища данных</description>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>ru.hflabs</groupId>
+            <artifactId>utils-spring</artifactId>
+            <version>${ru.hflabs.util.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${aspectj.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>${cglib.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>${springframework.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

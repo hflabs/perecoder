@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Базовый валидатор групп справочников -->
+    <bean id="groupValidator" class="ru.hflabs.rcd.service.document.group.GroupChangeValidator" parent="existedDocumentValidator" abstract="true">
+        <property name="documentService" ref="groupService"/>
+    </bean>
+    <!-- Валидатор создания группы справочников -->
+    <bean id="groupValidator.create" parent="groupValidator">
+        <constructor-arg value="false"/>
+    </bean>
+    <!-- Валидатор обновления группы справочников -->
+    <bean id="groupValidator.update" parent="groupValidator">
+        <constructor-arg value="true"/>
+    </bean>
+    <!-- Валидатор закрытия группы справочников -->
+    <bean id="groupValidator.close" class="ru.hflabs.rcd.service.document.group.GroupCloseValidator" parent="validatorService"/>
+
+    <!-- Сервис работы с группами справочников -->
+    <bean id="groupService" class="ru.hflabs.rcd.service.document.group.GroupService" parent="namedDocumentServiceTemplate">
+        <property name="storageService" ref="groupStorageService"/>
+        <property name="createValidator" ref="groupValidator.create"/>
+        <property name="updateValidator" ref="groupValidator.update"/>
+        <property name="closeValidator" ref="groupValidator.close"/>
+    </bean>
+
+</beans>

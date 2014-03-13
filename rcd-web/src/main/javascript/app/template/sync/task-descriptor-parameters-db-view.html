@@ -1,0 +1,73 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3><%- tc('view.sync.edit.parameters') %></h3>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal">
+        <div class="alert" style="display: none;"></div>
+        <div class="control-group">
+            <label class="control-label" for="task-description"><%- tc('model.sync.descriptor.description') %>:</label>
+            <div class="controls">
+                <input type="text" id="task-description" class="autowidened" data-field="description" value="<%- description %>" autofocus="autofocus">
+                <div class="help-block font-small"><%- getDefaultHint('description') %></div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="parameters-driverName"><%- tc('view.sync.parameters-driverName') %>:</label>
+            <div class="controls">
+                <select size="1" id="parameters-driverName" class="selectpicker" data-field="parameters.driverName" value="<%- parameters.driverName %>">
+                <% _.each(getAvailableValues().driverName, function(driver){ %>
+                    <option value="<%- driver.name %>"<%= (parameters.driverName == driver.name) ? ' selected="selected"' : '' %>><%- driver.description %></option>
+                <% }); %>
+                </select>
+                <div class="help-block font-small"><%- getDefaultHint('parameters.driverName') %></div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="parameters-jdbcUrl"><%- tc('view.sync.parameters-jdbcUrl') %>:</label>
+            <div class="controls">
+                <input type="text" id="parameters-jdbcUrl" class="autowidened" data-field="parameters.jdbcUrl" value="<%- parameters.jdbcUrl %>">
+                <div class="help-block font-small"><%- getDefaultHint('parameters.jdbcUrl') %></div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="parameters-jdbcProperties"><%- tc('view.sync.parameters-jdbcProperties') %>:</label>
+            <div class="controls">
+                <input type="text" id="parameters-jdbcProperties" class="autowidened" data-field="parameters.jdbcProperties" value="<%- parameters.jdbcProperties %>">
+                <div class="help-block font-small"><%- getDefaultHint('parameters.jdbcProperties') %></div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="parameters-username"><%- tc('view.sync.parameters-username') %>:</label>
+            <div class="controls">
+                <input type="text" id="parameters-username" class="autowidened" data-field="parameters.username" value="<%- parameters.username %>">
+                <div class="help-block font-small"><%- getDefaultHint('parameters.username') %></div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="parameters-password"><%- tc('view.sync.parameters-password') %>:</label>
+            <div class="controls">
+                <input type="text" id="parameters-password" class="autowidened" data-field="parameters.password" value="<%- parameters.password %>">
+                <div class="help-block font-small"><%- getDefaultHint('parameters.password') %></div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="parameters-tocTableName"><%- tc('view.sync.parameters-tocTableName') %>:</label>
+            <div class="controls">
+                <input type="text" id="parameters-tocTableName" class="autowidened" data-field="parameters.tocTableName" value="<%- parameters.tocTableName %>">
+                <div class="help-block font-small"><%- getDefaultHint('parameters.tocTableName') %></div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="parameters-timeout"><%- tc('view.sync.parameters-timeout') %>:</label>
+            <div class="controls">
+                <input type="number" id="parameters-timeout" data-field="parameters.timeout" value="<%- parameters.timeout %>">
+                <div class="help-block font-small"><%- getDefaultHint('parameters.timeout') %></div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn pull-left" data-dismiss="modal" data-action="cancel"><%- tc('view.sync.button.cancel') %></button>
+    <button class="btn btn-primary pull-right" data-action="save"><%- tc('view.sync.button.save') %></button>
+</div>

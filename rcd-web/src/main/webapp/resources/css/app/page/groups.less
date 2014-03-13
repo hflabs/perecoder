@@ -1,0 +1,194 @@
+@import "../common/const";
+@import "../common/elements";
+
+[data-page="groups"] {
+
+    .tile-container {
+        margin: 0 -@common-spacing 0 0;
+    }
+    .tile {
+        float: left;
+        width: 33.33%;
+    }
+    @media screen and (min-width: 1560px) {
+        .tile {
+            width: 25%;
+        }
+    }
+
+    article {
+        @background-color: #fafafa;
+        @left-icons-width: 35px;
+        background: @background-color;
+        border: 1px solid #d5d5d5;
+        .rounded(4px);
+        margin: 0 @common-spacing @common-spacing 0;
+        padding: (2 * @common-spacing) (3 * @common-spacing) (2 * @common-spacing) (2 * @common-spacing);
+        position: relative;
+        height: 110px;
+        overflow: hidden;
+        &.empty {
+            .empty-message
+        }
+        .delete-dialog {
+            background: #5c8592;
+            border: 1px solid #55646a;
+            .rounded(4px);
+            color: white;
+            font-size: 20px;
+            line-height: 20px;
+            text-align: center;
+            padding: (2 * @common-spacing) (3 * @common-spacing) (2 * @common-spacing) (2 * @common-spacing);
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 3;
+            .buttons {
+                background: inherit;
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: @common-spacing;
+            }
+            button {
+                background: fade(white, 50%);
+                border: none;
+                .rounded(4px);
+                color: #5c8592;
+                font-size: inherit;
+                margin: @common-spacing;
+                padding: @common-spacing;
+                width: 100px;
+                &:hover{
+                    background: white;
+                }
+            }
+        }
+        header {
+            color: #5f8c9a;
+            font-size: 24px;
+            line-height: 24px;
+            white-space: nowrap;
+            overflow: hidden;
+            padding: 1px 1px 1px @left-icons-width;
+            position: relative;
+            .fader {
+                position: absolute;
+                right: 0;
+                top: 17px;
+                box-shadow: 0 0 30px 20px @background-color;
+            }
+            .icon-32 {
+                float: left;
+                margin-left: -@left-icons-width;
+                padding: 0;
+            }
+            a {
+                color: inherit;
+                display: inline-block;
+                box-sizing: content-box;
+                margin: 5px 0 5px 7px;
+            }
+            input {
+                background: @background-color;
+                border: 1px solid #5f8c9a;
+                //.box-shadow(0 0 2px 2px fadeout(#5f8c9a, 75%));
+                color: inherit;
+                display: block;
+                margin: 0;
+                font-size: 24px;
+                width: 100%;
+                .box-sizing;
+                height: 34px;
+                padding: 4px 24px 4px 6px;
+            }
+            .undo {
+                cursor: pointer;
+                position: absolute;
+                right: 7px;
+                top: 9px;
+                &:hover {
+                    background-position: -32px -128px;
+                }
+            }
+        }
+        .dictionaries {
+            margin: @common-spacing 0 0;
+            .single-lined;
+        }
+        .description-wrapper {
+            color: #a2a2a2;
+            margin: @common-spacing 0 0;
+            padding-left: @left-icons-width;
+            .description {
+                margin: 5px 0 0 7px;
+                word-break: break-all;
+                overflow: hidden;
+                max-height: 40px;
+            }
+            textarea {
+                max-height: 40px;
+                width: 100%;
+                .box-sizing;
+            }
+            [data-mode="edit-description"] {
+                &:hover {
+                    cursor: pointer;
+                    border-bottom: 1px dashed #191919;
+                    color: #191919;
+                }
+            }
+        }
+        .visible-in-hover {
+            display: none;
+            &.edit {
+                position: absolute;
+                top: 32px;
+                z-index: 2;
+            }
+        }
+        &:hover {
+            .visible-in-hover {
+                display: block;
+            }
+        }
+        .icon-16 {
+            &.trash {
+                position: absolute;
+                right: 8px;
+                top: 8px;
+            }
+            &.dictionary {
+                margin-left: 16px;
+                margin-right: @common-spacing;
+                vertical-align: baseline;
+            }
+            &.unmatched {
+                margin-left: @common-spacing;
+            }
+            &.page {
+                float: left;
+                margin-left: -19px;
+            }
+            &.edit {
+                vertical-align: top;
+            }
+        }
+        .total-count {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .unmathed-count {
+            color: #e07174;
+            font-size: 20px;
+            font-weight: bold;
+            margin-left: @common-spacing;
+        }
+    }
+    .message {
+        padding: @common-spacing;
+    }
+
+}

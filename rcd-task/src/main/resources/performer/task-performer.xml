@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Базовый дескриптор задачи -->
+    <bean id="taskDefinitionTemplate" class="ru.hflabs.rcd.model.task.TaskDefinition" abstract="true"/>
+
+    <!-- Базовый класс исполнителя задачи -->
+    <bean id="taskPerformerTemplate" class="ru.hflabs.rcd.task.performer.TaskPerformerTemplate" abstract="true">
+        <property name="taskDefinitionRepository" ref="taskDefinitionRepository"/>
+    </bean>
+
+    <!-- Базовый класс исполнителя задачи синхронизации с внешним источником -->
+    <bean id="synchronizationTaskPerformer"
+          class="ru.hflabs.rcd.task.performer.synchronization.SynchronizationTaskPerformer"
+          parent="taskPerformerTemplate"
+          abstract="true">
+        <!-- Document services -->
+        <property name="historyService" ref="historyService"/>
+        <property name="groupService" ref="groupService"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
+        <property name="metaFieldService" ref="metaFieldService"/>
+        <property name="fieldService" ref="fieldService"/>
+        <!-- Rule services -->
+        <property name="recodeRuleSetService" ref="recodeRuleSetService"/>
+        <property name="recodeRuleService" ref="recodeRuleService"/>
+    </bean>
+
+</beans>

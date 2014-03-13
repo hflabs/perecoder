@@ -1,0 +1,32 @@
+<header class="page-main-header clearfix">
+    <i class="icon-64 content"></i>
+    <h1>
+        <%- fromDictionary.name %><%
+        if (fromGroup.name) {
+        %> <span class="group-name">[<%- fromGroup.name %>]</span><%
+        } %>
+    </h1>
+    <nav class="breadcrumbs">
+        <a href="<%- buildUrl('GROUPS') %>" data-local="true"><%- tc('view.header.groups') %></a> &rarr;
+        <a href="<%- buildUrl('DICTIONARIES', fromGroup.id) %>" data-local="true"><%- fromGroup.name %></a> &rarr;
+        <a href="<%- buildUrl('RECORDS', fromDictionary.id) %>" data-local="true"><%- fromDictionary.name %></a> &rarr;
+        <%- tc('view.recodes.recodeTo') %> <%- toDictionary.name %>
+    </nav>
+</header>
+<div class="toolbar clearfix">
+    <div class="searchbar in-page">
+        <div class="input-wrapper">
+            <input type="text" data-field="filter" placeholder="<%- tc('view.records.filter.placeholder') %>">
+        </div>
+        <i class="icon-16 search"></i>
+        <i class="icon-16 clear"></i>
+    </div>
+    <div data-region="pager" class="upper-paginator"></div>
+</div>
+<div data-field="selection" class="selection">
+    <span data-field="selection-count"></span> <a class="command" data-action="unselect"><%- tc('view.recodes.unselect') %></a></div>
+<div class="spacer clear"></div>
+<div class="source-table-wrapper">
+    <section class="table-wrapper" data-region="records"></section>
+</div>
+<div data-region="popups"></div>

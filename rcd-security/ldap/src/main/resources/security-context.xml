@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+    <!-- Валидатор соединений с LDAP сервером -->
+    <bean id="dirContextValidator" class="org.springframework.ldap.pool.validation.DefaultDirContextValidator">
+        <property name="base" value="$security.ldap{ldap.searchBase}"/>
+        <property name="filter">
+            <bean class="java.text.MessageFormat" factory-method="format">
+                <constructor-arg index="0" type="java.lang.String" value="$security.ldap{ldap.searchFilter}"/>
+                <constructor-arg index="1" value="$security.ldap{ldap.account}"/>
+            </bean>
+        </property>
+        <property name="searchControls">
+            <bean class="javax.naming.directory.SearchControls">
+                <property name="countLimit" value="1"/>
+                <property name="timeLimit" value="500"/>
+                <property name="searchScope">
+                    <util:constant static-field="javax.naming.directory.SearchControls.SUBTREE_SCOPE"/>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Контекст соединения с LDAP сервером -->
+    <bean id="contextSource.ldap" class="org.springframework.security.ldap.DefaultSpringSecurityContextSource">
+        <constructor-arg value="$security.ldap{ldap.url}"/>
+        <property name="userDn" value="$security.ldap{ldap.account}@$security.ldap{ldap.domain}"/>
+        <property name="password" value="$security.ldap{ldap.password}"/>
+        <property name="referral" value="follow"/>
+        <property name="pooled" value="false"/>
+    </bean>
+
+    <!-- Пул соединений с LDAP сервером -->
+    <bean id="contextSource" class="org.springframework.ldap.pool.factory.PoolingContextSource">
+        <!-- Контекст соединения с LDAP сервером -->
+        <property name="contextSource" ref="contextSource.ldap"/>
+        <!-- Валидатор соединений -->
+        <property name="dirContextValidator" ref="dirContextValidator"/>
+        <!-- Настройки пула -->
+        <property name="maxActive" value="$security.ldap{ldap.maxActive}"/>
+        <property name="maxIdle" value="$security.ldap{ldap.maxIdle}"/>
+        <property name="maxWait" value="$security.ldap{ldap.maxWait}"/>
+        <!-- Настройки валидации соединений -->
+        <property name="testOnBorrow" value="$security.ldap{ldap.testOnBorrow}"/>
+        <property name="testWhileIdle" value="$security.ldap{ldap.testWhileIdle}"/>
+        <property name="timeBetweenEvictionRunsMillis" value="$security.ldap{ldap.timeBetweenEvictionRunsMillis}"/>
+    </bean>
+
+    <!-- Трансформер из свойств в карту замены ролей -->
+    <bean id="propertiesToReplacementRolesConverter" class="ru.hflabs.util.spring.core.convert.converter.PropertiesToReverseMapConverter"/>
+
+    <!-- Фильтр замены ролей -->
+    <bean id="replacementRolesFilter" class="ru.hflabs.util.security.userdetails.ldap.filter.ReplacementRolesFilter">
+        <property name="replacement">
+            <bean factory-bean="propertiesToReplacementRolesConverter" factory-method="convert">
+                <constructor-arg type="java.util.Properties" ref="propertyPlaceholderConfigurer.security_ldap2roles"/>
+            </bean>
+        </property>
+        <property name="useOnlyReplacementRoles" value="true"/>
+    </bean>
+
+    <!-- Поиск пользователя по LDAP серверу -->
+    <bean id="ldapUserSearch" class="org.springframework.security.ldap.search.FilterBasedLdapUserSearch">
+        <constructor-arg index="0" value="$security.ldap{ldap.searchBase}"/>
+        <constructor-arg index="1" value="$security.ldap{ldap.searchFilter}"/>
+        <constructor-arg index="2" ref="contextSource.ldap"/>
+    </bean>
+
+    <!-- Сервис аутентификации пользователя -->
+    <bean id="ldapBindAuthenticator" class="ru.hflabs.util.security.providers.ldap.authenticator.LdapBindAuthenticator">
+        <constructor-arg index="0" ref="contextSource"/>
+        <constructor-arg index="1" value=".*data ([\p{XDigit}]+),.*"/>
+        <property name="userSearch" ref="ldapUserSearch"/>
+        <property name="ldapErrorPatternGroup" value="1"/>
+        <property name="exceptions">
+            <util:properties location="classpath:ldap2exceptions.properties"/>
+        </property>
+    </bean>
+
+    <!-- Мэппинг ролей LDAP на роли системы -->
+    <bean id="ldapReplacementRolesMapper" class="ru.hflabs.util.security.userdetails.ldap.LdapRolesMapper">
+        <property name="rolesFilters">
+            <util:list value-type="ru.hflabs.util.security.userdetails.ldap.filter.RolesFilter">
+                <ref local="replacementRolesFilter"/>
+            </util:list>
+        </property>
+    </bean>
+
+    <!-- Поиск групп пользователя по LDAP серверу -->
+    <bean id="ldapAuthoritiesPopulator" class="org.springframework.security.ldap.userdetails.DefaultLdapAuthoritiesPopulator">
+        <constructor-arg index="0" ref="contextSource"/>
+        <constructor-arg index="1" value="$security.ldap{ldap.groupSearchBase}"/>
+        <property name="rolePrefix" value=""/>
+    </bean>
+
+    <!-- Провайдер аутентификации на LDAP сервере -->
+    <bean id="ldapAuthenticationProvider" class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">
+        <constructor-arg index="0" type="org.springframework.security.ldap.authentication.LdapAuthenticator" ref="ldapBindAuthenticator"/>
+        <constructor-arg index="1" type="org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator" ref="ldapAuthoritiesPopulator"/>
+        <property name="userDetailsContextMapper" ref="ldapReplacementRolesMapper"/>
+    </bean>
+
+</beans>

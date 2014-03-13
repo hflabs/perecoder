@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+    <context:component-scan base-package="ru.hflabs.rcd.web"/>
+
+    <!-- Configure annotations -->
+    <mvc:annotation-driven validator="commonValidator">
+        <mvc:message-converters register-defaults="false">
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper" ref="jacksonObjectMapper"/>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!-- Configure interceptors -->
+    <mvc:interceptors>
+        <bean class="ru.hflabs.rcd.web.interceptor.HttpHeadersInterceptor"/>
+    </mvc:interceptors>
+
+    <!-- Default locale resolver -->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver"/>
+
+    <!-- Default multipart resolver -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+
+    <!-- Default view resolver -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="useNotAcceptableStatusCode" value="true"/>
+        <property name="viewResolvers">
+            <util:list>
+                <bean class="org.springframework.web.servlet.view.tiles2.TilesViewResolver">
+                    <property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView"/>
+                </bean>
+            </util:list>
+        </property>
+        <property name="defaultViews">
+            <util:list>
+                <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+                    <property name="objectMapper" ref="jacksonObjectMapper"/>
+                </bean>
+            </util:list>
+        </property>
+    </bean>
+
+    <!-- Tiles configuration -->
+    <bean class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+        <property name="definitions" value="/WEB-INF/tiles.xml"/>
+    </bean>
+
+</beans>

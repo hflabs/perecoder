@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+
+    <definition name="_styles" template="/views/_styles.jsp"/>
+
+    <definition name="dashboard" template="/views/dashboard.jsp"/>
+    <definition name="login" template="/views/login.jsp"/>
+    <definition name="error" template="/views/error.jsp"/>
+
+</tiles-definitions>

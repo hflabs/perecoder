@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+    <import resource="**/security-*.xml"/>
+
+    <!-- Метод определения безопасности -->
+    <sec:global-method-security access-decision-manager-ref="accessDecisionManager" jsr250-annotations="enabled"/>
+
+    <!-- Стратегия аутентификации -->
+    <bean id="securityContextStrategy" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="org.springframework.security.core.context.SecurityContextHolder.setStrategyName"/>
+        <property name="arguments">
+            <util:constant static-field="org.springframework.security.core.context.SecurityContextHolder.MODE_INHERITABLETHREADLOCAL"/>
+        </property>
+    </bean>
+
+    <!-- Менеджер аутентификации -->
+    <bean id="authenticationManager" class="ru.hflabs.util.security.authentication.AuthenticationManagerFactoryBean" depends-on="securityContextStrategy">
+        <property name="authenticationEventPublisher" ref="authenticationEventPublisher"/>
+    </bean>
+    <alias name="authenticationManager" alias="org.springframework.security.authenticationManager"/>
+
+    <!-- Прокси установки фиктивной аутентификации -->
+    <bean id="systemAuthenticationInvocationInterceptor" class="ru.hflabs.rcd.security.SystemAuthenticationInvocationInterceptor"/>
+
+    <!-- Постпроцессор загрузки контекста и установки провайдера системной аутентификации -->
+    <bean class="ru.hflabs.util.security.authentication.SecurityPostProcessor" depends-on="securityContextStrategy">
+        <constructor-arg index="0">
+            <bean class="ru.hflabs.util.security.authentication.SystemRoleNameAuthenticationProvider">
+                <constructor-arg index="0">
+                    <util:constant static-field="ru.hflabs.rcd.Constants.RCD_NAME"/>
+                </constructor-arg>
+                <constructor-arg index="1">
+                    <util:constant static-field="ru.hflabs.rcd.RoleNames.SYSTEM"/>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+        <constructor-arg index="1" ref="accessDecisionManager"/>
+        <property name="order">
+            <util:constant static-field="org.springframework.core.Ordered.LOWEST_PRECEDENCE"/>
+        </property>
+    </bean>
+
+</beans>

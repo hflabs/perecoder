@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="database" basedir="">
+
+    <macrodef name="unzip_schema" description="Unpack and filter schema">
+        <attribute name="jdbcType"/>
+        <sequential>
+            <tempfile property="sql.dir" destDir="${tmp.dir}" prefix="schema_"/>
+            <echo message="Unpack @{jdbcType} schema sources to ${sql.dir}"/>
+            <unzip src="${data.dir}/${data.sql}" dest="${sql.dir}" encoding="${ant.encoding}">
+                <patternset>
+                    <include name="**/@{jdbcType}/*.sql"/>
+                </patternset>
+            </unzip>
+            <echo message="Filter schema sources in ${sql.dir}"/>
+            <replace dir="${sql.dir}" value="${data.version}" encoding="${ant.encoding}">
+                <include name="**/*.sql"/>
+                <replacetoken><![CDATA[${project.version}]]></replacetoken>
+            </replace>
+            <replace dir="${sql.dir}" value="${storage.jdbc.username}" encoding="${ant.encoding}">
+                <include name="**/*.sql"/>
+                <replacetoken><![CDATA[${storage.jdbc.username}]]></replacetoken>
+            </replace>
+            <replace dir="${sql.dir}" value="${storage.jdbc.password}" encoding="${ant.encoding}">
+                <include name="**/*.sql"/>
+                <replacetoken><![CDATA[${storage.jdbc.password}]]></replacetoken>
+            </replace>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="create_schema" description="Create JDBC schema">
+        <attribute name="jdbcType"/>
+        <sequential>
+            <unzip_schema jdbcType="@{jdbcType}"/>
+            <echo message="Create common @{jdbcType} SQL schema"/>
+            <sql driver="${storage.jdbc.driverClassName}"
+                 url="${storage.jdbc.url}"
+                 userid="${storage.jdbc.dba.username}"
+                 password="${storage.jdbc.dba.password}"
+                 encoding="${ant.encoding}"
+                 print="${ant.debug}">
+                <transaction src="${sql.dir}/@{jdbcType}/schema_@{jdbcType}_create_user.sql"/>
+                <transaction src="${sql.dir}/@{jdbcType}/schema_@{jdbcType}_create.sql"/>
+                <transaction src="${sql.dir}/@{jdbcType}/schema_@{jdbcType}_data.sql"/>
+            </sql>
+            <echo message="Execute tuning @{jdbcType} SQL"/>
+            <sql driver="${storage.jdbc.driverClassName}"
+                 url="${storage.jdbc.url}"
+                 userid="${storage.jdbc.dba.username}"
+                 password="${storage.jdbc.dba.password}"
+                 encoding="${ant.encoding}"
+                 onerror="continue"
+                 print="${ant.debug}">
+                <transaction src="${sql.dir}/@{jdbcType}/schema_@{jdbcType}_tuning.sql"/>
+            </sql>
+            <echo message="Execute customer @{jdbcType} SQL"/>
+            <sql driver="${storage.jdbc.driverClassName}"
+                 url="${storage.jdbc.url}"
+                 userid="${storage.jdbc.dba.username}"
+                 password="${storage.jdbc.dba.password}"
+                 encoding="${ant.encoding}"
+                 onerror="continue"
+                 print="${ant.debug}">
+                <transaction src="${sql.dir}/@{jdbcType}/schema_@{jdbcType}_data_customer.sql"/>
+            </sql>
+        </sequential>
+    </macrodef>
+
+    <target name="create_schema_oracle" description="Create oracle schema">
+        <create_schema jdbcType="oracle"/>
+    </target>
+
+    <target name="create_schema_mysql" description="Create mysql schema">
+        <antcall target="create_schema_mariadb"/>
+    </target>
+
+    <target name="create_schema_mariadb" description="Create mariadb schema">
+        <create_schema jdbcType="mariadb"/>
+    </target>
+
+</project>

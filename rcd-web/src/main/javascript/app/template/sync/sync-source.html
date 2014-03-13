@@ -1,0 +1,57 @@
+<tr<%= getModel().isResultError() ? ' data-result-error="true"' : '' %>>
+    <td rowspan="2">
+        <i class="icon-48 <%= getIconClass() %>"></i>
+    </td>
+    <td>
+        <h4><%- descriptor.get('description') %></h4>
+    </td>
+    <td></td>
+</tr>
+<tr<%= getModel().isResultError() ? ' data-result-error="true"' : '' %>>
+    <td>
+        <div class="cell-wrapper">
+        <button class="btn" data-action="run-stop"<%= getModel().isStatusInterrupting() ? ' disabled="disabled"' : '' %>><%- t('view.sync.button.'+(getModel().isExecuting() ? 'stop' : 'run')) %></button>
+        <% if (descriptor.task_type.deletable) { %><span data-action="delete"><i class="icon-16 trash"></i></span><% } %>
+
+        <% if (getModel().isExecuting()) {
+            var percent = Math.max(0, progress && progress.percent || 0); %>
+        <span data-label="percent"><%= percent %>%</span>
+        <div class="progress">
+            <div class="bar" data-label="progress" style="width: <%= percent %>%;">
+                <span>&nbsp;</span>
+            </div>
+        </div>
+        <div data-label="step"><%- progress && progress.step || '' %></div>
+        <% } else { %>
+        <div class="result-description">
+            <%= wrapError(getModel().isResultError(), getStatusDescription() + ' ' + adequateDate()) %>
+            <% if (getModel().hasMultipleResults()) { %>
+                (<%= wrapError(getModel().hasErrors(), dictionaryCount()) %>)
+            <% } %>
+        </div>
+        <% var nextScheduledDate = getModel().get('descriptor').get('nextScheduledDate');
+        if (nextScheduledDate) { %>
+        <div class="muted">
+            <%- tc('view.sync.next_sync') %> <span title="<%- nextScheduledDate.toString() %>" data-label="nextDate"><%- nextSync(nextScheduledDate) %></span>
+        </div>
+        <% }
+        } %>
+        </div>
+    </td>
+    <td>
+        <div class="link-wrapper">
+        <% if (descriptor.get('cron').isCorrect()) { %>
+        <i class="icon-16 cronedit"></i>
+        <a class="command" data-action="edit"><%- tc('view.sync.cron_defined') %>:</a>
+        <div class="schedule"><%- descriptor.get('cron').describe() %></div>
+        <% } else { %>
+        <i class="icon-16 cronadd"></i>
+        <a class="command" data-action="edit"><%- tc('model.cron.undefined') %></a>
+        <% } %>
+        </div>
+        <div class="link-wrapper">
+        <i class="icon-16 settings"></i>
+        <a class="command" data-action="settings"><%- t('view.sync.edit.parameters') %></a>
+        </div>
+    </td>
+</tr>

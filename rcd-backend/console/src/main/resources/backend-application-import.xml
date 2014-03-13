@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+       default-lazy-init="true">
+
+    <!-- Базовое приложение импорта документов -->
+    <bean id="importDocument" class="ru.hflabs.rcd.backend.console.imports.ImportDocument" abstract="true" parent="runTemplate"/>
+
+    <!-- Приложение импорта справочников -->
+    <bean id="importDictionaries" class="ru.hflabs.rcd.backend.console.imports.ImportDictionaries" parent="importDocument">
+        <property name="importOverFileProcessor" ref="importOverFile.dictionaries"/>
+        <property name="importOverDirectoryProcessor" ref="importOverDirectory.dictionaries"/>
+    </bean>
+
+    <!-- Приложение импорта правил перекодирования -->
+    <bean id="importRules" class="ru.hflabs.rcd.backend.console.imports.ImportRules" parent="importDocument">
+        <property name="importOverFileProcessor" ref="importOverFile.rules"/>
+        <property name="importOverDirectoryProcessor" ref="importOverDirectory.rules"/>
+    </bean>
+
+</beans>

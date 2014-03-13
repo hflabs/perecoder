@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+    <import resource="storage-*.xml"/>
+
+    <!-- Базовый провайдер модификации документов -->
+    <bean id="sqlDocumentCallback" class="ru.hflabs.rcd.storage.sql.SqlDocumentCallback" abstract="true">
+        <property name="batchSize" value="$storage{jdbc.batchSize}"/>
+    </bean>
+
+    <!-- Базовый сервис хранилища документов -->
+    <bean id="sqlStorageService" class="ru.hflabs.rcd.storage.sql.SqlStorageService" parent="changeServiceTemplate" abstract="true">
+        <property name="changeDocumentCallbacks">
+            <util:map key-type="ru.hflabs.rcd.model.change.ChangeType" value-type="ru.hflabs.rcd.storage.ChangeDocumentCallback">
+                <entry key="CREATE">
+                    <bean class="ru.hflabs.rcd.storage.sql.SqlDocumentCallback$CreateDocumentCallback" parent="sqlDocumentCallback"/>
+                </entry>
+                <entry key="UPDATE">
+                    <bean class="ru.hflabs.rcd.storage.sql.SqlDocumentCallback$UpdateDocumentCallback" parent="sqlDocumentCallback"/>
+                </entry>
+                <entry key="CLOSE">
+                    <bean class="ru.hflabs.rcd.storage.sql.SqlDocumentCallback$UpdateDocumentCallback" parent="sqlDocumentCallback"/>
+                </entry>
+                <entry key="RESTORE">
+                    <bean class="ru.hflabs.rcd.storage.sql.SqlDocumentCallback$UpdateDocumentCallback" parent="sqlDocumentCallback"/>
+                </entry>
+            </util:map>
+        </property>
+    </bean>
+
+    <!-- Сервис хранилища истории документов -->
+    <bean id="historyStorageService" parent="sqlStorageService">
+        <constructor-arg index="0" value="ru.hflabs.rcd.model.change.History"/>
+    </bean>
+
+    <!-- Сервис хранилища групп справочников -->
+    <bean id="groupStorageService" parent="sqlStorageService">
+        <constructor-arg index="0" value="ru.hflabs.rcd.model.document.Group"/>
+    </bean>
+
+    <!-- Сервис хранилища справочников -->
+    <bean id="dictionaryStorageService" parent="sqlStorageService">
+        <constructor-arg index="0" value="ru.hflabs.rcd.model.document.Dictionary"/>
+    </bean>
+
+    <!-- Сервис хранилища МЕТА-полей справочников -->
+    <bean id="metaFieldStorageService" parent="sqlStorageService">
+        <constructor-arg index="0" value="ru.hflabs.rcd.model.document.MetaField"/>
+    </bean>
+
+    <!-- Сервис хранилища значений полей записи -->
+    <bean id="fieldStorageService" parent="sqlStorageService">
+        <constructor-arg index="0" value="ru.hflabs.rcd.model.document.Field"/>
+    </bean>
+
+    <!-- Сервис хранилища наборов правил перекодирования -->
+    <bean id="recodeRuleSetStorageService" parent="sqlStorageService">
+        <constructor-arg index="0" value="ru.hflabs.rcd.model.rule.RecodeRuleSet"/>
+    </bean>
+
+    <!-- Сервис хранилища правил перекодирования -->
+    <bean id="recodeRuleStorageService" parent="sqlStorageService">
+        <constructor-arg index="0" value="ru.hflabs.rcd.model.rule.RecodeRule"/>
+    </bean>
+
+    <!-- Сервис хранилища оповещений -->
+    <bean id="notificationStorageService" parent="sqlStorageService">
+        <constructor-arg index="0" value="ru.hflabs.rcd.model.notification.Notification"/>
+    </bean>
+
+    <!-- Сервис хранилища параметров задач -->
+    <bean id="taskDescriptorStorageService" parent="sqlStorageService">
+        <constructor-arg index="0" value="ru.hflabs.rcd.model.task.TaskDescriptor"/>
+    </bean>
+
+    <!-- Сервис хранилища выполненных задач -->
+    <bean id="taskResultStorageService" parent="sqlStorageService">
+        <constructor-arg index="0" value="ru.hflabs.rcd.model.task.TaskResult"/>
+    </bean>
+
+</beans>

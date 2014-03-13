@@ -1,0 +1,71 @@
+<izpack:antactions xmlns:izpack="http://izpack.org/schema/antactions"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://izpack.org/schema/antactions http://izpack.org/schema/5.0/izpack-antactions-5.0.xsd"
+                   version="5.0">
+
+    <pack name="Database schema">
+        <antcall order="beforepack" buildresource="ant.database.xml" logfile="${izpack.logs.path}/create_schema.log" messageid="ant.database">
+            <property name="ant.encoding" value="${izpack.encoding}"/>
+            <property name="ant.debug" value="${izpack.debug}"/>
+            <!-- Classpath -->
+            <property name="tmp.dir" value="${izpack.tmp.path}"/>
+            <property name="data.version" value="${izpack.project.version}"/>
+            <property name="data.dir" value="${izpack.data.dir}"/>
+            <property name="data.sql" value="${izpack.data.sql}"/>
+            <!-- Connection variables -->
+            <property name="storage.jdbc.type" value="${izpack.jdbc.type}"/>
+            <property name="storage.jdbc.driverClassName" value="${izpack.jdbc.driverClassName}"/>
+            <property name="storage.jdbc.url" value="${izpack.jdbc.url}"/>
+            <!-- Authentication variables -->
+            <property name="storage.jdbc.username" value="${izpack.jdbc.username}"/>
+            <property name="storage.jdbc.password" value="${izpack.jdbc.password}"/>
+            <property name="storage.jdbc.dba.username" value="${izpack.jdbc.dba.username}"/>
+            <property name="storage.jdbc.dba.password" value="${izpack.jdbc.dba.password}"/>
+            <!-- Call action -->
+            <target name="create_schema_${izpack.jdbc.type}"/>
+        </antcall>
+    </pack>
+
+    <pack name="Install JBoss">
+        <antcall order="beforepack" buildresource="ant.jboss.xml" logfile="${izpack.logs.path}/install_jboss.log" messageid="ant.jboss.install">
+            <property name="ant.encoding" value="${izpack.encoding}"/>
+            <property name="ant.debug" value="${izpack.debug}"/>
+            <!-- Classpath -->
+            <property name="data.dir" value="${izpack.data.dir}"/>
+            <property name="data.jboss" value="${izpack.data.jboss}"/>
+            <property name="data.3rdparty" value="${izpack.data.3rdparty}"/>
+            <!-- JBoss variables -->
+            <property name="jboss.name" value="${izpack.jboss.name}"/>
+            <property name="jboss.path" value="${izpack.jboss.path}"/>
+            <property name="jboss.dir" value="${izpack.jboss.dir}"/>
+            <property name="jboss.home" value="${izpack.jboss.dir}/${izpack.jboss.name}"/>
+            <property name="jboss.port" value="${izpack.jboss.port}"/>
+            <property name="rcd.home" value="${izpack.rcd.home}"/>
+            <!-- JDBC variables -->
+            <property name="storage.jdbc.type" value="${izpack.jdbc.type}"/>
+            <property name="storage.jdbc.host" value="${izpack.jdbc.host}"/>
+            <property name="storage.jdbc.port" value="${izpack.jdbc.port}"/>
+            <property name="storage.jdbc.sid" value="${izpack.jdbc.sid}"/>
+            <property name="storage.jdbc.username" value="${izpack.jdbc.username}"/>
+            <property name="storage.jdbc.password" value="${izpack.jdbc.password}"/>
+            <!-- Call action -->
+            <target name="install_jboss"/>
+            <target name="configure_jboss_cli"/>
+            <target name="configure_jboss_ds"/>
+        </antcall>
+    </pack>
+
+    <pack name="Install application">
+        <antcall order="beforepack" buildresource="ant.jboss.xml" logfile="${izpack.logs.path}/install_application.log" messageid="ant.jboss.application">
+            <property name="ant.encoding" value="${izpack.encoding}"/>
+            <property name="ant.debug" value="${izpack.debug}"/>
+            <!-- Classpath -->
+            <property name="data.dir" value="${izpack.data.dir}"/>
+            <!-- Task variables -->
+            <property name="jboss.home" value="${izpack.jboss.home}"/>
+            <!-- Call action -->
+            <target name="install_application"/>
+        </antcall>
+    </pack>
+
+</izpack:antactions>

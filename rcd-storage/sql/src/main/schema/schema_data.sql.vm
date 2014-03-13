@@ -1,0 +1,12 @@
+-- -----------------------------------------------------
+-- USE SCHEMA ${storage.jdbc.username}
+-- -----------------------------------------------------
+ALTER SESSION SET CURRENT_SCHEMA = ${storage.jdbc.username};
+
+-- -----------------------------------------------------
+-- Init DB schema
+-- -----------------------------------------------------
+INSERT INTO schema_version (version, type, script, installed_by, installed_on, state, current_version)
+  VALUES('${project.version}', 'SQL', 'initial', '${storage.jdbc.username}', CURRENT_TIMESTAMP, 'SUCCESS', 1);
+
+COMMIT;

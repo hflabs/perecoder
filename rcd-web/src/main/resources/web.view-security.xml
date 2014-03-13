@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:sec="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+
+    <!-- Входная точка для Ajax запросов -->
+    <bean id="entryPoint" class="ru.hflabs.rcd.web.handler.AjaxAuthenticationEntryPoint">
+        <constructor-arg name="loginFormUrl" value="/admin/login/"/>
+    </bean>
+
+    <!-- Обработчик событий неудачных аутентификаций -->
+    <bean id="authenticationFailureEventHandler" class="ru.hflabs.rcd.web.handler.AuthenticationFailureEventHandler">
+        <constructor-arg index="0" value="/admin/login?errorCode=%s"/>
+    </bean>
+    <!-- Обработчик событий завершения сессии -->
+    <bean id="authenticationCleanedEventHandler" class="ru.hflabs.rcd.web.handler.AuthenticationCleanedEventHandler">
+        <property name="delegate">
+            <bean class="org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler">
+                <property name="defaultTargetUrl" value="/admin/login/"/>
+            </bean>
+        </property>
+    </bean>
+
+    <sec:http access-decision-manager-ref="accessDecisionManager" entry-point-ref="entryPoint">
+        <sec:intercept-url pattern="/admin/login/**" access="ROLE_ANONYMOUS, ROLE_OPERATOR, ROLE_ADMINISTRATOR"/>
+        <sec:intercept-url pattern="/admin/**" access="ROLE_OPERATOR, ROLE_ADMINISTRATOR"/>
+        <sec:intercept-url pattern="/**" access="ROLE_ADMINISTRATOR"/>
+        <sec:anonymous granted-authority="ROLE_ANONYMOUS" key="anonymousKey" username="guest"/>
+        <sec:form-login login-page="/admin/login/"
+                        login-processing-url="/admin/j_security_check"
+                        default-target-url="/admin/"
+                        authentication-failure-handler-ref="authenticationFailureEventHandler"
+                />
+        <sec:access-denied-handler ref="authenticationFailureEventHandler"/>
+        <sec:logout logout-url="/admin/logout/" success-handler-ref="authenticationCleanedEventHandler"/>
+    </sec:http>
+
+</beans>

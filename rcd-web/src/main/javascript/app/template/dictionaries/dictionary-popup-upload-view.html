@@ -1,0 +1,96 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3><%- tc('view.dictionaries.upload.title') %></h3>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal" method="POST">
+        <div class="alert" style="display: none;"></div>
+        <% if (groupId) {
+            %><input type="hidden" name="groupId" data-field="groupId" value="<%- groupId %>"><%
+        } else {
+        %><div class="control-group">
+            <label class="control-label" for="dictionaries-upload-group"><%- tc('view.dictionaries.upload.group') %>:</label>
+            <div class="controls">
+                <select size="1" id="dictionaries-upload-group" class="selectpicker" name="groupId" data-field="groupId" data-live-search="true"><%
+                    getGroupsList().each(function(group){
+                        if (group.isWritable()) {
+                            %><option value="<%- group.get('id') %>"<%= (group.get('id')==groupId) ? ' selected="selected"' : '' %> data-subtext="<%- _.escape(group.get('description')) %>"><%- group.get('name') %></option><%
+                        }
+                    });
+                %></select>
+                <div class="help-block font-small"></div>
+            </div>
+        </div>
+        <% } %>
+        <div class="control-group">
+            <label class="control-label" for="dictionaries-upload-file"><%- tc('view.dictionaries.upload.file') %>:</label>
+            <div class="controls">
+                <div class="fileupload fileupload-new" data-provides="fileupload">
+                    <div class="input-append">
+                        <div class="uneditable-input autocomplete-input">
+                            <i class="icon-file fileupload-exists"></i>
+                            <span class="fileupload-preview"></span>
+                        </div>
+                        <a href="#" class="add-on btn-file">
+                            <span class="fileupload-new icon-upload"></span>
+                            <span class="fileupload-exists icon-upload"></span>
+                            <input type="file" id="dictionaries-upload-file" name="file" data-field="file" autofocus="autofocus"/>
+                        </a>
+                        <a href="#" class="fileupload-exists" data-dismiss="fileupload">
+                            <i class="icon-remove"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="help-block font-small"></div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="dictionaries-upload-delimiter"><%- tc('view.dictionaries.upload.delimiter') %>:</label>
+            <div class="controls">
+                <input type="text" id="dictionaries-upload-delimiter" name="delimiter" data-field="delimiter" value="<%- delimiter %>">
+                <div class="help-block font-small"></div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="dictionaries-upload-quote"><%- tc('view.dictionaries.upload.quote') %>:</label>
+            <div class="controls">
+                <input type="text" id="dictionaries-upload-quote" name="quote" data-field="quote" value="<%- quote %>">
+                <div class="help-block font-small"></div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="dictionaries-upload-encoding"><%- tc('view.dictionaries.upload.encoding') %>:</label>
+            <div class="controls">
+                <select size="1" id="dictionaries-upload-encoding" class="selectpicker" name="encoding" data-field="encoding" data-live-search="true">
+                    <% for(var i=0, list=getEncodings(), l=list.length; i<l; i++) { %>
+                    <option value="<%- list[i] %>"<%= (list[i]==encoding) ? ' selected="selected"' : '' %>><%- list[i] %></option>
+                    <% }; %>
+                </select>
+                <div class="help-block font-small"></div>
+            </div>
+        </div><%
+        if (dictionaryId) { %>
+            <input type="hidden" name="name" data-field="name" value="<%- name %>">
+            <input type="hidden" name="description" data-field="description" value="<%- description %>"><%
+        } else { %>
+        <div class="control-group">
+            <label class="control-label" for="dictionaries-upload-name"><%- tc('model.dictionaries.name') %>:</label>
+            <div class="controls">
+                <input type="text" id="dictionaries-upload-name" name="name" data-field="name" value="<%- name %>">
+                <div class="help-block font-small"></div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="dictionaries-upload-description"><%- tc('model.dictionaries.description') %>:</label>
+            <div class="controls">
+                <input type="text" id="dictionaries-upload-description" name="description" data-field="description" value="<%- description %>">
+                <div class="help-block font-small"></div>
+            </div>
+        </div><%
+        } %>
+    </form>
+</div>
+<div class="modal-footer">
+    <button id="dictionaries-upload-button-cancel" class="btn pull-left" data-dismiss="modal" data-action="cancel"><%- tc('view.dictionaries.button.cancel') %></button>
+    <button id="dictionaries-upload-button-submit" class="btn btn-primary pull-right" data-action="submit"><%- tc('view.dictionaries.button.upload') %></button>
+</div>

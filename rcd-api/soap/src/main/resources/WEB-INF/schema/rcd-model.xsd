@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <xsd:complexType name="WError">
+        <xsd:annotation>
+            <xsd:documentation>Detailed error message</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="errorType" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="errorMessage" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="WRecodeCriteria">
+        <xsd:sequence>
+            <xsd:element name="fromGroup" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>Source group name</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="fromDictionary" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>Source dictionary name</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="fromValue" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>Source value</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="toGroup" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>Destination group name</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="toDictionary" type="xsd:string" minOccurs="0">
+                <xsd:annotation>
+                    <xsd:documentation>Destination dictionary name</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="WSearchCriteria">
+        <xsd:sequence>
+            <xsd:element name="search" type="xsd:string" minOccurs="0" default="">
+                <xsd:annotation>
+                    <xsd:documentation>Full text search query</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="offset" type="xsd:unsignedInt" default="0">
+                <xsd:annotation>
+                    <xsd:documentation>Data offset</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="count" type="xsd:unsignedInt" default="100">
+                <xsd:annotation>
+                    <xsd:documentation>Data count</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="WSearchResponse">
+        <xsd:sequence>
+            <xsd:element name="filterCount" type="xsd:int">
+                <xsd:annotation>
+                    <xsd:documentation>Filtered count</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="totalCount" type="xsd:int">
+                <xsd:annotation>
+                    <xsd:documentation>Total count</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="WEssenceIdentifier" abstract="true">
+        <xsd:annotation>
+            <xsd:documentation>Base identification essence</xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="id" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation>Unique essence identifier</xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="WDocument">
+        <xsd:annotation>
+            <xsd:documentation>Base identification and named document</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="WEssenceIdentifier">
+                <xsd:sequence>
+                    <xsd:element name="description" type="xsd:string" minOccurs="0">
+                        <xsd:annotation>
+                            <xsd:documentation>Document description</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                </xsd:sequence>
+                <xsd:attribute name="name" type="xsd:string" use="required">
+                    <xsd:annotation>
+                        <xsd:documentation>Document name</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="WGroup">
+        <xsd:annotation>
+            <xsd:documentation>Group definition</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="WDocument"/>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="WDictionaryPath">
+        <xsd:annotation>
+            <xsd:documentation>Unique dictionary named path</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="groupName" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>Group name</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+            <xsd:element name="dictionaryName" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:documentation>Dictionary name</xsd:documentation>
+                </xsd:annotation>
+            </xsd:element>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="WDictionaryDefinition">
+        <xsd:annotation>
+            <xsd:documentation>Unique dictionary named path or ID</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:choice>
+                <xsd:element name="id" type="xsd:string"/>
+                <xsd:element name="path" type="WDictionaryPath"/>
+            </xsd:choice>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="WDictionary">
+        <xsd:annotation>
+            <xsd:documentation>Dictionary</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="WDocument">
+                <xsd:sequence>
+                    <xsd:element name="group" type="WGroup">
+                        <xsd:annotation>
+                            <xsd:documentation>Reference to group</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="metaField" type="WMetaField" minOccurs="0" maxOccurs="unbounded">
+                        <xsd:annotation>
+                            <xsd:documentation>Dictionary structure</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="WMetaField">
+        <xsd:annotation>
+            <xsd:documentation>Dictionary meta field</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="WDocument">
+                <xsd:attribute name="dictionaryId" type="xsd:string" use="required">
+                    <xsd:annotation>
+                        <xsd:documentation>Reference to dictionary ID</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="primary" type="xsd:boolean">
+                    <xsd:annotation>
+                        <xsd:documentation>Flag indicating that this meta field is the primary key of dictionary</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="unique" type="xsd:boolean">
+                    <xsd:annotation>
+                        <xsd:documentation>Flag indicating that this meta field is unique in dictionary</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="WField">
+        <xsd:annotation>
+            <xsd:documentation>Record field</xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="name" type="xsd:string" use="required">
+                    <xsd:annotation>
+                        <xsd:documentation>Meta field name</xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="WRecord">
+        <xsd:annotation>
+            <xsd:documentation>Dictionary record</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="WEssenceIdentifier">
+                <xsd:sequence>
+                    <xsd:element name="field" type="WField" minOccurs="0" maxOccurs="unbounded">
+                        <xsd:annotation>
+                            <xsd:documentation>Collection of elements</xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="WRulePath">
+        <xsd:annotation>
+            <xsd:documentation>Unique rule named path</xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="fromDictionary" type="WDictionaryDefinition"/>
+            <xsd:element name="toDictionary" type="WDictionaryDefinition"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="WRuleDefinition">
+        <xsd:annotation>
+            <xsd:documentation>Unique rule named path or alias</xsd:documentation>
+        </xsd:annotation>
+        <xsd:choice>
+            <xsd:element name="alias" type="xsd:string"/>
+            <xsd:element name="path" type="WRulePath"/>
+        </xsd:choice>
+    </xsd:complexType>
+
+    <xsd:complexType name="WRule">
+        <xsd:annotation>
+            <xsd:documentation>Recode rule between dictionaries</xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexContent>
+            <xsd:extension base="WEssenceIdentifier">
+                <xsd:sequence>
+                    <xsd:element name="fromRecord" type="WRecord"/>
+                    <xsd:element name="toRecord" type="WRecord"/>
+                </xsd:sequence>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+</xsd:schema>

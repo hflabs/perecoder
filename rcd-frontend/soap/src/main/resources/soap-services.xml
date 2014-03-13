@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- WEB сервис работы со справочниками  -->
+    <bean id="recodeWS" class="ru.hflabs.rcd.soap.RecodeWebService">
+        <!-- API mappers -->
+        <property name="mapper" ref="mapper.xsd2model"/>
+        <property name="toWGroupTransformer" ref="mapper.model2group"/>
+        <property name="toWDictionaryTransformer" ref="mapper.model2dictionary"/>
+        <property name="toWMetaFieldTransformer" ref="mapper.model2metaField"/>
+        <property name="toWRecordTransformer" ref="mapper.model2record"/>
+        <!-- Services -->
+        <property name="groupService" ref="groupService"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
+        <property name="metaFieldService" ref="metaFieldService"/>
+        <property name="recordService" ref="recordService"/>
+        <property name="fieldService" ref="fieldService"/>
+        <property name="recodeRuleSetService" ref="recodeRuleSetService"/>
+        <property name="recodeRuleService" ref="recodeRuleService"/>
+    </bean>
+
+</beans>

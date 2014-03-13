@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:tns="http://hflabs.ru/rcd/soap/1_0"
+             targetNamespace="http://hflabs.ru/rcd/soap/1_0">
+
+    <types>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://hflabs.ru/rcd/soap/1_0">
+            <xsd:include schemaLocation="schema/rcd-msg.xsd"/>
+        </xsd:schema>
+    </types>
+
+    <message name="errorResponse">
+        <part name="errorMessage" element="tns:errorMessage"/>
+    </message>
+
+    <message name="versionSoapIn"/>
+    <message name="versionSoapOut">
+        <part name="result" element="tns:versionResponse"/>
+    </message>
+
+    <message name="recodeSoapIn">
+        <part name="parameters" element="tns:recodeRequest"/>
+    </message>
+    <message name="recodeSoapOut">
+        <part name="result" element="tns:recodeResponse"/>
+    </message>
+
+    <message name="recodeByAliasSoapIn">
+        <part name="parameters" element="tns:recodeByAliasRequest"/>
+    </message>
+    <message name="recodeByAliasSoapOut">
+        <part name="result" element="tns:recodeResponse"/>
+    </message>
+
+    <message name="getGroupsIn">
+        <part name="parameters" element="tns:searchGroupsRequest"/>
+    </message>
+    <message name="getGroupsOut">
+        <part name="result" element="tns:searchGroupsResponse"/>
+    </message>
+
+    <message name="getDictionaryIn">
+        <part name="id" element="tns:getDictionaryRequest"/>
+    </message>
+    <message name="getDictionaryOut">
+        <part name="result" element="tns:getDictionaryResponse"/>
+    </message>
+
+    <message name="getDictionariesIn">
+        <part name="parameters" element="tns:searchDictionariesRequest"/>
+    </message>
+    <message name="getDictionariesOut">
+        <part name="result" element="tns:searchDictionariesResponse"/>
+    </message>
+
+    <message name="getRecordsIn">
+        <part name="parameters" element="tns:searchRecordsRequest"/>
+    </message>
+    <message name="getRecordsOut">
+        <part name="result" element="tns:searchRecordsResponse"/>
+    </message>
+
+    <message name="getRulesIn">
+        <part name="parameters" element="tns:searchRulesRequest"/>
+    </message>
+    <message name="getRulesOut">
+        <part name="result" element="tns:searchRulesResponse"/>
+    </message>
+
+    <portType name="RcdServicePortType">
+        <operation name="version">
+            <input message="tns:versionSoapIn"/>
+            <output message="tns:versionSoapOut"/>
+        </operation>
+        <operation name="recode">
+            <input message="tns:recodeSoapIn"/>
+            <output message="tns:recodeSoapOut"/>
+            <fault name="errorOrWarning" message="tns:errorResponse"/>
+        </operation>
+        <operation name="recodeByAlias">
+            <input message="tns:recodeByAliasSoapIn"/>
+            <output message="tns:recodeByAliasSoapOut"/>
+            <fault name="errorOrWarning" message="tns:errorResponse"/>
+        </operation>
+        <operation name="getGroups">
+            <input message="tns:getGroupsIn"/>
+            <output message="tns:getGroupsOut"/>
+            <fault name="errorOrWarning" message="tns:errorResponse"/>
+        </operation>
+        <operation name="getDictionary">
+            <input message="tns:getDictionaryIn"/>
+            <output message="tns:getDictionaryOut"/>
+            <fault name="errorOrWarning" message="tns:errorResponse"/>
+        </operation>
+        <operation name="getDictionaries">
+            <input message="tns:getDictionariesIn"/>
+            <output message="tns:getDictionariesOut"/>
+            <fault name="errorOrWarning" message="tns:errorResponse"/>
+        </operation>
+        <operation name="getRecords">
+            <input message="tns:getRecordsIn"/>
+            <output message="tns:getRecordsOut"/>
+            <fault name="errorOrWarning" message="tns:errorResponse"/>
+        </operation>
+        <operation name="getRules">
+            <input message="tns:getRulesIn"/>
+            <output message="tns:getRulesOut"/>
+            <fault name="errorOrWarning" message="tns:errorResponse"/>
+        </operation>
+    </portType>
+
+    <binding name="RcdServiceBinding" type="tns:RcdServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="version">
+            <soap:operation soapAction="http://hflabs.ru/rcd/version" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="recode">
+            <soap:operation soapAction="http://hflabs.ru/rcd/recode" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="errorOrWarning">
+                <soap:fault name="errorOrWarning" use="literal"/>
+            </fault>
+        </operation>
+        <operation name="recodeByAlias">
+            <soap:operation soapAction="http://hflabs.ru/rcd/recodeByAlias" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="errorOrWarning">
+                <soap:fault name="errorOrWarning" use="literal"/>
+            </fault>
+        </operation>
+        <operation name="getGroups">
+            <soap:operation soapAction="http://hflabs.ru/rcd/getGroups" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="errorOrWarning">
+                <soap:fault name="errorOrWarning" use="literal"/>
+            </fault>
+        </operation>
+        <operation name="getDictionary">
+            <soap:operation soapAction="http://hflabs.ru/rcd/getDictionary" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="errorOrWarning">
+                <soap:fault name="errorOrWarning" use="literal"/>
+            </fault>
+        </operation>
+        <operation name="getDictionaries">
+            <soap:operation soapAction="http://hflabs.ru/rcd/getDictionaries" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="errorOrWarning">
+                <soap:fault name="errorOrWarning" use="literal"/>
+            </fault>
+        </operation>
+        <operation name="getRecords">
+            <soap:operation soapAction="http://hflabs.ru/rcd/getRecords" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="errorOrWarning">
+                <soap:fault name="errorOrWarning" use="literal"/>
+            </fault>
+        </operation>
+        <operation name="getRules">
+            <soap:operation soapAction="http://hflabs.ru/rcd/getRules" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="errorOrWarning">
+                <soap:fault name="errorOrWarning" use="literal"/>
+            </fault>
+        </operation>
+    </binding>
+
+    <service name="RcdWS">
+        <port name="RcdServicePort" binding="tns:RcdServiceBinding">
+            <soap:address location="http://localhost:8080/rcd/soap/services/1_0/RcdWS"/>
+        </port>
+    </service>
+
+</definitions>

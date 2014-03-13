@@ -1,0 +1,65 @@
+@import "../common/const";
+@import "../common/elements";
+
+@login-border-color: #487082;
+
+#form-login {
+    .box-shadow(0 4px 10px rgba(128, 128, 128, 0.1));
+    .rounded(@large-border-radius);
+    margin: 200px auto 20px auto;
+    text-align: center;
+    width: 610px;
+    h1.brand {
+        .border-radius(@large-border-radius, 0,  0, @large-border-radius);
+        background-color: #578093;
+        color: #fff;
+        border-top: 1px solid @login-border-color;
+        border-left: 1px solid @login-border-color;
+        border-right: 1px solid @login-border-color;
+        margin: 0;
+        padding: 40px 0 30px 0;
+        i {
+            background-color: transparent;
+            background-position: 0 (-@logo-height*2);
+            background-repeat: no-repeat;
+            display: inline-block;
+            height: 20px;
+            margin-right: 15px;
+            width: 130px;
+        }
+        span {
+            padding-left: 15px;
+            border-left: 1px solid #7d9dac;
+        }
+    }
+}
+
+.login {
+    .border-radius(0, @large-border-radius,  @large-border-radius, 0);
+    background-color: @common-background-color;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    min-height: 20px;
+    padding: 0 0 30px 0;
+    div {
+        &.control-group {
+            margin: 20px 0 0 0;
+            &:first-of-type {
+                margin-top: 0;
+                padding-top: 30px;
+            }
+            &:last-of-type {
+                margin-top: 10px;
+            }
+        }
+    }
+
+    .text-error {
+        margin: 5px 0 10px 0;
+        min-height: 15px;
+    }
+    .btn-login {
+        .button-gradient(@font-size: 24px, @padding: 15px 40px);
+    }
+}

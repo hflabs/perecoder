@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.hflabs.rcd</groupId>
+        <artifactId>rcd-connector</artifactId>
+        <version>3.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>rcd-connector-db</artifactId>
+
+    <packaging>jar</packaging>
+
+    <name>HFLabs RCD DB connectors module</name>
+    <description>Модуль загрузки данных из БД</description>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.jolbox</groupId>
+            <artifactId>bonecp</artifactId>
+            <version>0.8.0.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+
+        <!-- ############################################################################ -->
+        <!-- Supported JDBC drivers -->
+        <!-- ############################################################################ -->
+        <dependency>
+            <groupId>${oracle.groupId}</groupId>
+            <artifactId>${oracle.artifactId}</artifactId>
+            <version>${oracle.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>${mariadb.groupId}</groupId>
+            <artifactId>${mariadb.artifactId}</artifactId>
+            <version>${mariadb.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>${mysql.groupId}</groupId>
+            <artifactId>${mysql.artifactId}</artifactId>
+            <version>${mysql.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>${mssql.groupId}</groupId>
+            <artifactId>${mssql.artifactId}</artifactId>
+            <version>${mssql.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>${postgresql.groupId}</groupId>
+            <artifactId>${postgresql.artifactId}</artifactId>
+            <version>${postgresql.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>${vertica.groupId}</groupId>
+            <artifactId>${vertica.artifactId}</artifactId>
+            <version>${vertica.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>

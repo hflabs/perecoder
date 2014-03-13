@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.hflabs.rcd</groupId>
+        <artifactId>rcd-distribution</artifactId>
+        <version>3.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>rcd-distribution-izpack</artifactId>
+
+    <packaging>jar</packaging>
+
+    <name>HFLabs RCD IzPack module</name>
+    <description>Инсталляционный пакет приложения</description>
+
+    <properties>
+        <izpack.version>5.0.0-rc1</izpack.version>
+        <izpack.debug>no</izpack.debug>
+        <izpack.mainClass>com.izforge.izpack.installer.bootstrap.Installer</izpack.mainClass>
+        <izpack.staging.directory>${project.build.directory}/staging</izpack.staging.directory>
+        <izpack.target.directory>${project.artifactId}-${project.version}</izpack.target.directory>
+        <izpack.final.directory>${project.build.directory}/${izpack.target.directory}</izpack.final.directory>
+        <izpack.finalName>setup</izpack.finalName>
+        <!-- Setup properties -->
+        <izpack.data.sql>sql-schema.zip</izpack.data.sql>
+        <izpack.data.jboss>jboss-configuration.zip</izpack.data.jboss>
+        <izpack.data.3rdparty>3rdparty</izpack.data.3rdparty>
+        <izpack.jboss.name>${container.jboss.name}</izpack.jboss.name>
+        <izpack.jboss.zip>${container.jboss.zip}</izpack.jboss.zip>
+    </properties>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>ant-contrib</groupId>
+                        <artifactId>ant-contrib</artifactId>
+                        <version>1.0b3</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>ant</groupId>
+                                <artifactId>ant</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <exportAntProperties>true</exportAntProperties>
+                            <target>
+                                <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
+                                <propertyregex property="project.version.short" input="${project.version}" regexp="(\d+\.\d+)-SNAPSHOT" select="\1" casesensitive="false" />
+                                <echo message="Set short project version to ${project.version.short}" />
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>izpack-dependency-libs</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <!-- Ant -->
+                                <artifactItem>
+                                    <outputDirectory>${izpack.final.directory}/lib</outputDirectory>
+                                    <groupId>org.apache.ant</groupId>
+                                    <artifactId>ant</artifactId>
+                                    <version>${ant.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <outputDirectory>${izpack.final.directory}/lib</outputDirectory>
+                                    <groupId>org.apache.ant</groupId>
+                                    <artifactId>ant-launcher</artifactId>
+                                    <version>${ant.version}</version>
+                                </artifactItem>
+                                <!-- JDBC -->
+                                <artifactItem>
+                                    <outputDirectory>${izpack.final.directory}/lib</outputDirectory>
+                                    <groupId>${oracle.groupId}</groupId>
+                                    <artifactId>${oracle.artifactId}</artifactId>
+                                    <version>${oracle.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <outputDirectory>${izpack.final.directory}/lib</outputDirectory>
+                                    <groupId>${mariadb.groupId}</groupId>
+                                    <artifactId>${mariadb.artifactId}</artifactId>
+                                    <version>${mariadb.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <outputDirectory>${izpack.final.directory}/lib</outputDirectory>
+                                    <groupId>${mysql.groupId}</groupId>
+                                    <artifactId>${mysql.artifactId}</artifactId>
+                                    <version>${mysql.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <outputDirectory>${izpack.final.directory}/data</outputDirectory>
+                                    <groupId>ru.hflabs.rcd</groupId>
+                                    <artifactId>rcd-storage-sql</artifactId>
+                                    <version>${project.version}</version>
+                                    <classifier>schema-resources-sources</classifier>
+                                    <type>zip</type>
+                                    <destFileName>${izpack.data.sql}</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <outputDirectory>${izpack.final.directory}/data</outputDirectory>
+                                    <groupId>ru.hflabs.rcd</groupId>
+                                    <artifactId>rcd-distribution-container</artifactId>
+                                    <version>${project.version}</version>
+                                    <classifier>jboss</classifier>
+                                    <type>zip</type>
+                                    <destFileName>${izpack.data.jboss}</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <outputDirectory>${izpack.final.directory}/data</outputDirectory>
+                                    <groupId>ru.hflabs.rcd</groupId>
+                                    <artifactId>rcd-web</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>war</type>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>izpack-dependency-scripts</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${izpack.staging.directory}/exec</outputDirectory>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>ru.hflabs</groupId>
+                                    <artifactId>parent-resources</artifactId>
+                                    <version>${ru.hflabs.parent.version}</version>
+                                    <overWrite>true</overWrite>
+                                </artifactItem>
+                            </artifactItems>
+                            <includes>*.sh*</includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>izpack-resources-copy</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${izpack.final.directory}</outputDirectory>
+                            <overwrite>true</overwrite>
+                            <resources>
+                                <resource>
+                                    <directory>../../</directory>
+                                    <includes>
+                                        <include>LICENSE</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>izpack-resources</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${izpack.staging.directory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/izpack</directory>
+                                    <includes>
+                                        <include>install.xml</include>
+                                    </includes>
+                                    <filtering>true</filtering>
+                                </resource>
+                                <resource>
+                                    <directory>src/main/izpack</directory>
+                                    <excludes>
+                                        <exclude>install.xml</exclude>
+                                    </excludes>
+                                    <filtering>false</filtering>
+                                </resource>
+                                <resource>
+                                    <directory>${izpack.staging.directory}/exec</directory>
+                                    <targetPath>${izpack.final.directory}</targetPath>
+                                    <excludes>
+                                        <exclude>*.vm</exclude>
+                                    </excludes>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>izpack-jar</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${izpack.staging.directory}/lib</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.izpack</groupId>
+                <artifactId>izpack-maven-plugin</artifactId>
+                <version>${izpack.version}</version>
+                <executions>
+                    <execution>
+                        <id>izpack-installer-java</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>izpack</goal>
+                        </goals>
+                        <configuration>
+                            <mkdirs>true</mkdirs>
+                            <baseDir>${izpack.staging.directory}</baseDir>
+                            <outputDirectory>${izpack.final.directory}/lib</outputDirectory>
+                            <installFile>${izpack.staging.directory}/install.xml</installFile>
+                            <finalName>${izpack.finalName}-${project.version}</finalName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <executions>
+                    <execution>
+                        <id>izpack-installer-unix</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <preserveDir>false</preserveDir>
+                            <basedir>${project.build.directory}</basedir>
+                            <outputDir>${izpack.target.directory}</outputDir>
+                            <filesToInclude>*/exec/**.vm</filesToInclude>
+                            <inputFilePattern>application.(.*).vm</inputFilePattern>
+                            <outputFilePattern>${izpack.finalName}.$1</outputFilePattern>
+                            <regex>false</regex>
+                            <token>$APPLICATION$</token>
+                            <value>${izpack.mainClass}</value>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                <artifactId>launch4j-maven-plugin</artifactId>
+                <version>1.5.2</version>
+                <executions>
+                    <execution>
+                        <id>izpack-installer-windows</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>launch4j</goal>
+                        </goals>
+                        <configuration>
+                            <headerType>gui</headerType>
+                            <customProcName>true</customProcName>
+                            <outfile>${izpack.final.directory}/${izpack.finalName}.exe</outfile>
+                            <jar>${izpack.target.directory}/lib/${izpack.finalName}-${project.version}.jar</jar>
+                            <dontWrapJar>true</dontWrapJar>
+                            <icon>src/main/resources/images/rcd.ico</icon>
+                            <manifest>src/main/resources/uac.exe.manifest</manifest>
+                            <downloadUrl>http://www.oracle.com/technetwork/java/javase/downloads/index.html</downloadUrl>
+                            <classPath>
+                                <mainClass>${izpack.mainClass}</mainClass>
+                                <addDependencies>true</addDependencies>
+                                <preCp>lib/*;</preCp>
+                            </classPath>
+                            <jre>
+                                <minVersion>${j2se.version}.0</minVersion>
+                                <jdkPreference>jdkOnly</jdkPreference>
+                            </jre>
+                            <versionInfo>
+                                <fileVersion>1.0.0.0</fileVersion>
+                                <txtFileVersion>${project.version}</txtFileVersion>
+                                <productVersion>1.0.0.0</productVersion>
+                                <txtProductVersion>${project.version}</txtProductVersion>
+                                <productName>${project.title}</productName>
+                                <companyName>${project.organization.name}</companyName>
+                                <copyright>© ${project.inceptionYear} ${project.organization.name}</copyright>
+                                <fileDescription>${project.name}</fileDescription>
+                                <internalName>${izpack.finalName}</internalName>
+                                <originalFilename>${izpack.finalName}.exe</originalFilename>
+                            </versionInfo>
+                            <singleInstance>
+                                <mutexName>RCD</mutexName>
+                                <windowTitle>HFLabs RCD</windowTitle>
+                            </singleInstance>
+                            <messages>
+                                <startupErr>Unable to launch installer</startupErr>
+                                <jreVersionErr>Incompatible JRE version</jreVersionErr>
+                                <launcherErr>Unable to launch installer</launcherErr>
+                            </messages>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>izpack-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <descriptors>
+                                <descriptor>src/main/resources/assemblies/assembly_izpack.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>net.ju-n.maven.plugins</groupId>
+                <artifactId>checksum-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>artifact-checksum</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>files</goal>
+                        </goals>
+                        <configuration>
+                            <csvSummary>false</csvSummary>
+                            <fileSets>
+                                <fileSet>
+                                    <directory>${project.build.directory}</directory>
+                                    <includes>
+                                        <include>${project.build.finalName}.zip</include>
+                                    </includes>
+                                </fileSet>
+                            </fileSets>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.codehaus.izpack</groupId>
+            <artifactId>izpack-maven-plugin</artifactId>
+            <version>${izpack.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.hflabs.rcd</groupId>
+            <artifactId>rcd-storage-sql</artifactId>
+            <version>${project.version}</version>
+            <classifier>schema-resources-sources</classifier>
+            <type>zip</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.hflabs.rcd</groupId>
+            <artifactId>rcd-distribution-container</artifactId>
+            <version>${project.version}</version>
+            <classifier>jboss</classifier>
+            <type>zip</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.hflabs.rcd</groupId>
+            <artifactId>rcd-web</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>

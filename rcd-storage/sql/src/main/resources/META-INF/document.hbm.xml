@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <!-- Historical document -->
+    <union-subclass name="ru.hflabs.rcd.model.document.DocumentTemplate" extends="ru.hflabs.rcd.model.EssenceTemplate" abstract="true">
+        <!-- Historical ID -->
+        <property name="historyId"/>
+
+        <!-- Group of dictionaries -->
+        <union-subclass name="ru.hflabs.rcd.model.document.Group">
+            <property name="name"/>
+            <property name="description"/>
+            <property name="owner"/>
+            <property name="permissions"/>
+        </union-subclass>
+
+        <!-- Dictionary -->
+        <union-subclass name="ru.hflabs.rcd.model.document.Dictionary">
+            <property name="groupId"/>
+            <property name="code"/>
+            <property name="name"/>
+            <property name="description"/>
+            <property name="version"/>
+        </union-subclass>
+
+        <!-- Dictionary meta field -->
+        <union-subclass name="ru.hflabs.rcd.model.document.MetaField">
+            <property name="dictionaryId"/>
+            <property name="name"/>
+            <property name="description"/>
+            <property name="ordinal"/>
+            <property name="type">
+                <type name="org.hibernate.type.EnumType">
+                    <param name="enumClass">ru.hflabs.rcd.model.document.MetaFieldType</param>
+                    <param name="useNamed">true</param>
+                </type>
+            </property>
+            <property name="flags"/>
+        </union-subclass>
+
+        <!-- Meta field value -->
+        <union-subclass name="ru.hflabs.rcd.model.document.Field">
+            <property name="metaFieldId"/>
+            <property name="name"/>
+            <property name="value" type="org.hibernate.type.MaterializedClobType"/>
+        </union-subclass>
+
+    </union-subclass>
+
+</hibernate-mapping>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dictionary xmlns="http://hflabs.ru/rcd/schema/dictionary">
+
+    <metaField name="HID"/>
+    <metaField name="NAME"/>
+    <metaField name="DESCRIPTION column"/>
+
+    <record>
+        <field name="HID">1</field>
+        <field name="NAME"><![CDATA[ONE>]]></field>
+        <field name="DESCRIPTION column">Без разделителей и кавычек</field>
+    </record>
+
+    <record>
+        <field name="DESCRIPTION column">С разделителем, без кавычек</field>
+        <field name="NAME">ON;E</field>
+        <field name="HID">2</field>
+    </record>
+
+    <record>
+        <field name="HID">3</field>
+        <field name="NAME">O "N" E</field>
+        <field name="DESCRIPTION column">Без разделителя, c кавычками</field>
+    </record>
+
+    <record>
+        <field name="HID">4</field>
+        <field name="NAME">O "N;" E</field>
+        <field name="DESCRIPTION column">C разделителем и кавычками</field>
+    </record>
+
+    <record>
+        <field name="HID">5</field>
+        <field name="NAME"/>
+        <field name="DESCRIPTION column">Пустое значение</field>
+    </record>
+
+</dictionary>

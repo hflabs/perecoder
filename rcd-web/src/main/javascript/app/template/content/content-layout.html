@@ -1,0 +1,28 @@
+<header class="page-main-header clearfix">
+    <i class="icon-64 content"></i>
+    <h1>
+        <%- currentDictionary.get('name') %><%
+        if (currentGroup.get('name')) {
+            %> <span class="group-name">[<%- currentGroup.get('name') %>]</span><%
+        } %>
+        <button type="button" class="btn flat" data-action="upload" title="<%- tc('view.records.upload') %>"<%= currentDictionary.isReadonly() ? ' disabled="disabled"' : '' %>><i class="icon-20 upload compact"></i></button>
+        <button type="button" class="btn flat"><a href="<%- buildUrl('DICTIONARIES_DOWNLOAD', currentDictionary.id) %>" data-action="download" title="<%- tc('view.records.download') %>"><i class="icon-20 download compact"></i></a></button>
+    </h1>
+    <nav class="breadcrumbs">
+        <a href="<%- buildUrl('GROUPS') %>" data-local="true"><%- tc('view.header.groups') %></a> &rarr;
+        <a href="<%- buildUrl('DICTIONARIES', currentGroup.id) %>" data-local="true"><%- currentGroup.get('name') %></a> &rarr;
+        <%- currentDictionary.get('name') %>
+    </nav>
+</header>
+<div class="toolbar clearfix">
+    <div class="searchbar in-page">
+        <div class="input-wrapper">
+            <input type="text" data-field="filter" placeholder="<%- tc('view.records.filter.placeholder') %>">
+        </div>
+        <i class="icon-16 search"></i>
+        <i class="icon-16 clear"></i>
+    </div>
+    <div data-region="pager" class="upper-paginator"></div>
+</div>
+<section class="table-wrapper rounded clear" data-region="records"></section>
+<div data-region="popups"></div>

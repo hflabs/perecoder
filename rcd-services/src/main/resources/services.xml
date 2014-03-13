@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <import resource="**/services-*.xml"/>
+
+    <!-- Сервис конфигурирования свойств -->
+    <bean parent="propertyPlaceholderConfigurer.file">
+        <property name="placeholderPrefix" value="$service{"/>
+        <property name="location" value="classpath:service.properties"/>
+    </bean>
+
+    <!-- Фабрика преобразования JSON в POJO объекты -->
+    <bean id="jacksonObjectMapper" class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+        <property name="failOnEmptyBeans" value="false"/>
+        <property name="annotationIntrospector">
+            <bean class="com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector"/>
+        </property>
+    </bean>
+
+    <!-- Сервис публикации событий -->
+    <bean id="applicationEventMulticaster" class="ru.hflabs.util.spring.context.event.AdvancedApplicationEventMulticaster"/>
+
+    <!-- Сервис получения системной информации -->
+    <bean id="versionService" class="ru.hflabs.rcd.service.VersionService"/>
+
+    <!-- Сервис управления справочниками -->
+    <bean id="documentManagerService" class="ru.hflabs.rcd.service.DocumentManagerService">
+        <property name="historyService" ref="historyService"/>
+        <property name="groupService" ref="groupService"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
+        <property name="metaFieldService" ref="metaFieldService"/>
+        <property name="fieldService" ref="fieldService"/>
+        <property name="recordService" ref="recordService"/>
+        <property name="recodeRuleSetService" ref="recodeRuleSetService"/>
+        <property name="rulesService" ref="recodeRuleService"/>
+    </bean>
+
+    <!-- Базовый сервис поиска и фильтрации -->
+    <bean id="filterDocumentServiceTemplate" class="ru.hflabs.rcd.service.document.FilterDocumentServiceTemplate" parent="changeServiceTemplate" abstract="true">
+        <property name="criteriaBuilder" ref="luceneCriteriaBuilder"/>
+        <property name="indexManager" ref="luceneIndexManager"/>
+        <property name="binderTransformerFactory" ref="luceneBinderTransformerFactory"/>
+    </bean>
+
+    <!-- Фабрика моделей -->
+    <bean id="modelDefinitionFactory" class="ru.hflabs.rcd.service.ModelDefinitionFactory">
+        <property name="class2fieldConverter" ref="luceneBinderTransformerFactory"/>
+    </bean>
+
+</beans>

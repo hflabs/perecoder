@@ -1,0 +1,40 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3><%- tc('view.dictionaries.add.title') %></h3>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal">
+        <div class="alert" style="display: none;"></div>
+        <div class="control-group">
+            <label class="control-label" for="dictionaries-add-name"><%- tc('model.dictionaries.name') %>:</label>
+            <div class="controls">
+                <input type="text" id="dictionaries-add-name" data-field="name" value="<%- name %>" autofocus="autofocus">
+                <div class="help-block font-small"></div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="dictionaries-add-description"><%- tc('model.dictionaries.description') %>:</label>
+            <div class="controls">
+                <input type="text" id="dictionaries-add-description" data-field="description" value="<%- description %>">
+                <div class="help-block font-small"></div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="dictionaries-add-group"><%- tc('model.dictionaries.groupId') %>:</label>
+            <div class="controls">
+                <select size="1" id="dictionaries-add-group" class="selectpicker" data-field="groupId"<%= groupId ? ' disabled="disabled"' : ''%> data-live-search="true">
+                    <% getGroupsList().each(function(group){
+                        if (group.isWritable()) { %>
+                    <option value="<%- group.get('id') %>"<%= (group.get('id')==groupId) ? ' selected="selected"' : '' %> data-subtext="<%- _.escape(group.get('description')) %>"><%- group.get('name') %></option>
+                    <%  }
+                      }); %>
+                </select>
+                <div class="help-block font-small"></div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button id="dictionaries-add-button-cancel" class="btn pull-left" data-dismiss="modal"><%- tc('view.dictionaries.button.cancel') %></button>
+    <button id="dictionaries-add-button-submit" class="btn btn-primary pull-right" data-action="submit"><%- tc('view.dictionaries.button.create') %></button>
+</div>

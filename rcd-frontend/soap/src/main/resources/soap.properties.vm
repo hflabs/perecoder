@@ -1,0 +1,2 @@
+#set($prefix = "#if($scope)${scope}_#end")
+soap.address = ${soap.address}

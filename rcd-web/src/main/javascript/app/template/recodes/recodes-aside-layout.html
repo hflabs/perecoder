@@ -1,0 +1,21 @@
+<header>
+    <div class="buttons">
+        <button type="button" class="btn flat" data-action="done" title="<%- tc('view.recodes.button.done') %>"><%- tc('view.recodes.button.done') %></button>
+        <button type="button" class="btn flat" data-action="new" title="<%- tc('view.recodes.add') %>"><i class="icon-16 add"></i> <%- tc('view.recodes.add') %></button>
+    </div>
+    <h1><i class="icon-24 recodes"></i><%- tc('view.recodes.recodes.title') %></h1>
+</header>
+<div class="clear">
+    <div class="recode-target-label"><%- t('view.recodes.recodeTo') %></div>
+    <div class="recode-target-trash"><i data-action="delete" title="<%- tc('view.recodes.delete.title') %>" class="icon-20 compact trash dark interactive"></i></div>
+    <div class="recode-target-wrapper">
+        <div class="recode-target">
+            <i class="icon-20 compact dropdown-grey"></i>
+            <i class="icon-16 dictionary"></i> <%- toDictionary.name %> <span class="group-name">[<%- toGroup.name %>]</span>
+        </div>
+        <div class="recode-target-list" data-region="targets"></div>
+    </div>
+</div>
+<div class="spacer clear"></div>
+<i class="icon-36 compact settings interactive" data-action="settings" title="<%- tc('view.recodes.button.settings') %>"></i>
+<div data-region="record-selector"></div>

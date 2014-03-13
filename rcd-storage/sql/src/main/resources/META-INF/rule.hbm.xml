@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <!-- Recode rule -->
+    <union-subclass name="ru.hflabs.rcd.model.rule.Rule" abstract="true" extends="ru.hflabs.rcd.model.document.DocumentTemplate">
+        <property name="fromFieldId"/>
+        <property name="toFieldId"/>
+
+        <!-- Recode rules set -->
+        <union-subclass name="ru.hflabs.rcd.model.rule.RecodeRuleSet">
+            <property name="name"/>
+            <property name="defaultFieldId"/>
+        </union-subclass>
+
+        <!-- Recode rule -->
+        <union-subclass name="ru.hflabs.rcd.model.rule.RecodeRule">
+            <property name="recodeRuleSetId"/>
+        </union-subclass>
+
+    </union-subclass>
+
+    <!-- Notifications -->
+    <union-subclass name="ru.hflabs.rcd.model.notification.Notification" extends="ru.hflabs.rcd.model.document.DocumentTemplate">
+        <property name="startDate"/>
+        <property name="endDate"/>
+        <property name="type">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">ru.hflabs.rcd.model.notification.NotifyType</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        <property name="ruleSetName"/>
+        <property name="fromGroupName"/>
+        <property name="fromDictionaryName"/>
+        <property name="fromValue" type="org.hibernate.type.MaterializedClobType"/>
+        <property name="toGroupName"/>
+        <property name="toDictionaryName"/>
+        <property name="count"/>
+        <property name="processingDate"/>
+        <property name="processingState">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">ru.hflabs.rcd.model.notification.NotifyState</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        <property name="processingAuthor"/>
+    </union-subclass>
+
+</hibernate-mapping>

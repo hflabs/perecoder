@@ -1,0 +1,14 @@
+ALTER SESSION SET CURRENT_SCHEMA = ${storage.jdbc.username};
+
+DELETE FROM t_notification;
+DELETE FROM t_taskresult;
+DELETE FROM t_taskdescriptor;
+DELETE FROM t_recoderule;
+DELETE FROM t_recoderuleset;
+DELETE FROM t_field;
+DELETE FROM t_metafield;
+DELETE FROM t_dictionary;
+DELETE FROM t_group;
+DELETE FROM t_history;
+
+COMMIT;

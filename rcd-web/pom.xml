@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.hflabs.rcd</groupId>
+        <artifactId>rcd</artifactId>
+        <version>3.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>rcd-web</artifactId>
+
+    <packaging>war</packaging>
+
+    <name>HFLabs RCD WEB module</name>
+    <description>Агрегирующий WEB модуль</description>
+
+    <properties>
+        <!-- ############################################################################ -->
+        <!-- Infrastructure properties -->
+        <!-- ############################################################################ -->
+        <project.build.webOutputDirectory>${project.build.directory}/web-classes</project.build.webOutputDirectory>
+        <project.build.webTestOutputDirectory>${project.build.directory}/web-test-classes</project.build.webTestOutputDirectory>
+
+        <!-- ############################################################################ -->
+        <!-- JS libraries versions -->
+        <!-- ############################################################################ -->
+        <backbonejs.version>1.0.0</backbonejs.version>
+        <bootstrap.version>2.3.1</bootstrap.version>
+        <jasmine.version>1.3.1.2</jasmine.version>
+        <jasmine.jquery.version>1.5.8</jasmine.jquery.version>
+        <jquery.version>1.8.3</jquery.version>
+        <lesscss.version>1.3.3.1-SNAPSHOT</lesscss.version>
+        <requirejs.version>2.1.5</requirejs.version>
+        <sinonjs.version>1.7.3</sinonjs.version>
+        <underscorejs.version>1.5.2</underscorejs.version>
+
+    </properties>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-remote-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-shared-resource</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <configuration>
+                            <skip>false</skip>
+                            <outputDirectory>${project.build.directory}/generated-resources</outputDirectory>
+                            <resourceBundles>
+                                <resourceBundle>ru.hflabs.rcd:rcd-storage-sql:${project.version}</resourceBundle>
+                                <resourceBundle>ru.hflabs.rcd:rcd-services:${project.version}</resourceBundle>
+                                <resourceBundle>ru.hflabs.rcd:rcd-frontend-rmi:${project.version}</resourceBundle>
+                                <resourceBundle>ru.hflabs.rcd:rcd-frontend-soap:${project.version}</resourceBundle>
+                            </resourceBundles>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-js</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+
+                                <artifactItem>
+                                    <groupId>org.webjars</groupId>
+                                    <artifactId>backbonejs</artifactId>
+                                    <version>${backbonejs.version}</version>
+                                    <outputDirectory>${project.build.webOutputDirectory}</outputDirectory>
+                                </artifactItem>
+
+                                <artifactItem>
+                                    <groupId>org.webjars</groupId>
+                                    <artifactId>bootstrap</artifactId>
+                                    <version>${bootstrap.version}</version>
+                                    <outputDirectory>${project.build.webOutputDirectory}</outputDirectory>
+                                </artifactItem>
+
+                                <artifactItem>
+                                    <groupId>org.webjars</groupId>
+                                    <artifactId>requirejs</artifactId>
+                                    <version>${requirejs.version}</version>
+                                    <outputDirectory>${project.build.webOutputDirectory}</outputDirectory>
+                                </artifactItem>
+
+                                <artifactItem>
+                                    <groupId>org.webjars</groupId>
+                                    <artifactId>jquery</artifactId>
+                                    <version>${jquery.version}</version>
+                                    <outputDirectory>${project.build.webOutputDirectory}</outputDirectory>
+                                </artifactItem>
+
+                                <artifactItem>
+                                    <groupId>org.webjars</groupId>
+                                    <artifactId>underscorejs</artifactId>
+                                    <version>${underscorejs.version}</version>
+                                    <outputDirectory>${project.build.webOutputDirectory}</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>${project.build.webOutputDirectory}/META-INF/resources</directory>
+                            <targetPath>/resources</targetPath>
+                        </resource>
+                        <resource>
+                            <directory>src/main/webapp/WEB-INF</directory>
+                            <targetPath>WEB-INF</targetPath>
+                            <includes>
+                                <include>jboss-web.xml</include>
+                                <include>web.xml</include>
+                            </includes>
+                            <filtering>true</filtering>
+                        </resource>
+                        <resource>
+                            <directory>src/main/webapp/META-INF</directory>
+                            <targetPath>META-INF</targetPath>
+                            <includes>
+                                <include>context.xml</include>
+                            </includes>
+                            <filtering>true</filtering>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>net.ju-n.maven.plugins</groupId>
+                <artifactId>checksum-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.lesscss</groupId>
+                <artifactId>lesscss-maven-plugin</artifactId>
+                <version>${lesscss.version}</version>
+                <configuration>
+                    <sourceDirectory>${project.basedir}/src/main/webapp/resources/css</sourceDirectory>
+                    <outputDirectory>${project.build.directory}/${maven.war.exploded}/resources/css</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.github.searls</groupId>
+                <artifactId>jasmine-maven-plugin</artifactId>
+                <version>${jasmine.version}</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <phase>test</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <skipTests>${maven.test.skip}</skipTests>
+                    <debug>true</debug>
+                    <specRunnerTemplate>REQUIRE_JS</specRunnerTemplate>
+                    <jsSrcDir>${project.build.webOutputDirectory}/META-INF/resources</jsSrcDir>
+                    <jsTestSrcDir>${project.build.webTestOutputDirectory}/META-INF/resources</jsTestSrcDir>
+                    <scriptLoaderPath>webjars/requirejs/${requirejs.version}/require.js</scriptLoaderPath>
+                    <customRunnerConfiguration>${project.build.webTestOutputDirectory}/META-INF/resources/jasmine.conf</customRunnerConfiguration>
+                    <specIncludes>
+                        <include>**/*-spec.js</include>
+                    </specIncludes>
+                </configuration>
+            </plugin>
+
+        </plugins>
+
+        <resources>
+
+            <resource>
+                <directory>src/main/javascript</directory>
+                <targetPath>${project.build.webOutputDirectory}/META-INF/resources/js</targetPath>
+            </resource>
+
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>**/*.properties</exclude>
+                    <exclude>**/log4j.xml</exclude>
+                </excludes>
+                <filtering>false</filtering>
+            </resource>
+
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/log4j.xml</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+
+            <resource>
+                <directory>${project.build.directory}/generated-resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+
+        </resources>
+
+        <testResources>
+
+            <testResource>
+                <directory>src/test/javascript</directory>
+                <targetPath>${project.build.webTestOutputDirectory}/META-INF/resources/js</targetPath>
+            </testResource>
+
+            <testResource>
+                <directory>src/test/resources</directory>
+                <targetPath>${project.build.webTestOutputDirectory}/META-INF/resources</targetPath>
+                <filtering>true</filtering>
+            </testResource>
+
+            <testResource>
+                <directory>src/test/resources</directory>
+                <excludes>
+                    <exclude>*.properties</exclude>
+                    <exclude>**/log4j.xml</exclude>
+                </excludes>
+                <filtering>false</filtering>
+            </testResource>
+
+            <testResource>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>*.properties</include>
+                    <include>**/log4j.xml</include>
+                </includes>
+                <filtering>true</filtering>
+            </testResource>
+
+            <testResource>
+                <directory>${project.build.directory}/generated-test-resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+                <filtering>true</filtering>
+            </testResource>
+
+        </testResources>
+
+    </build>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>ru.hflabs.rcd</groupId>
+            <artifactId>rcd-task</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.hflabs.rcd</groupId>
+            <artifactId>rcd-storage-sql</artifactId>
+            <version>${project.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.hflabs.rcd</groupId>
+            <artifactId>rcd-frontend-rmi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.hflabs.rcd</groupId>
+            <artifactId>rcd-frontend-soap</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.hflabs.rcd</groupId>
+            <artifactId>rcd-backend-console</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tiles</groupId>
+            <artifactId>tiles-jsp</artifactId>
+            <version>2.2.2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-nop</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>${javax.servlet-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>${javax.servlet-jstl.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>${commons-fileupload.version}</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

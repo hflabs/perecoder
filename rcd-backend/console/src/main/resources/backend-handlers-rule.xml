@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Процессор импорта правил перекодирования из файла -->
+    <bean id="importOverFile.rules" class="ru.hflabs.rcd.backend.console.imports.handlers.rule.ImportRulesOverFile" parent="importProcessorOverFileTemplate"/>
+
+    <!-- Процессор импорта правил перекодирования из директории -->
+    <bean id="importOverDirectory.rules" class="ru.hflabs.rcd.backend.console.imports.handlers.rule.ImportRulesOverDirectory" parent="importOverFile.rules"/>
+
+</beans>

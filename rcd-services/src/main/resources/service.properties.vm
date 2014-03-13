@@ -1,0 +1,21 @@
+#set($symbol_pound = '#')
+#set($prefix = "#if($scope)${scope}_#end")
+${symbol_pound} Максимальный размер очереди оповещений
+notification.queueSize = ${service.notification.queueSize}
+${symbol_pound} Интервал агрегирования оповещений
+notification.interval = ${service.notification.interval}
+
+${symbol_pound} Параметры соединения с SMTP сервером
+notification.email.host = ${service.notification.email.host}
+notification.email.port = ${service.notification.email.port}
+notification.email.protocol = ${service.notification.email.protocol}
+notification.email.username = ${service.notification.email.username}
+notification.email.password = ${service.notification.email.password}
+notification.email.encoding = ${service.notification.email.encoding}
+notification.email.timeout = ${service.notification.email.timeout}
+
+${symbol_pound} Параметры отправки сообщений
+notification.email.from = ${service.notification.email.from}
+notification.email.to = ${service.notification.email.to}
+notification.email.cc = ${service.notification.email.cc}
+notification.email.bcc = ${service.notification.email.bcc}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Базовый пул соединений с БД -->
+    <bean id="basicDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" abstract="true"/>
+
+    <!-- Пул соединений с БД -->
+    <bean id="dataSource.rcd" parent="basicDataSource">
+        <!-- Driver settings -->
+        <property name="driverClassName" value="$jdbc{jdbc.driverClassName}"/>
+        <property name="url" value="$jdbc{jdbc.url}"/>
+        <!-- Connection settings -->
+        <property name="username" value="$jdbc{jdbc.username}"/>
+        <property name="password" value="$jdbc{jdbc.password}"/>
+        <property name="connectionProperties" value="$jdbc{jdbc.properties}"/>
+        <!-- Pool settings -->
+        <property name="initialSize" value="$jdbc{jdbc.initialSize}"/>
+        <property name="maxIdle" value="$jdbc{jdbc.maxIdle}"/>
+        <property name="maxActive" value="$jdbc{jdbc.maxActive}"/>
+        <property name="maxWait" value="$jdbc{jdbc.maxWait}"/>
+        <property name="testOnBorrow" value="$jdbc{jdbc.testOnBorrow}"/>
+        <property name="testWhileIdle" value="$jdbc{jdbc.testWhileIdle}"/>
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <property name="validationQuery" value="$jdbc{jdbc.validationQuery}"/>
+        <property name="defaultAutoCommit" value="$jdbc{jdbc.autoCommit}"/>
+        <property name="poolPreparedStatements" value="false"/>
+        <property name="maxOpenPreparedStatements" value="50"/>
+    </bean>
+
+</beans>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+    <!-- Сервис сравнения оповещений -->
+    <bean id="notificationComparator" class="org.springframework.util.comparator.CompoundComparator">
+        <constructor-arg>
+            <list>
+                <util:constant static-field="ru.hflabs.rcd.model.notification.NotificationComparators.BY_FROM_GROUP"/>
+                <util:constant static-field="ru.hflabs.rcd.model.notification.NotificationComparators.BY_FROM_DICTIONARY"/>
+                <util:constant static-field="ru.hflabs.rcd.model.notification.NotificationComparators.BY_TO_GROUP"/>
+                <util:constant static-field="ru.hflabs.rcd.model.notification.NotificationComparators.BY_TO_DICTIONARY"/>
+                <util:constant static-field="ru.hflabs.rcd.model.notification.NotificationComparators.BY_TYPE"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <!-- Слушатель отправки оповещений по электронной почте -->
+    <bean class="ru.hflabs.rcd.service.notification.NotificationToEmailListener">
+        <!-- Сервис сравнения оповещений перед отправкой -->
+        <property name="notificationComparator" ref="notificationComparator"/>
+        <!--Провайдер отправки сообщения-->
+        <property name="mailSender">
+            <bean class="org.springframework.mail.javamail.JavaMailSenderImpl">
+                <property name="host" value="$service{notification.email.host}"/>
+                <property name="port" value="$service{notification.email.port}"/>
+                <property name="protocol" value="$service{notification.email.protocol}"/>
+                <property name="username" value="$service{notification.email.username}"/>
+                <property name="password" value="$service{notification.email.password}"/>
+                <property name="defaultEncoding" value="$service{notification.email.encoding}"/>
+                <!-- See also http://javamail.kenai.com/nonav/javadocs/com/sun/mail/smtp/package-summary.html -->
+                <property name="javaMailProperties">
+                    <props>
+                        <prop key="mail.smtp.connectiontimeout">$service{notification.email.timeout}</prop>
+                        <prop key="mail.smtp.timeout">$service{notification.email.timeout}</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
+        <!-- Шаблонизатор -->
+        <property name="velocityEngine">
+            <bean class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+                <property name="velocityProperties">
+                    <props>
+                        <prop key="resource.loader">class</prop>
+                        <prop key="class.resource.loader.class">org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader</prop>
+                    </props>
+                </property>
+            </bean>
+        </property>
+        <!-- Параметры отправки сообщения -->
+        <property name="messageParameters">
+            <bean class="ru.hflabs.rcd.service.notification.NotificationToEmailListener$MessageParameters">
+                <property name="from" value="$service{notification.email.from}"/>
+                <property name="to" value="$service{notification.email.to}"/>
+                <property name="cc" value="$service{notification.email.cc}"/>
+                <property name="bcc" value="$service{notification.email.bcc}"/>
+            </bean>
+        </property>
+        <!-- Флаг отправки сообщения в HTML виде -->
+        <property name="htmlMessage" value="true"/>
+    </bean>
+
+</beans>

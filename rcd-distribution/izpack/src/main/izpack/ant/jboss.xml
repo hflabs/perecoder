@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="jboss" basedir="">
+
+    <property name="jboss.bin" value="${jboss.home}/bin"/>
+    <property name="jboss.deployments" value="${jboss.home}/standalone/deployments"/>
+    <property name="jboss.binary.cli" value="jboss-cli"/>
+    <property name="jboss.binary.run" value="standalone"/>
+
+    <macrodef name="unpack_archive" description="Unpack archive">
+        <attribute name="from"/>
+        <attribute name="to"/>
+        <sequential>
+            <echo message="Unpack archive @{from} to @{to}"/>
+            <unzip src="@{from}" dest="@{to}" overwrite="true"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="execute_binary" description="Execute binary in JBoss">
+        <attribute name="home"/>
+        <attribute name="binary"/>
+        <attribute name="spawn" default="true"/>
+        <attribute name="args"/>
+        <attribute name="failOnError"/>
+        <sequential>
+            <echo message="Execute @{binary} at @{home} with args: @{args}"/>
+            <exec executable="cmd" osfamily="windows" spawn="@{spawn}">
+                <arg value="/c"/>
+                <arg value="@{home}/bin/@{binary}.bat"/>
+                <arg line="@{args}"/>
+            </exec>
+            <exec executable="/bin/sh" osfamily="unix" spawn="@{spawn}">
+                <arg value="@{home}/bin/@{binary}.sh"/>
+                <arg line="@{args}"/>
+            </exec>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="configure_cli" description="Configure JBoss parameters">
+        <attribute name="home"/>
+        <attribute name="port"/>
+        <sequential>
+            <execute_binary home="@{home}" binary="${jboss.binary.cli}" args="--connect --command=:shutdown" spawn="false" failOnError="false"/>
+            <execute_binary home="@{home}" binary="${jboss.binary.run}" args="--admin-only" spawn="true" failOnError="true"/>
+            <echo message="Waiting JBoss at @{home}"/>
+            <waitfor maxwait="1" maxwaitunit="minute">
+                <socket server="localhost" port="@{port}"/>
+            </waitfor>
+            <execute_binary home="@{home}" binary="${jboss.binary.cli}" args="--file=@{home}/bin/hflabs-config.cli" spawn="false" failOnError="true"/>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="configure_ds" description="Configure JBoss data source">
+        <attribute name="home"/>
+        <attribute name="jdbcType"/>
+        <sequential>
+            <echo message="Configure JBoss data source at @{home}"/>
+            <copy file="${jboss.deployments}/rcd-@{jdbcType}-ds.xml.example"
+                  tofile="${jboss.deployments}/rcd-@{jdbcType}-ds.xml"
+                  overwrite="true"/>
+            <replace file="${jboss.deployments}/rcd-@{jdbcType}-ds.xml" encoding="${ant.encoding}">
+                <replacefilter value="${storage.jdbc.host}">
+                    <replacetoken><![CDATA[${storage.jdbc.host}]]></replacetoken>
+                </replacefilter>
+                <replacefilter value="${storage.jdbc.port}">
+                    <replacetoken><![CDATA[${storage.jdbc.port}]]></replacetoken>
+                </replacefilter>
+                <replacefilter value="${storage.jdbc.sid}">
+                    <replacetoken><![CDATA[${storage.jdbc.sid}]]></replacetoken>
+                </replacefilter>
+                <replacefilter value="${storage.jdbc.username}">
+                    <replacetoken><![CDATA[${storage.jdbc.username}]]></replacetoken>
+                </replacefilter>
+                <replacefilter value="${storage.jdbc.password}">
+                    <replacetoken><![CDATA[${storage.jdbc.password}]]></replacetoken>
+                </replacefilter>
+            </replace>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="configure_jvm" description="Configure JVM application properties">
+        <attribute name="home"/>
+        <attribute name="token"/>
+        <attribute name="value"/>
+        <sequential>
+            <echo message="Configure JVM application properties at @{home}"/>
+            <replaceregexp match="^(#|:|rem)(.*)(\$\{@{token}\})(.*)"
+                           replace="\2@{value}\4"
+                           byline="true"
+                           encoding="${ant.encoding}">
+                <fileset dir="@{home}/bin">
+                    <include name="standalone.conf*"/>
+                </fileset>
+            </replaceregexp>
+        </sequential>
+    </macrodef>
+
+    <target name="install_jboss" description="Install JBoss">
+        <unpack_archive from="${jboss.path}" to="${jboss.dir}"/>
+        <unpack_archive from="${data.dir}/${data.jboss}" to="${jboss.dir}/${jboss.name}"/>
+    </target>
+
+    <target name="configure_jboss_cli" description="Configure JBoss CLI">
+        <pathconvert targetos="unix" property="rcd.home.path">
+            <path location="${rcd.home}"/>
+        </pathconvert>
+        <configure_cli home="${jboss.home}" port="${jboss.port}"/>
+        <configure_jvm home="${jboss.home}" token="rcd.home" value="${rcd.home.path}"/>
+        <echo message="Copy 3rd party artifacts"/>
+        <copy todir="${rcd.home.path}/3rdparty">
+            <fileset dir="${data.dir}/${data.3rdparty}" erroronmissingdir="false"/>
+        </copy>
+    </target>
+
+    <target name="configure_jboss_ds.check">
+        <condition property="configure_jboss_ds.run">
+            <available file="${jboss.deployments}/rcd-${storage.jdbc.type}-ds.xml.example"/>
+        </condition>
+    </target>
+
+    <target name="configure_jboss_ds" description="Configure JBoss data source" depends="configure_jboss_ds.check" if="configure_jboss_ds.run">
+        <configure_ds home="${jboss.home}" jdbcType="${storage.jdbc.type}"/>
+        <configure_jvm home="${jboss.home}" token="storage.jdbc.type" value="${storage.jdbc.type}"/>
+    </target>
+
+    <target name="install_application" description="Install application">
+        <delete dir="${jboss.deployments}" includes="rcd*.war" failonerror="false"/>
+        <copy todir="${jboss.deployments}">
+            <fileset dir="${data.dir}" includes="rcd*.war"/>
+        </copy>
+    </target>
+
+</project>

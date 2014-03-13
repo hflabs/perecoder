@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <import resource="storage-*.xml"/>
+
+    <!-- Сервис конфигурирования свойств -->
+    <bean parent="propertyPlaceholderConfigurer.inMemory">
+        <property name="placeholderPrefix" value="$storage{"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="location" value="classpath:storage.properties"/>
+    </bean>
+
+    <bean id="sequenceService" class="ru.hflabs.rcd.storage.sequence.SequenceService">
+        <constructor-arg>
+            <bean class="ru.hflabs.rcd.storage.sequence.UUIDSequenceGenerator"/>
+        </constructor-arg>
+    </bean>
+
+    <!-- Базовый класс сервиса изменения документов -->
+    <bean id="changeServiceTemplate" class="ru.hflabs.rcd.storage.ChangeServiceTemplate" abstract="true"/>
+
+</beans>

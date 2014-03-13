@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.hflabs.rcd</groupId>
+        <artifactId>rcd-api</artifactId>
+        <version>3.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>rcd-api-common</artifactId>
+
+    <packaging>jar</packaging>
+
+    <name>HFLabs RCD common API module</name>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.jboss.maven.plugins</groupId>
+                <artifactId>maven-injection-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>bytecode</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <bytecodeInjections>
+                        <bytecodeInjection>
+                            <expression>${project.version}</expression>
+                            <targetMembers>
+                                <methodBodyReturn>
+                                    <className>ru.hflabs.rcd.Version</className>
+                                    <methodName>getCurrentVersion</methodName>
+                                </methodBodyReturn>
+                            </targetMembers>
+                        </bytecodeInjection>
+                        <bytecodeInjection>
+                            <expression>${project.scm.revision}</expression>
+                            <targetMembers>
+                                <methodBodyReturn>
+                                    <className>ru.hflabs.rcd.Version</className>
+                                    <methodName>getRevision</methodName>
+                                </methodBodyReturn>
+                            </targetMembers>
+                        </bytecodeInjection>
+                    </bytecodeInjections>
+                </configuration>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>${commons-lang.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.0.0.GA</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>jsr250-api</artifactId>
+            <version>${javax.annotation.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.hflabs</groupId>
+            <artifactId>utils-core</artifactId>
+            <version>${ru.hflabs.util.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${springframework.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>

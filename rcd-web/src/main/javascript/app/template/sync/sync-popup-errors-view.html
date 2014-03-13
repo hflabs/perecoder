@@ -1,0 +1,23 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3><%- tc('view.sync.last_errors') %></h3>
+</div>
+<div class="modal-body">
+    <div class="errors-wrapper">
+    <% if (result && result.errorMessage) { %>
+    <p><%- result.errorMessage %></p>
+    <% } %>
+    <% if (result && result.content && result.content.errorCount > 0 && _.isArray(result.content.dictionaries)) { %>
+    <h4><%- tc('view.sync.last_errors_dictionaries') %>:</h4>
+    <dl>
+        <% _.each(_.where(result.content.dictionaries, {status:'ERROR'}), function(dictionary){ %>
+        <dt><%- dictionary.dictionaryName %> [<%- dictionary.groupName %>]</dt>
+        <dd><%- dictionary.errorMessage %></dd>
+        <% }); %>
+    </dl>
+    <% } %>
+    </div>
+</div>
+<div class="modal-footer">
+    <button id="sync-errors-button-close" class="btn btn-primary pull-right" data-dismiss="modal" data-action="close" autofocus="autofocus"><%- tc('view.sync.button.close') %></button>
+</div>

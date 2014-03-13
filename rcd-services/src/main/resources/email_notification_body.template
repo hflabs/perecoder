@@ -1,0 +1,18 @@
+#set( $date_pattern = "HH:mm" )
+<html>
+    <body>
+        <p>Добрый день,</p>
+        <p>За период с $DateUtil.formatDate($interval.first, $date_pattern) по $DateUtil.formatDate($interval.second, $date_pattern) произошли следующие ошибки перекодировки справочников:</p>
+        <ul>
+        #foreach(${n} in ${notifications})
+            #if(${n.type} == 'NO_RULE_ALIAS')
+                <li>Не найдена перекодировка с названием "${n.ruleSetName}" ($n.count шт.)</li>
+            #elseif(${n.type} == 'NO_VALUE')
+                <li>${n.fromGroupName}.${n.fromDictionaryName}: не найдено исходное значение "${n.fromValue}" ($n.count шт.)</li>
+            #else
+                <li>${n.fromGroupName}.${n.fromDictionaryName} &rarr; ${n.toGroupName}.${n.toDictionaryName}: ошибка ${n.type} ($n.count шт.)</li>
+            #end
+        #end
+        </ul>
+    </body>
+</html>

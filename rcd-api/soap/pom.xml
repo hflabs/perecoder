@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.hflabs.rcd</groupId>
+        <artifactId>rcd-api</artifactId>
+        <version>3.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>rcd-api-soap</artifactId>
+
+    <packaging>jar</packaging>
+
+    <name>HFLabs RCD soap API module</name>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-codegen-plugin</artifactId>
+                <configuration>
+                    <sourceRoot>${project.build.directory}/generated-sources/src</sourceRoot>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate-sources-by-wsdl</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>wsdl2java</goal>
+                        </goals>
+                        <configuration>
+                            <classesDirectory>${project.build.directory}/generated-sources/src</classesDirectory>
+                            <wsdlOptions>
+                                <wsdlOption>
+                                    <wsdl>src/main/resources/WEB-INF/rcd-ws.wsdl</wsdl>
+                                    <validateWsdl>true</validateWsdl>
+                                    <wsdlLocation>classpath:WEB-INF/rcd-ws.wsdl</wsdlLocation>
+                                    <bindingFiles>
+                                        <bindingFile>src/main/resources/rcd-ws.xjb</bindingFile>
+                                    </bindingFiles>
+                                    <extraargs>
+                                        <extraarg>-verbose</extraarg>
+                                        <extraarg>-mark-generated</extraarg>
+                                        <extraarg>-fe</extraarg>
+                                        <extraarg>jaxws21</extraarg>
+                                    </extraargs>
+                                </wsdlOption>
+                            </wsdlOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>ru.hflabs.rcd</groupId>
+            <artifactId>rcd-api-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>${javax.rs.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>

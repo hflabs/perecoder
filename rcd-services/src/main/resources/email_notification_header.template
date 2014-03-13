@@ -1,0 +1,2 @@
+#set( $date_pattern = "HH:mm" )
+Проблемы перекодировки ($DateUtil.formatDate($interval.first, $date_pattern)–$DateUtil.formatDate($interval.second, $date_pattern))

@@ -1,0 +1,23 @@
+<div class="dropdown-wrapper">
+    <section class="table-wrapper clear" data-region="records"></section>
+    <div class="target-dropdown" style="display: none">
+        <div class="dropdown-selection"></div>
+        <div class="target-dropdown-inner">
+            <div class="dropdown-filter clearfix">
+                <a class="command" data-action="reset"><%- getResetText() %></a>
+                <div class="searchbar in-page">
+                    <div class="input-wrapper">
+                        <input type="text" data-field="filter" placeholder="<%- tc('view.records.filter.placeholder') %>">
+                    </div>
+                    <i class="icon-16 search"></i>
+                    <i class="icon-16 clear"></i>
+                </div>
+            </div>
+            <div class="dropdown-table-wrapper">
+                <table class="table" data-region="dropdown"></table>
+            </div>
+            <div data-region="pager"></div>
+        </div>
+    </div>
+</div>
+

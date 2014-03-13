@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <!-- Task execution descriptor -->
+    <union-subclass name="ru.hflabs.rcd.model.task.TaskDescriptor" extends="ru.hflabs.rcd.model.document.DocumentTemplate">
+        <property name="name"/>
+        <property name="description"/>
+        <property name="cron"/>
+        <property name="parameters">
+            <type name="org.hibernate.type.JsonBlobType">
+                <param name="org.hibernate.type.ParameterType.returnedClass">java.util.Map</param>
+            </type>
+        </property>
+    </union-subclass>
+
+    <!-- Task execution result -->
+    <union-subclass name="ru.hflabs.rcd.model.task.TaskResult" extends="ru.hflabs.rcd.model.EssenceTemplate">
+        <property name="descriptorId"/>
+        <property name="owner"/>
+        <property name="author"/>
+        <property name="registrationDate"/>
+        <property name="startDate"/>
+        <property name="endDate"/>
+        <property name="status">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">ru.hflabs.rcd.model.task.TaskResultStatus</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        <property name="errorMessage"/>
+        <property name="parameters">
+            <type name="org.hibernate.type.JsonBlobType">
+                <param name="org.hibernate.type.ParameterType.returnedClass">java.util.Map</param>
+            </type>
+        </property>
+        <property name="content">
+            <type name="org.hibernate.type.JsonBlobType">
+                <param name="org.hibernate.type.ParameterType.returnedClass">java.util.Map</param>
+            </type>
+        </property>
+    </union-subclass>
+
+</hibernate-mapping>

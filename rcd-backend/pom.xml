@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.hflabs.rcd</groupId>
+        <artifactId>rcd</artifactId>
+        <version>3.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>rcd-backend</artifactId>
+
+    <packaging>pom</packaging>
+
+    <name>HFLabs RCD backend module</name>
+    <description>Модуль агрегирует утилитные приложения для работы с системой</description>
+
+    <properties>
+        <jcommander.version>1.30</jcommander.version>
+    </properties>
+
+    <modules>
+        <module>console</module>
+    </modules>
+
+    <build>
+
+        <pluginManagement>
+
+            <plugins>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>extract-scripts</id>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>unpack</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${project.build.directory}/assembly/exec</outputDirectory>
+                                <artifactItems>
+                                    <artifactItem>
+                                        <groupId>ru.hflabs</groupId>
+                                        <artifactId>parent-resources</artifactId>
+                                        <version>${ru.hflabs.parent.version}</version>
+                                        <overWrite>true</overWrite>
+                                    </artifactItem>
+                                </artifactItems>
+                                <includes>*.bat,*.sh,*.vm</includes>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>com.google.code.maven-replacer-plugin</groupId>
+                    <artifactId>replacer</artifactId>
+                    <configuration>
+                        <preserveDir>false</preserveDir>
+                        <basedir>${project.basedir}</basedir>
+                        <outputBasedir>${project.build.directory}/assembly/exec</outputBasedir>
+                        <inputFilePattern>application.(.*).vm</inputFilePattern>
+                        <filesToInclude>*/assembly/exec/**.vm</filesToInclude>
+                        <regex>false</regex>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>net.ju-n.maven.plugins</groupId>
+                    <artifactId>checksum-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>artifact-checksum</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>files</goal>
+                            </goals>
+                            <configuration>
+                                <csvSummary>false</csvSummary>
+                                <fileSets>
+                                    <fileSet>
+                                        <directory>${project.build.directory}</directory>
+                                        <includes>
+                                            <include>${project.build.finalName}.zip</include>
+                                        </includes>
+                                    </fileSet>
+                                </fileSets>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+            </plugins>
+
+        </pluginManagement>
+
+    </build>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>ru.hflabs.rcd</groupId>
+            <artifactId>rcd-api-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-ldap</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-cli</groupId>
+            <artifactId>commons-cli</artifactId>
+            <version>${commons-cli.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.beust</groupId>
+            <artifactId>jcommander</artifactId>
+            <version>${jcommander.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.hflabs.rcd</groupId>
+            <artifactId>rcd-api-embedded</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>

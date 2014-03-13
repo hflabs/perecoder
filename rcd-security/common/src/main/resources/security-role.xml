@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+    <!-- Иерархия ролей -->
+    <bean id="roleHierarchy" class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl">
+        <property name="hierarchy">
+            <value>
+                ROLE_ADMINISTRATOR > ROLE_OPERATOR
+                ROLE_SYSTEM > ROLE_ADMINISTRATOR
+            </value>
+        </property>
+    </bean>
+
+    <!-- Сервис определения роли -->
+    <bean id="roleHierarchyVoter" class="org.springframework.security.access.vote.RoleHierarchyVoter">
+        <constructor-arg type="org.springframework.security.access.hierarchicalroles.RoleHierarchy" ref="roleHierarchy"/>
+        <property name="rolePrefix" value=""/>
+    </bean>
+
+    <!-- Менеджер определения прав доступа -->
+    <bean id="accessDecisionManager" class="org.springframework.security.access.vote.AffirmativeBased">
+        <constructor-arg>
+            <util:list value-type="org.springframework.security.access.AccessDecisionVoter">
+                <ref bean="roleHierarchyVoter"/>
+                <bean class="org.springframework.security.access.vote.AuthenticatedVoter"/>
+            </util:list>
+        </constructor-arg>
+        <property name="allowIfAllAbstainDecisions" value="false"/>
+    </bean>
+
+</beans>

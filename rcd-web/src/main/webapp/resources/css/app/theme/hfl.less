@@ -1,0 +1,63 @@
+@import "../common/const";
+@imagepath: "../../../images/hfl";
+
+.navbar {
+    .authentication {
+        .username {
+            div {
+                &:before {
+                    content: '';
+                    background-image: url("@{imagepath}/icons_16.png");
+                    background-position: 0 -144px;
+                }
+            }
+        }
+    }
+    .brand {
+        background: transparent url("@{imagepath}/logo.png");
+    }
+}
+
+#form-login h1.brand i {
+    background-image: url("@{imagepath}/logo.png");
+}
+
+.icon-16 {
+    background-image: url("@{imagepath}/icons_16.png");
+}
+
+.icon-20 {
+    background-image: url("@{imagepath}/icons_20.png");
+}
+
+.icon-24 {
+    background-image: url("@{imagepath}/icons_24.png");
+}
+
+.icon-32 {
+    background-image: url("@{imagepath}/icons_32.png");
+}
+
+.icon-36 {
+    background-image: url("@{imagepath}/icons_36.png");
+}
+
+.icon-48 {
+    background-image: url("@{imagepath}/icons_48.png");
+    &.running {
+        background-image: url("@{imagepath}/sync_48_running.gif");
+        background-position: 0 0;
+    }
+}
+
+.icon-64 {
+    background-image: url("@{imagepath}/icons_64.png");
+}
+
+.error-404 {
+    background: url("@{imagepath}/404.png") no-repeat 20px 50%;
+}
+
+.error-500 {
+    background: url("@{imagepath}/500.png") no-repeat 20px 50%;
+}

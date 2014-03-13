@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Базовый валитатор справочника -->
+    <bean id="dictionaryValidator" class="ru.hflabs.rcd.service.document.dictionary.DictionaryChangeValidator" parent="existedDocumentValidator" abstract="true">
+        <property name="documentService" ref="dictionaryService"/>
+        <property name="groupService" ref="groupService"/>
+    </bean>
+    <!-- Валидатор создания справочника -->
+    <bean id="dictionaryValidator.create" parent="dictionaryValidator">
+        <constructor-arg value="false"/>
+    </bean>
+    <!-- Валидатор обновления справочника -->
+    <bean id="dictionaryValidator.update" parent="dictionaryValidator">
+        <constructor-arg value="true"/>
+    </bean>
+    <!-- Валидатор закрытия справочника -->
+    <bean id="dictionaryValidator.close" class="ru.hflabs.rcd.service.document.dictionary.DictionaryCloseValidator" parent="validatorService">
+        <property name="groupService" ref="groupService"/>
+    </bean>
+
+    <!-- Сервис работы со справочниками -->
+    <bean id="dictionaryService" class="ru.hflabs.rcd.service.document.dictionary.DictionaryService" parent="namedDocumentServiceTemplate">
+        <property name="storageService" ref="dictionaryStorageService"/>
+        <property name="groupService" ref="groupService"/>
+        <property name="createValidator" ref="dictionaryValidator.create"/>
+        <property name="updateValidator" ref="dictionaryValidator.update"/>
+        <property name="closeValidator" ref="dictionaryValidator.close"/>
+    </bean>
+
+</beans>

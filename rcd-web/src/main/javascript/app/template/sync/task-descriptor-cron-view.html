@@ -1,0 +1,76 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3><%- tc('view.sync.edit.editcron') %> 
+        <% if (description) { %>
+        <div class="font-small">(<%- description %>)</div>
+        <% } %>
+    </h3>
+</div>
+<div class="modal-body">
+    <form class="form-horizontal">
+        <div class="alert"></div>
+        <div class="control-group">
+            <label class="control-label"><%- tc('view.sync.edit.cron_enabled') %></label>
+            <div class="controls">
+                <div class="make-switch" tabindex="-1" data-on-label="<%- t('view.sync.edit.on') %>" data-off-label="<%- t('view.sync.edit.off') %>">
+                    <input type="checkbox" checked="checked">
+                </div>
+            </div>
+        </div>
+        <fieldset data-field="cron-details">
+            <div class="control-group">
+                <label class="control-label"><%- tc('model.sync.description.m') %></label>
+                <div class="controls">
+                    <input type="text" data-cron="m" value="<%- getTempCron().schedule.m.toString() %>" autofocus="autofocus">
+                    <div class="help-block"></div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label"><%- tc('model.sync.description.h') %></label>
+                <div class="controls">
+                    <input type="text" data-cron="h" value="<%- getTempCron().schedule.h.toString() %>">
+                    <div class="help-block"></div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label"><%- tc('model.sync.description.day') %></label>
+                <div class="controls">
+                    <input type="text" data-cron="day" value="<%- getTempCron().schedule.day.toString() %>">
+                    <div class="help-block"></div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label"><%- tc('model.sync.description.mon') %></label>
+                <div class="controls">
+                    <select class="selectpicker" size="1" data-cron="mon">
+                        <option value="*"><%- tc('model.time.month_*') %></option>
+                    <% for(var i=1; i<=12; i++) { %>
+                        <option value="<%= i %>"<% if (getTempCron().schedule.mon.toString() == i) { %> selected ="selected"<% } %>>
+                            <%- tc('model.time.month_' + i) %>
+                        </option>
+                    <% } %>
+                    </select>
+                    <div class="help-block"></div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label"><%- tc('model.sync.description.dow') %></label>
+                <div class="controls">
+                    <select class="selectpicker" size="1" data-cron="dow">
+                        <option value="*"><%- tc('model.time.dow_*') %></option>
+                    <% for(var i=1; i<=7; i++) { %>
+                        <option value="<%= i%7 %>"<% if (getTempCron().schedule.dow.toString() == i%7) { %> selected ="selected"<% } %>>
+                            <%- tc('model.time.dow_' + i%7) %>
+                        </option>
+                    <% } %>
+                    </select>
+                    <div class="help-block"></div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn pull-left" data-dismiss="modal" data-action="cancel"><%- tc('view.sync.button.cancel') %></button>
+    <button class="btn btn-primary pull-right" data-action="save"><%- tc('view.sync.button.save') %></button>
+</div>

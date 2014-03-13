@@ -1,0 +1,670 @@
+@import "const";
+@import "elements";
+
+/* === Common styles and overrides. === */
+* {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+}
+
+h1 {
+    font-family: "RobotoLight", Helvetica, Arial, sans-serif;
+    font-size: 32px;
+    font-weight: normal;
+}
+
+textarea {
+    resize: none;
+}
+
+/* ===================== Make Icons look better ===================== */
+a [class^="icon-"], a [class*=" icon-"] {
+    text-decoration: none;
+}
+
+/* ===================== Some common styles ===================== */
+
+/* Icon */
+i.icon {
+    text-align: center;
+    background-image: none;
+}
+
+/* Hidden element */
+.hidden {
+    display: none;
+}
+
+.autosize {
+    display: inline-block;
+    min-width: 100%;
+}
+
+/* command Links */
+a.command {
+    border-bottom: 1px dashed;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.font-large {
+    font-size: 133%;
+}
+
+.font-small {
+    font-size: 75%;
+}
+
+.break-word {
+    word-break: break-all;
+}
+
+.clear {
+    clear: both;
+}
+
+.muted {
+    color: @color-grey;
+}
+
+.color-ltgrey {
+    color: @color-ltgrey;
+}
+
+.color-dkgrey {
+    color: @color-dkgrey;
+}
+
+.centered {
+    text-align: center;
+}
+
+.group-name {
+    color: @color-ltgrey;
+    display: inline-block;
+    max-width: 100%;
+    vertical-align: top;
+    .single-lined;
+}
+
+/* ===================== Alerts and errors ===================== */
+
+.error {
+    color: red;
+}
+
+.alert {
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    .box-shadow(0 5px 10px rgba(128, 128, 128, .5));
+    position: fixed;
+    left: @alert-left;
+    right: @alert-right;
+    text-align: center;
+    top: @navbar-height;
+    z-index: 100;
+}
+
+.modal {
+    .alert {
+        top: 0;
+    }
+}
+
+/* ===================== Autocomplete ===================== */
+
+/* Input part of autocomplete textbox */
+.autocomplete-input {
+    width: @autocomplete-input-width;
+    /*padding-right: 28px !important;*/
+}
+
+/* Autocomplete dropdown menu */
+.dropdown-menu {
+    overflow: hidden;
+    a {
+        min-height: 20px;
+    }
+}
+
+/* ===================== Bootstrap selects ===================== */
+.bootstrap-select {
+    .dropdown-menu {
+        &.open {
+            right: 0;
+        }
+        &.inner {
+            width: 100%;
+            li {
+                > a {
+                    span {
+                        .single-lined;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* ===================== File upload ===================== */
+.fileupload {
+    display: inline-block;
+    margin-bottom: 0;
+    + .help-block {
+        margin-top: 10px;
+    }
+}
+
+.fileupload-exists {
+    &[data-dismiss="fileupload"] {
+        background: url("@{imagespath}/clear.png") no-repeat center center;
+        display: inline-block;
+        height: 20px;
+        margin-left: 5px;
+        width: 11px;
+    }
+    .input-append {
+        .btn-file {
+            .border-radius(3px, 3px, 0, 0);
+        }
+    }
+}
+
+/* ===================== Widgets ===================== */
+.widget {
+    background-color: @common-background-color;
+    border: 1px solid @common-border-color;
+    .rounded(@common-border-radius);
+    .box-shadow(2px 2px 3px #eee);
+    margin: @common-spacing;
+    min-width: 300px;
+    padding: 0;
+    article {
+        header {
+            .single-lined;
+        }
+    }
+    & > header {
+        .gradient(@header-bottom-color, @header-bottom-color, @header-top-color);
+        border-bottom: 1px solid #d5d5d5;
+        .border-radius(@common-border-radius, 0, 0, @common-border-radius);
+        padding: 0 10px;
+        h3 {
+            color: @header-text-color;
+            font-size: 100%;
+            margin: 0;
+            padding: 0;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+        }
+    }
+    article.message {
+        p {
+            border: none;
+            color: #bbb;
+            line-height: 41px;
+            text-align: center;
+            vertical-align: middle;
+        }
+    }
+    & > div.items {
+        margin: 0;
+        padding: 0;
+    }
+    & > div {
+        margin: 0;
+        padding: 5px;
+    }
+    &.autosize {
+        min-width: 99%;
+    }
+    /* ===================== Widget extension ===================== */
+    &.list {
+        article {
+            border-bottom: 1px dotted #CCC;
+            margin: 0;
+            padding: @common-spacing;
+            position: relative;
+        }
+        article:last-of-type {
+            border-bottom: none;
+        }
+    }
+}
+
+/* ===================== Tags ===================== */
+.tags {
+    a {
+        background: #eee;
+        border-radius: 4px;
+        display: inline-block;
+        margin: 2px;
+        padding: 2px 5px;
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+    }
+    a:hover {
+        background: #3a87ad;
+        color: #fff;
+    }
+}
+
+/* ===================== Forms ===================== */
+.control-label {
+    overflow-wrap: break-word;
+    &[required] {
+        &:after {
+            content: '*';
+            color: darkred;
+            display: inline-block;
+            width: 8px;
+            margin-right: -8px;
+        }
+    }
+}
+
+/* ===================== Bootstrap overrides ===================== */
+ul.inline & > li:first-child, ol.inline & > li:first-child {
+    padding-left: 0;
+}
+
+.btn {
+    &.flat {
+        background: transparent;
+        border: 1px solid @color-ltgrey;
+        border-radius: 6px;
+        &:not([disabled]):hover {
+            background: #fafafa;
+            border: 1px solid #578093;
+        }
+    }
+}
+
+/* ===================== Images ===================== */
+.interactive {
+    cursor: pointer;
+    &[disabled] {
+        cursor: default;
+    }
+}
+
+.icon-16, .icon-20, .icon-24, .icon-32, .icon-48, .icon-64 {
+    background-repeat: no-repeat;
+    display: inline-block !important;
+    padding-right: 10px;
+    vertical-align: middle;
+    button & {
+        vertical-align: top;
+    }
+}
+
+.icon-16, .icon-20.compact, .icon-24.compact, .icon-32.compact, .icon-36.compact, .icon-48.compact, .icon-64.compact {
+    padding-right: 0;
+}
+
+.icon-16 {
+    @icon-size: 16px;
+    height: @icon-size;
+    width: @icon-size;
+    &.clear {
+        background-position: 0 0;
+    }
+    &.search {
+        background-position: 0 -@icon-size;
+    }
+    &.trash {
+        background-position: 0 -(2 * @icon-size);
+        &.interactive {
+            &:hover {
+                background-position: -(2 * @icon-size) -(2 * @icon-size);
+            }
+        }
+    }
+    &.slideup {
+        background-position: 0 -(3 * @icon-size);
+    }
+    &.dictionary {
+        background-position: 0 -(4 * @icon-size);
+    }
+    &.unmatched {
+        background-position: 0 -(5 * @icon-size);
+    }
+    &.page {
+        background-position: 0 -(6 * @icon-size);
+    }
+    &.edit {
+        background-position: 0 -(7 * @icon-size);
+        &.interactive {
+            &:hover {
+                background-position: -(2 * @icon-size) -(7 * @icon-size);
+            }
+        }
+    }
+    &.undo {
+        background-position: 0 -(8 * @icon-size);
+        &.interactive {
+            &:hover {
+                background-position: -(2 * @icon-size) -(8 * @icon-size);
+            }
+        }
+    }
+    &.delete {
+        background-position: 0 -(10 * @icon-size);
+        &.interactive {
+            &:hover {
+                background-position: -(2 * @icon-size) -(10 * @icon-size);
+            }
+        }
+    }
+    &.cronadd {
+        background-position: 0 -(11 * @icon-size);
+    }
+    &.settings {
+        background-position: 0 -(12 * @icon-size);
+    }
+    &.cronedit {
+        background-position: 0 -(13 * @icon-size);
+    }
+    &.dictionary.locked {
+        background-position: 0 -(14 * @icon-size);
+    }
+    &.add {
+        background-position: 0 -(15 * @icon-size);
+    }
+    &.recodes-out {
+        background-position: 0 -(16 * @icon-size);
+    }
+    &.recodes-in {
+        background-position: 0 -(17 * @icon-size);
+    }
+    &.unique {
+        background-position: 0 -(18 * @icon-size);
+    }
+    &.not.unique {
+        background-position: 0 -(19 * @icon-size);
+    }
+    &.error {
+        background-position: 0 -(20 * @icon-size);
+    }
+    &.info {
+        background-position: 0 -(21 * @icon-size);
+    }
+}
+
+.icon-20 {
+    @icon-size: 20px;
+    height: @icon-size;
+    width: @icon-size;
+    &.empty {
+        background: none;
+    }
+    &.prev {
+        background-position: 0 0;
+    }
+    &.next {
+        background-position: 0 (-@icon-size);
+    }
+    &.upload {
+        background-position: 0 (-@icon-size * 2);
+    }
+    &.search {
+        background-position: 0 (-@icon-size * 3);
+        &.interactive {
+            &:hover {
+                background-position: -(2 * @icon-size) -(3 * @icon-size);
+            }
+        }
+    }
+    &.download {
+        background-position: 0 (-@icon-size * 4);
+    }
+    &.add {
+        background-position: 0 (-@icon-size * 5);
+        &.interactive {
+            &:hover:not([disabled]) {
+                background-position: -(2 * @icon-size) -(5 * @icon-size);
+            }
+        }
+    }
+    &.save {
+        background-position: 0 (-@icon-size * 6);
+        &.interactive {
+            &:hover {
+                background-position: -(2 * @icon-size) -(6 * @icon-size);
+            }
+        }
+    }
+    &.structure {
+        background-position: 0 (-@icon-size * 7);
+        &.interactive {
+            &:hover {
+                background-position: -(2 * @icon-size) -(7 * @icon-size);
+            }
+        }
+    }
+    &.trash {
+        background-position: 0 (-@icon-size * 8);
+        &.interactive {
+            &:hover {
+                background-position: -(2 * @icon-size) -(8 * @icon-size);
+            }
+        }
+        &.dark {
+            background-position: 0 (-@icon-size * 18);
+            &.interactive {
+                &:hover {
+                    background-position: -(2 * @icon-size) -(18 * @icon-size);
+                }
+            }
+        }
+    }
+    &.structure-ready {
+        background-position: 0 (-@icon-size * 9);
+        &.interactive {
+            &:hover {
+                background-position: -(2 * @icon-size) -(9 * @icon-size);
+            }
+        }
+    }
+    &.structure-add {
+        background-position: 0 (-@icon-size * 10);
+        &.interactive {
+            &:hover {
+                background-position: -(2 * @icon-size) -(10 * @icon-size);
+            }
+        }
+    }
+    &.expander {
+        background-position: 0 (-@icon-size * 11);
+        &.expanded {
+            background-position: 0 (-@icon-size * 12);
+        }
+        &:not(.empty){
+            cursor: pointer;
+        }
+    }
+    &.treeitem {
+        background-position: 0 (-@icon-size * 13);
+        width: (@icon-size * 2);
+        :last-child>& {
+            background-position: 0 (-@icon-size * 15);
+        }
+    }
+    &.group {
+        background-position: 0 (-@icon-size * 14);
+    }
+    &.dropdown-grey {
+        background-position: 0 (-@icon-size * 16);
+    }
+    &.dropdown-colour {
+        background-position: 0 (-@icon-size * 17);
+    }
+    &.pin {
+        background-position: 0 (-@icon-size * 19);
+    }
+}
+
+.icon-24 {
+    @icon-size: 24px;
+    height: @icon-size;
+    width: @icon-size;
+    &.attachment {
+        background-position: 0 0;
+    }
+    &.error {
+        background-position: 0 (-@icon-size);
+    }
+    &.empty {
+        background-position: 0 (-@icon-size * 2);
+    }
+    &.right_arrow {
+        background-position: 0 (-@icon-size * 3);
+    }
+    &.info {
+        background-position: 0 (-@icon-size * 4);
+    }
+    &.recodes {
+        background-position: 0 (-@icon-size * 5);
+    }
+}
+
+.icon-32 {
+    @icon-size: 32px;
+    height: @icon-size;
+    width: @icon-size;
+    &.accept {
+        background-position: 0 0;
+    }
+    &.clock {
+        background-position: 0 (-@icon-size);
+    }
+    &.cloud {
+        background-position: 0 (-@icon-size * 2);
+    }
+    &.group.locked {
+        background-position: 0 (-@icon-size * 3);
+    }
+    &.office_folders {
+        background-position: 0 (-@icon-size * 4);
+    }
+    &.group {
+        background-position: 0 (-@icon-size * 5);
+    }
+}
+
+.icon-36 {
+    @icon-size: 36px;
+    height: @icon-size;
+    width: @icon-size;
+    &.no-dictionary {
+        background-position: 0 (-@icon-size);
+    }
+    &.no-group {
+        background-position: 0 (-@icon-size * 2);
+    }
+    &.no-rule {
+        background-position: 0 (-@icon-size * 3);
+    }
+    &.no-ruleset {
+        background-position: 0 (-@icon-size * 4);
+    }
+    &.settings {
+        background-position: 0 (-@icon-size * 5);
+    }
+}
+
+.icon-48 {
+    @icon-size: 48px;
+    height: @icon-size;
+    width: @icon-size;
+    &.right_arrow {
+        background-position: 0 (-@icon-size);
+        margin-top: -3px;
+    }
+    &.lock {
+        background-position: 0 0;
+    }
+    &.ready {
+        background-position: 0 (-@icon-size * 2);
+    }
+    &.error {
+        background-position: 0 (-@icon-size * 3);
+    }
+    &.cancel {
+        background-position: 0 (-@icon-size * 4);
+    }
+    &.running {
+        background-position: 0 (-@icon-size * 5);
+    }
+}
+
+.icon-64 {
+    @icon-size: 64px;
+    height: @icon-size;
+    width: @icon-size;
+    &.app {
+        background-position: 0 -512px;
+    }
+    &.dictionary {
+        background-position: 0 0;
+    }
+    &.content {
+        background-position: 0 (-@icon-size);
+    }
+    &.dictionary-structure {
+        background-position: 0 (-@icon-size * 2);
+    }
+    &.group {
+        background-position: 0 (-@icon-size * 3);
+    }
+    &.recode {
+        background-position: 0 (-@icon-size * 4);
+    }
+    &.recode-set {
+        background-position: 0 (-@icon-size * 5);
+    }
+    &.recode-settings {
+        background-position: 0 (-@icon-size * 6);
+    }
+    &.sync {
+        background-position: 0 (-@icon-size * 7);
+    }
+}
+
+.icon-glyph {
+    color: @color-glyph;
+    &.add:before {
+        content: "\f067";
+    }
+    &.delete:before {
+        content: "\f014";
+    }
+    &.download:before {
+        content: "\f019";
+    }
+    &.edit:before {
+        content: "\f040";
+    }
+    &.recode:before {
+        content: "\f074";
+    }
+    &.settings:before {
+        content: "\f0ad";
+    }
+    &.structure:before {
+        content: "\f00a";
+    }
+    &.upload:before {
+        content: "\f093";
+    }
+}
+
+.progress {
+    .bar {
+        .gradient(#6a97a4, #6a97a4, #96c1cb);
+        border-bottom: 1px solid #45626b;
+    }
+}

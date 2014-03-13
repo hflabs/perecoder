@@ -1,0 +1,38 @@
+<article><%
+    if (writable === true) { %><span class="visible-in-hover"><i class="icon-16 trash interactive" data-action="delete"></i></span><%
+        if (getMode()!='edit-name' ) { %><span class="visible-in-hover edit"><i class="icon-16 edit interactive" data-mode="edit-name"></i></span><% }
+    }
+%><header>
+    <i class="icon-32 group<%= writable === true ? '' : ' locked' %>"></i><%
+    if (getMode()=='edit-name') {
+        %><input type="text" value="<%- name %>" data-field="name"><i class="icon-16 undo interactive" data-action="undo"></i><%
+    } else {
+        %><span class="fader"></span><a href="<%- buildUrl('DICTIONARIES', id) %>" title="<%- name %>" data-label="name" data-local="true"><%- name %></a><%
+    }
+%></header>
+<div class="dictionaries">
+    <i class="icon-16 dictionary"></i><%
+    if (statistic && statistic.totalCount) {
+        %><span class="total-count"><%= statistic.totalCount %></span> <%- t('model.dictionary', statistic.totalCount) %><%
+        if (statistic.unmatchedCount) {
+        %><span class="unmathed-count"><%= statistic.unmatchedCount %></span> <%- t('view.groups.unmatched', statistic.unmatchedCount) %><%
+        } else {
+        %><i class="icon-16 unmatched"></i> <%- tc('view.groups.all_matched') %><%
+        }
+    } else {
+        %><%- tc('view.groups.no_dictionaries') %><%
+    }
+%></div>
+<div class="description-wrapper"><%
+    if (getMode()=='edit-description'){%>
+    <i class="icon-16 page"></i><textarea data-field="description"><%- description || '' %></textarea><%
+    } else if (description || writable){%>
+    <div<%if(!description){%> class="visible-in-hover"<%}%>>
+        <i class="icon-16 page"></i>
+        <div class="description">
+            <span<%if(writable){%> data-mode="edit-description"<% } %> title="<%- description||'' %>"><%- description || tc('view.groups.no_description') %></span>
+        </div>
+    </div><%
+    }%>
+</div>
+</article>

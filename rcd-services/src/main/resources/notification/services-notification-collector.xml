@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Коллектор сбора оповещений по именованным путям -->
+    <bean id="byTypedNamedPathCollector" class="ru.hflabs.rcd.service.notification.collector.ByTypedNamedPathCollector" init-method="createCollection">
+        <property name="queueSize" value="$service{notification.queueSize}"/>
+    </bean>
+
+    <!-- Коллектор сбора оповещений за промежуток времени -->
+    <bean id="byIntervalCollector" class="ru.hflabs.rcd.service.notification.collector.ByIntervalCollector">
+        <property name="historyService" ref="historyService"/>
+        <property name="delegate" ref="byTypedNamedPathCollector"/>
+        <property name="executorService">
+            <bean class="java.util.concurrent.Executors" factory-method="newScheduledThreadPool">
+                <constructor-arg value="1"/>
+            </bean>
+        </property>
+        <property name="interval" value="$service{notification.interval}"/>
+    </bean>
+
+    <!-- Слушатель агрегирования ошибочных перекодировок -->
+    <bean class="ru.hflabs.rcd.service.notification.RecodeFailedAggregateListener">
+        <property name="notificationCollector" ref="byIntervalCollector"/>
+    </bean>
+
+</beans>

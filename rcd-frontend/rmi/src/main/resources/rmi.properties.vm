@@ -1,0 +1,3 @@
+#set($prefix = "#if($scope)${scope}_#end")
+rmi.port.registry = ${rmi.port.registry}
+rmi.port.service = ${rmi.port.service}

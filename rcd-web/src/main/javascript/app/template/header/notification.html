@@ -1,0 +1,25 @@
+<button class="close" title="<%- t('view.notifications.mark_as_processed') %>">×</button>
+<i class="icon-36 <%= getIconClass() %>"></i>
+<div>
+    <small>
+        <time><%= recodeDates() %></time>
+    </small>
+</div>
+<header><%
+if (recodeText()) {
+    if (recodeUrl()) {
+    %><a href="<%- recodeUrl() %>" title="<%= recodeText() %>" data-local="true"><%= recodeText() %></a><%
+    } else {
+    %><span title="<%= recodeText() %>"><%= recodeText() %></span><%
+    }
+} %>
+</header>
+<div>
+    <small>
+    <%- tc('model.notification.' + type) %>
+    (<%- t('view.notifications.count', count) %>)
+    <% if (recodeField()) { %>
+    <i><%- recodeField() %></i>
+    <% } %>
+    </small>
+</div>

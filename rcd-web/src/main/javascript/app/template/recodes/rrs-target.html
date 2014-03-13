@@ -1,0 +1,6 @@
+<i class="icon-16 recodes-out"></i> <%
+if (isCurrent()) {
+    %><%- toDictionary.name %> [ <%- toGroup.name %> ]<%
+} else {
+    %><a href="<%- buildUrl('RECODES', id) %>" data-local="true"><%- toDictionary.name %> [ <%- toGroup.name %> ]</a><%
+} %>

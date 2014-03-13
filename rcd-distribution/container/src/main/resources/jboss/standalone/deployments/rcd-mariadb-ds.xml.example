@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources xmlns="http://www.jboss.org/ironjacamar/schema"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.jboss.org/ironjacamar/schema http://docs.jboss.org/ironjacamar/schema/datasources_1_1.xsd">
+
+    <datasource jndi-name="java:rcd-dataSource-storage" pool-name="rcd-dataSource-storage" use-java-context="true">
+
+        <connection-url>jdbc:mariadb://${storage.jdbc.host}:${storage.jdbc.port}/${storage.jdbc.username}</connection-url>
+        <driver>mariadb</driver>
+
+        <connection-property name="useUnicode">true</connection-property>
+        <connection-property name="characterEncoding">UTF-8</connection-property>
+        <connection-property name="noAccessToProcedureBodies">true</connection-property>
+
+        <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+
+        <pool>
+            <min-pool-size>2</min-pool-size>
+            <max-pool-size>50</max-pool-size>
+        </pool>
+
+        <security>
+            <user-name>${storage.jdbc.username}</user-name>
+            <password>${storage.jdbc.password}</password>
+        </security>
+
+        <validation>
+            <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLValidConnectionChecker"/>
+            <check-valid-connection-sql>select 1</check-valid-connection-sql>
+            <validate-on-match>false</validate-on-match>
+            <background-validation>true</background-validation>
+            <background-validation-millis>120000</background-validation-millis>
+            <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLExceptionSorter"/>
+        </validation>
+
+        <timeout>
+            <!--
+            The length of time to wait for a connection to become available when all the connections are checked out
+            (default 5000 == 5 seconds, from 3.2.4 it is 30000 == 30 seconds)
+            -->
+            <blocking-timeout-millis>30000</blocking-timeout-millis>
+            <!-- The time before an unused connection is destroyed -->
+            <!-- NOTE: This is the check period. It will be destroyed somewhere between 1x and 2x this timeout after last use -->
+            <idle-timeout-minutes>1</idle-timeout-minutes>
+        </timeout>
+
+    </datasource>
+
+</datasources>

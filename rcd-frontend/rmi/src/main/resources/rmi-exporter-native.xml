@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean parent="propertyPlaceholderConfigurer.file">
+        <property name="placeholderPrefix" value="$rmi{"/>
+        <property name="location" value="classpath:rmi.properties"/>
+    </bean>
+
+    <!-- Базовый экспортер RMI сервисов -->
+    <bean id="rmiServiceExporter.core" class="org.springframework.remoting.rmi.RmiServiceExporter" parent="remoteExporter" scope="prototype">
+        <property name="registryPort" value="$rmi{rmi.port.registry}"/>
+        <property name="servicePort" value="$rmi{rmi.port.service}"/>
+    </bean>
+
+    <!-- Фабрика регистрации RMI сервисов -->
+    <bean id="rmiRemoteExporterBeanRegister" class="ru.hflabs.util.spring.remoting.rmi.RmiRemoteExporterBeanRegister">
+        <constructor-arg index="0" value="org.springframework.remoting.rmi.RmiServiceExporter"/>
+        <constructor-arg index="1">
+            <idref bean="rmiServiceExporter.core"/>
+        </constructor-arg>
+        <constructor-arg index="2" value="rcd/rmi/services"/>
+    </bean>
+
+</beans>

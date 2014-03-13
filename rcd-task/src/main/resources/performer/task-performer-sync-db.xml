@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+    <!-- Фабрика создания соединения с реляционной СУБД -->
+    <bean id="dataSourceConnectorFactory" class="ru.hflabs.rcd.task.performer.synchronization.db.DataSourceConnectorFactory">
+        <property name="descriptors" ref="dataSourceDescriptors"/>
+    </bean>
+
+    <!-- Исполнитель задачи синхронизации с СУБД -->
+    <bean id="dataSourceSyncTaskPerformer" class="ru.hflabs.rcd.task.performer.synchronization.db.DataSourceSyncTaskPerformer" parent="synchronizationTaskPerformer">
+        <!-- Access factory -->
+        <property name="dataSourceServiceFactory" ref="dataSourceConnectorFactory"/>
+    </bean>
+
+    <!-- Дескриптор задачи синхронизации с СУБД -->
+    <bean parent="taskDefinitionTemplate" scope="prototype">
+        <property name="id">
+            <idref bean="dataSourceSyncTaskPerformer"/>
+        </property>
+        <property name="parametersClass">
+            <bean factory-bean="dataSourceSyncTaskPerformer" factory-method="retrieveParameterClass"/>
+        </property>
+        <property name="availableValues">
+            <util:map>
+                <entry key="driverName" value-ref="dataSourceDescriptors"/>
+            </util:map>
+        </property>
+    </bean>
+
+</beans>

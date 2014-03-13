@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://hflabs.ru/rcd/schema/dictionary"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://hflabs.ru/rcd/schema/dictionary">
+
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+
+    <xsd:annotation>
+        <xsd:documentation><![CDATA[
+	        RCD XML Dictionary Schema, version 1.0
+
+	        This defines a simple and consistent way of creating a namespace
+	        of JavaBeans objects, managed by a RCD application.
+		]]></xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:element name="dictionary">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[
+	The top level (typically root) element.
+			]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="metaField" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="record" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="metaField">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[
+                Defines a single META column for dictionary
+			]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute name="name" type="xsd:string" use="required">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[
+	                    The unique name for META column
+				]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="field">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[
+                Defines a record field
+			]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                    <xsd:attribute name="name" type="xsd:string" use="required">
+                        <xsd:annotation>
+                            <xsd:documentation><![CDATA[
+                                The meta field name reference
+                        ]]></xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="record">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[
+                Defines a single dictionary record
+			]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="field" minOccurs="1" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>

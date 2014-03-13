@@ -1,0 +1,150 @@
+<izpack:installation xmlns:izpack="http://izpack.org/schema/installation"
+                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="http://izpack.org/schema/installation http://izpack.org/schema/5.0/izpack-installation-5.0.xsd"
+                     version="5.0">
+
+    <properties>
+        <property name="izpack.project.version" value="${project.version}"/>
+        <property name="izpack.encoding" value="${project.build.sourceEncoding}"/>
+    </properties>
+
+    <info>
+        <appname>${project.title}</appname>
+        <appversion>${project.version.short}</appversion>
+        <javaversion>${j2se.version}</javaversion>
+        <requiresjdk>true</requiresjdk>
+        <url>${organization.url}</url>
+        <authors>
+            <author name="${project.organization.name}" email="${project.organization.email}"/>
+        </authors>
+        <run-privileged condition="izpack.windowsinstall"/>
+        <uninstaller write="no"/>
+        <writeinstallationinformation>no</writeinstallationinformation>
+    </info>
+
+    <variables>
+        <variable name="DEFAULT_INSTALL_PATH" value="${USER_HOME}/.hflabs/rcd"/>
+        <!-- Paths -->
+        <variable name="TargetPanel.dir.windows" value="C:\HFLabs\rcd"/>
+        <variable name="TargetPanel.dir.unix" value="${USER_HOME}/HFLabs/rcd"/>
+        <!-- External resources -->
+        <variable name="izpack.data.dir" value="data"/>
+        <!-- JBoss parameters -->
+        <variable name="izpack.jboss.port" value="${container.jboss.port.management-native}"/>
+    </variables>
+
+    <dynamicvariables>
+        <variable name="izpack.tmp.path" value="${SYSTEM_java_io_tmpdir}" checkonce="true"/>
+        <variable name="izpack.logs.path" value="${DEFAULT_INSTALL_PATH}/logs" checkonce="true"/>
+        <variable name="izpack.licence.path" value="${SYSTEM_user_dir}/LICENSE"/>
+        <variable name="izpack.jboss.home" value="${izpack.jboss.dir}/${izpack.jboss.name}" condition="jboss.install.condition"/>
+    </dynamicvariables>
+
+    <conditions>
+        <condition type="exists" id="izpack.data.condition.exist">
+            <file>${izpack.data.dir}</file>
+        </condition>
+        <condition type="not" id="izpack.data.condition.notExist">
+            <condition refid="izpack.data.condition.exist"/>
+        </condition>
+        <condition type="variable" id="izpack.debug.condition">
+            <name>izpack.debug</name>
+            <value>yes</value>
+        </condition>
+        <condition type="packselection" id="db.configuration.condition">
+            <name>Database schema</name>
+        </condition>
+        <condition type="packselection" id="jboss.install.condition">
+            <name>Install JBoss</name>
+        </condition>
+        <condition type="not" id="jboss.home.condition">
+            <condition refid="jboss.install.condition"/>
+        </condition>
+    </conditions>
+
+    <!-- Install GUI preferences -->
+    <guiprefs width="640" height="480" resizable="no">
+        <modifier key="useLabelIcons" value="no"/>
+        <modifier key="layoutAnchor" value="CENTER"/>
+        <modifier key="labelGap" value="2"/>
+        <modifier key="allXGap" value="4"/>
+        <modifier key="allYGap" value="8"/>
+        <modifier key="doNotShowPackSizeColumn" value="true"/>
+        <modifier key="doNotShowRequiredSize" value="true"/>
+        <modifier key="langDisplayType" value="native"/>
+    </guiprefs>
+
+    <locale>
+        <langpack iso3="eng"/>
+        <langpack iso3="rus"/>
+    </locale>
+
+    <!-- Used resources -->
+    <resources>
+        <res id="customicons.xml" src="icons.xml"/>
+        <res id="CustomLangPack.xml_eng" src="i18n/global_en.xml"/>
+        <res id="CustomLangPack.xml_rus" src="i18n/global_ru.xml"/>
+        <res id="packsLang.xml_rus" src="i18n/packs_ru.xml"/>
+        <res id="userInputSpec.xml" src="inputs.xml"/>
+        <res id="userInputLang.xml_eng" src="i18n/inputs_en.xml"/>
+        <res id="userInputLang.xml_rus" src="i18n/inputs_ru.xml"/>
+        <res id="AntActionsSpec.xml" src="actions.xml"/>
+        <res id="ant.database.xml" src="ant/database.xml"/>
+        <res id="ant.jboss.xml" src="ant/jboss.xml"/>
+    </resources>
+
+    <!-- Install libraries -->
+    <jar src="lib/${project.artifactId}-${project.version}.jar" stage="both"/>
+
+    <!-- Install listeners -->
+    <listeners>
+        <listener classname="AntActionInstallerListener" stage="install"/>
+    </listeners>
+
+    <!-- Install panels -->
+    <panels>
+        <panel classname="CheckedHelloPanel"/>
+        <panel classname="DefaultTargetPanel"/>
+        <panel classname="UserInputPanel" id="data.input" condition="izpack.data.condition.notExist"/>
+        <panel classname="ru.hflabs.izpack.panels.ExternalLicencePanel"/>
+        <panel classname="PacksPanel"/>
+        <panel classname="UserInputPanel" id="db.configuration.input" condition="db.configuration.condition">
+            <validator classname="ru.hflabs.izpack.validator.db.DatabaseValidator"/>
+        </panel>
+        <panel classname="UserInputPanel" id="jboss.install.input" condition="jboss.install.condition"/>
+        <panel classname="UserInputPanel" id="jboss.home.input" condition="jboss.home.condition"/>
+        <panel classname="InstallPanel"/>
+        <panel classname="SimpleFinishPanel"/>
+    </panels>
+
+    <!-- Install packs -->
+    <packs>
+
+        <pack id="db.configuration.pack" name="Database schema" required="false" preselected="true">
+            <description>Create database schema</description>
+        </pack>
+
+        <pack id="jboss.install.pack" name="Install JBoss" required="false" preselected="true">
+            <description>Install and configure vanilla JBoss application server</description>
+            <executable targetfile="${ENV[ComSpec]}" keep="true" stage="postinstall">
+                <args>
+                    <arg value="\/c"/>
+                    <arg value="setx JAVA_HOME &quot;${SYSTEM_java_home}&quot; \/M"/>
+                </args>
+                <os family="windows"/>
+            </executable>
+            <executable targetfile="${izpack.jboss.dir}${FILE_SEPARATOR}${izpack.jboss.name}${FILE_SEPARATOR}bin${FILE_SEPARATOR}service.bat" keep="true" stage="postinstall">
+                <args>
+                    <arg value="install"/>
+                </args>
+                <os family="windows"/>
+            </executable>
+        </pack>
+
+        <pack id="application.pack" name="Install application" required="true">
+            <description>Install application into JBoss application server</description>
+        </pack>
+
+    </packs>
+
+</izpack:installation>

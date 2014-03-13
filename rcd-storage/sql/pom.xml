@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.hflabs.rcd</groupId>
+        <artifactId>rcd-storage</artifactId>
+        <version>3.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>rcd-storage-sql</artifactId>
+
+    <packaging>jar</packaging>
+
+    <name>HFLabs RCD sql storage module</name>
+    <description>Модуль хранилища данных на основе реляционной СУБД</description>
+
+    <properties>
+        <maven.remoteresources.skip>false</maven.remoteresources.skip>
+    </properties>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <configuration>
+                    <preserveDir>false</preserveDir>
+                    <basedir>${project.basedir}</basedir>
+                    <outputBasedir>${project.build.directory}/generated-schema</outputBasedir>
+                    <inputFilePattern>schema_(.*).sql.vm</inputFilePattern>
+                    <filesToInclude>src/main/schema/schema_*.sql.vm</filesToInclude>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate-schema-hsqldb</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <outputDir>hsqldb</outputDir>
+                            <outputFilePattern>schema_hsqldb_$1.sql</outputFilePattern>
+                            <tokenValueMap>src/main/schema/hsqldb/hsqldb.tokens</tokenValueMap>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-schema-mariadb</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <outputDir>mariadb</outputDir>
+                            <outputFilePattern>schema_mariadb_$1.sql</outputFilePattern>
+                            <tokenValueMap>src/main/schema/mariadb/mariadb.tokens</tokenValueMap>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-schema-oracle</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <outputDir>oracle</outputDir>
+                            <outputFilePattern>schema_oracle_$1.sql</outputFilePattern>
+                            <replacements />
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>rcd-storage-sql</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/resources/assemblies/assembly_schema.xml</descriptor>
+                                <descriptor>src/main/resources/assemblies/assembly_schema_sources.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>rcd-storage-sql-migration</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}/db/migration</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}/${project.build.finalName}-schema-resources</directory>
+                                    <includes>
+                                        <include>**/migrate/schema_migrate_*.sql</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>ru.hflabs.rcd</groupId>
+            <artifactId>rcd-storage-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.flyway</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>${flyway.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

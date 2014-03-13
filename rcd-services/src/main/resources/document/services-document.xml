@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Базовый класс работы с документами -->
+    <bean id="documentServiceTemplate" class="ru.hflabs.rcd.service.document.DocumentServiceTemplate" parent="filterDocumentServiceTemplate" abstract="true">
+        <property name="historyService" ref="historyService"/>
+    </bean>
+
+    <!-- Базовый сервис работы с именованными документами -->
+    <bean id="namedDocumentServiceTemplate" parent="documentServiceTemplate" abstract="true">
+        <property name="criteriaBuilder" ref="namedDocumentCriteriaBuilder"/>
+    </bean>
+
+</beans>

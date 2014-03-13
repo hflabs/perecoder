@@ -1,0 +1,22 @@
+<% var isCurrentGroupReadonly = getCurrentGroup() && getCurrentGroup().isReadonly(); %>
+<header class="page-main-header clearfix">
+    <i class="icon-64"></i>
+    <h1>
+        <button type="button" class="btn flat" data-action="upload" title="<%- tc('view.dictionaries.page.upload') %>"<%= isCurrentGroupReadonly ? ' disabled="disabled"' : '' %>><i class="icon-20 upload compact"></i></button>
+        <button type="button" class="btn flat" data-action="add" title="<%- tc('view.dictionaries.page.add') %>"<%= isCurrentGroupReadonly ? ' disabled="disabled"' : '' %>><i class="icon-glyph add"></i> <%- tc('view.dictionaries.page.add') %></button>
+        <div class="searchbar">
+            <div class="input-wrapper">
+                <input type="text" data-field="filter" placeholder="<%- tc('view.filter.placeholder') %>">
+            </div>
+            <span class="search"><i class="icon-20 compact search interactive"></i></span>
+        </div>
+        <%- t('view.dictionaries.page.title') %><%
+        var currentGroupName = getCurrentGroup() && getCurrentGroup().get('name');
+        if (currentGroupName) {
+            %> <span class="group-name">[<%- currentGroupName %>]</span><%
+        } %>
+    </h1>
+</header>
+<section class="table-wrapper rounded" data-region="dictionaries"></section>
+<section data-region="pager" class="pinnable"></section>
+<div data-region="popups"></div>

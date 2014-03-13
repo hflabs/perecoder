@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Процессор импорта справочника из файла -->
+    <bean id="importOverFile.dictionaries" class="ru.hflabs.rcd.backend.console.imports.handlers.dictionary.ImportDictionariesOverFile" parent="importProcessorOverFileTemplate"/>
+
+    <!-- Процессор импорта справочника из директории -->
+    <bean id="importOverDirectory.dictionaries" class="ru.hflabs.rcd.backend.console.imports.handlers.dictionary.ImportDictionariesOverDirectory" parent="importOverFile.dictionaries"/>
+
+    <!-- Процессор экспорта справочника в директорию -->
+    <bean id="exportOverDirectory.dictionaries" class="ru.hflabs.rcd.backend.console.exports.handlers.dictionary.ExportDictionariesOverDirectory" parent="exportProcessorOverFileTemplate"/>
+
+</beans>

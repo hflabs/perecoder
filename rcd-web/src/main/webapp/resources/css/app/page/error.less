@@ -1,0 +1,16 @@
+@import "../common/const";
+@import "../common/elements";
+section.error {
+    .rounded(@large-border-radius);
+    .box-shadow(0 4px 10px rgba(128, 128, 128, 0.1));
+    background-color: @common-background-color;
+    border: 1px solid #ccc;
+    color: @body-text-color;
+    margin: 200px auto 0 auto;
+    padding: 45px 80px;
+    text-align: center;
+    width: 610px;
+    & > article {
+        padding-left: 170px;
+    }
+}

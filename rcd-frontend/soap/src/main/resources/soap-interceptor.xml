@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+    <!-- Перехватчик логирования входящего сообщения -->
+    <bean id="loggingInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor">
+        <property name="prettyLogging" value="true"/>
+    </bean>
+    <!-- Перехватчик логирования исходящего сообщения -->
+    <bean id="loggingOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor">
+        <property name="prettyLogging" value="true"/>
+    </bean>
+
+    <!-- Сервис установки аутентификации в заголовок сообщения -->
+    <bean id="soapAuthenticationProviderInterceptor.operator" class="ru.hflabs.util.soap.interceptor.UsernamePasswordAuthenticationProviderInterceptor">
+        <property name="userName" value="anonymous"/>
+        <property name="grantedAuthorities">
+            <util:list value-type="java.lang.String">
+                <util:constant static-field="ru.hflabs.rcd.RoleNames.OPERATOR"/>
+            </util:list>
+        </property>
+    </bean>
+
+</beans>

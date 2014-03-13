@@ -1,0 +1,53 @@
+<izpack:langpack xmlns:izpack="http://izpack.org/schema/langpack"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://izpack.org/schema/langpack http://izpack.org/schema/5.0/izpack-langpack-5.0.xsd"
+                 version="5.0">
+
+    <!-- RCD -->
+    <str id="izpack.rcd.title" txt="Configure"/>
+    <str id="izpack.rcd.home" txt="Path to application storage directory"/>
+
+    <!-- Data input -->
+    <str id="izpack.data.title" txt="External data"/>
+    <str id="izpack.data.dir" txt="Path to data directory"/>
+
+    <!-- JDBC input messages -->
+    <str id="izpack.db.title" txt="Database configuration"/>
+
+    <str id="izpack.jdbc.type" txt="Database type"/>
+
+    <str id="izpack.jdbc.host" txt="Host: "/>
+    <str id="izpack.jdbc.host.empty" txt="Host must not be empty"/>
+
+    <str id="izpack.jdbc.port" txt="Port: "/>
+    <str id="izpack.jdbc.port.range" txt="Port must be in range [0..65535]"/>
+    <str id="izpack.jdbc.port.empty" txt="Port must not be empty"/>
+
+    <str id="izpack.jdbc.sid" txt="SID (oracle): "/>
+
+    <str id="izpack.jdbc.dba.username" txt="DBA username: "/>
+    <str id="izpack.jdbc.dba.username.invalid" txt="Invalid DBA user name"/>
+
+    <str id="izpack.jdbc.dba.password" txt="DBA password: "/>
+
+    <str id="izpack.jdbc.username" txt="Username: "/>
+    <str id="izpack.jdbc.username.invalid" txt="Invalid username"/>
+
+    <str id="izpack.jdbc.password.original" txt="Password: "/>
+    <str id="izpack.jdbc.password.retype" txt="Password (retype): "/>
+    <str id="izpack.jdbc.password.notequals" txt="Passwords must match"/>
+    <str id="izpack.jdbc.password.empty" txt="Password must not be empty"/>
+
+    <!-- JBoss input messages -->
+    <str id="izpack.jboss.install.title" txt="Install JBoss"/>
+    <str id="izpack.jboss.home" txt="Path to JBoss home"/>
+
+    <str id="izpack.jboss.path" txt="Path to vanilla JBoss archive"/>
+    <str id="izpack.jboss.path.description" txt="You can download vanilla JBoss archive from http://www.jboss.org/jbossas/downloads/"/>
+
+    <str id="izpack.jboss.path.empty" txt="Path must not be empty"/>
+    <str id="izpack.jboss.path.md5" txt="Selected JBoss archive is not vanilla"/>
+
+    <str id="izpack.jboss.dir" txt="Path to JBoss directory"/>
+
+</izpack:langpack>

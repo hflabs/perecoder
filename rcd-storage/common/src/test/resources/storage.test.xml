@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Сервис хранилища истории документов -->
+    <bean id="historyStorageService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg index="0" value="ru.hflabs.rcd.service.IStorageService"/>
+    </bean>
+
+    <!-- Сервис хранилища групп справочников -->
+    <bean id="groupStorageService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg index="0" value="ru.hflabs.rcd.service.IStorageService"/>
+    </bean>
+
+    <!-- Сервис хранилища справочников -->
+    <bean id="dictionaryStorageService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg index="0" value="ru.hflabs.rcd.service.IStorageService"/>
+    </bean>
+
+    <!-- Сервис хранилища МЕТА-полей справочников -->
+    <bean id="metaFieldStorageService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg index="0" value="ru.hflabs.rcd.service.IStorageService"/>
+    </bean>
+
+    <!-- Сервис хранилища значений полей записи -->
+    <bean id="fieldStorageService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg index="0" value="ru.hflabs.rcd.service.IStorageService"/>
+    </bean>
+
+    <!-- Сервис хранилища наборов правил перекодирования -->
+    <bean id="recodeRuleSetStorageService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg index="0" value="ru.hflabs.rcd.service.IStorageService"/>
+    </bean>
+
+    <!-- Сервис хранилища правил перекодирования -->
+    <bean id="recodeRuleStorageService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg index="0" value="ru.hflabs.rcd.service.IStorageService"/>
+    </bean>
+
+    <!-- Сервис хранилища оповещений -->
+    <bean id="notificationStorageService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg index="0" value="ru.hflabs.rcd.service.IStorageService"/>
+    </bean>
+
+    <!-- Сервис хранилища параметров задач -->
+    <bean id="taskDescriptorStorageService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg index="0" value="ru.hflabs.rcd.service.IStorageService"/>
+    </bean>
+
+    <!-- Сервис хранилища выполненных задач -->
+    <bean id="taskResultStorageService" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg index="0" value="ru.hflabs.rcd.service.IStorageService"/>
+    </bean>
+
+</beans>

@@ -1,0 +1,5 @@
+<i class="icon-16 recodes-<%= isIncome ? 'in' : 'out' %>"></i>
+<a href="<%- buildUrl('RECODES', id) %>" data-local="true"><%-
+    isIncome ? fromDictionary.name : toDictionary.name %> [ <%-
+    isIncome ? fromGroup.name : toGroup.name
+%> ]</a>

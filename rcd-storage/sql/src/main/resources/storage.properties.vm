@@ -1,0 +1,12 @@
+#set($prefix = "#if($scope)${scope}_#end")
+# JDBC type
+jdbc.type = ${${prefix}storage.type}
+# Supported dialects
+jdbc.dialect.oracle = ${oracle.jdbc.dialect}
+jdbc.dialect.mariadb = ${mariadb.jdbc.dialect}
+jdbc.dialect.mysql = ${mariadb.jdbc.dialect}
+jdbc.dialect.hsqldb = ${hsqldb.jdbc.dialect}
+# JDBC options
+jdbc.timeout = ${storage.jdbc.timout}
+jdbc.batchSize = ${storage.jdbc.batchSize}
+jdbc.debug = ${storage.jdbc.debug}

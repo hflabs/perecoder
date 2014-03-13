@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Фабрика безопасности -->
+    <bean id="remoteInvocationFactory" class="ru.hflabs.util.security.remoting.rmi.ContextRemoteInvocationFactory">
+        <constructor-arg type="java.lang.Class" value="ru.hflabs.util.security.remoting.rmi.SecurityContextPropagatingRemoteInvocation"/>
+    </bean>
+
+    <!-- Абстрактный класс для работы с удаленным сервисом -->
+    <bean id="remoteInvocationBasedAccessor" class="org.springframework.remoting.support.RemoteInvocationBasedAccessor" abstract="true">
+        <property name="remoteInvocationFactory" ref="remoteInvocationFactory"/>
+    </bean>
+
+    <!-- Абстрактный прокси для работы с RMI сервера -->
+    <bean id="proxyRemoteService" class="org.springframework.aop.framework.ProxyFactoryBean" abstract="true"/>
+
+</beans>

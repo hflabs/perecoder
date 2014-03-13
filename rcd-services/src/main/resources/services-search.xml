@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+    <!-- Версия lucene -->
+    <util:constant id="luceneVersion" static-field="org.apache.lucene.util.Version.LUCENE_43"/>
+
+    <!-- Анализатор индекса -->
+    <bean id="luceneAnalyzer" class="org.apache.lucene.analysis.miscellaneous.PerFieldAnalyzerWrapper">
+        <constructor-arg type="org.apache.lucene.analysis.Analyzer">
+            <bean class="ru.hflabs.util.lucene.analysis.KeywordLowerCaseAnalyzer">
+                <constructor-arg type="org.apache.lucene.util.Version" ref="luceneVersion"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg type="java.util.Map">
+            <util:map key-type="java.lang.String" value-type="org.apache.lucene.analysis.Analyzer">
+                <entry>
+                    <key>
+                        <util:constant static-field="ru.hflabs.util.lucene.LuceneBinderTransformer.DEFAULT_SEARCH_FIELD"/>
+                    </key>
+                    <bean class="ru.hflabs.util.lucene.analysis.WhitespaceLowerCaseAnalyzer">
+                        <constructor-arg type="org.apache.lucene.util.Version" ref="luceneVersion"/>
+                    </bean>
+                </entry>
+            </util:map>
+        </constructor-arg>
+    </bean>
+
+    <!-- Настройки сервиса записи в индекс -->
+    <bean id="luceneIndexWriterConfig" class="org.apache.lucene.index.IndexWriterConfig" scope="prototype">
+        <constructor-arg type="org.apache.lucene.util.Version" ref="luceneVersion"/>
+        <constructor-arg type="org.apache.lucene.analysis.Analyzer" ref="luceneAnalyzer"/>
+        <property name="writeLockTimeout">
+            <util:constant static-field="org.apache.lucene.store.Lock.LOCK_OBTAIN_WAIT_FOREVER"/>
+        </property>
+        <property name="mergeScheduler">
+            <bean class="org.apache.lucene.index.SerialMergeScheduler"/>
+        </property>
+    </bean>
+
+    <!-- Сервис построение lucene критерия  -->
+    <bean id="luceneCriteriaBuilder" class="ru.hflabs.rcd.lucene.criteria.LuceneCriteriaBuilder" parent="criteriaBuilderTemplate">
+        <property name="activityBuilders">
+            <util:list value-type="ru.hflabs.rcd.service.IActivityBuilder">
+                <ref bean="historicalActivityBuilder"/>
+            </util:list>
+        </property>
+        <property name="class2fieldConverter" ref="luceneBinderTransformerFactory"/>
+    </bean>
+
+    <!-- Сервис построения lucene критерия критерия именованного документа -->
+    <bean id="namedDocumentCriteriaBuilder" class="ru.hflabs.rcd.lucene.criteria.NamedDocumentCriteriaBuilder" parent="luceneCriteriaBuilder"/>
+
+    <!-- Сервис построения критерия активности документов -->
+    <bean id="historicalActivityBuilder" class="ru.hflabs.rcd.lucene.criteria.LuceneHistoricalActivityBuilder"/>
+
+    <!-- Фабрика создания сервисов связи поисковой сущности и сущности API -->
+    <bean id="luceneBinderTransformerFactory" class="ru.hflabs.rcd.lucene.binder.LuceneBinderTransformerFactory"/>
+
+    <!-- Провайдер доступа к сервису записи в индекс -->
+    <bean id="luceneIndexWriterAccessor" class="ru.hflabs.rcd.lucene.transaction.TransactionalIndexWriterAccessor">
+        <property name="indexWriterConfig" ref="luceneIndexWriterConfig"/>
+    </bean>
+
+    <!-- Фабрика директорий индекса -->
+    <bean id="luceneDirectoryFactory" class="ru.hflabs.rcd.lucene.directory.LuceneFileDirectoryFactory">
+        <property name="location" ref="storageFolderLocation"/>
+    </bean>
+
+    <!-- Менеджер индекса -->
+    <bean id="luceneIndexManager" class="ru.hflabs.rcd.lucene.LuceneIndexManagerTemplate" scope="prototype">
+        <property name="luceneDirectoryFactory" ref="luceneDirectoryFactory"/>
+        <property name="writerAccessor" ref="luceneIndexWriterAccessor"/>
+    </bean>
+
+</beans>

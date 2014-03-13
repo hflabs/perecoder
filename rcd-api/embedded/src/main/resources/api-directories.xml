@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+    <!-- Сервис разименования свойств из classpath-а -->
+    <bean id="propertyPlaceholderConfigurer.inMemory" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" abstract="true">
+        <property name="systemPropertiesMode">
+            <util:constant static-field="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+        </property>
+    </bean>
+
+    <!-- Сервис разименования свойств из внешнего файла -->
+    <bean id="propertyPlaceholderConfigurer.file" class="ru.hflabs.util.spring.beans.factory.ExternalFilePropertyPlaceholderConfigurer" abstract="true">
+        <constructor-arg>
+            <bean class="ru.hflabs.util.spring.beans.factory.FileSystemPropertiesExtracter"/>
+        </constructor-arg>
+        <property name="rootPathToExternalProperties" ref="propertiesFolderLocation"/>
+    </bean>
+
+    <!-- Корневая директория -->
+    <util:constant id="rootFolder" static-field="ru.hflabs.rcd.Directories.ROOT_FOLDER"/>
+    <bean id="rootFolderKey" factory-bean="rootFolder" factory-method="getKey"/>
+    <bean id="rootFolderDescription" factory-bean="rootFolder" factory-method="getDescription"/>
+    <bean id="rootFolderLocation" factory-bean="rootFolder" factory-method="getLocation"/>
+
+    <!-- Директория с конфигурационными параметрами -->
+    <util:constant id="propertiesFolder" static-field="ru.hflabs.rcd.Directories.PROPERTIES_FOLDER"/>
+    <bean id="propertiesFolderKey" factory-bean="propertiesFolder" factory-method="getKey"/>
+    <bean id="propertiesFolderDescription" factory-bean="propertiesFolder" factory-method="getDescription"/>
+    <bean id="propertiesFolderLocation" factory-bean="propertiesFolder" factory-method="getLocation"/>
+
+    <!-- Директория хранения данных -->
+    <util:constant id="storageFolder" static-field="ru.hflabs.rcd.Directories.STORAGE_FOLDER"/>
+    <bean id="storageFolderKey" factory-bean="storageFolder" factory-method="getKey"/>
+    <bean id="storageFolderDescription" factory-bean="storageFolder" factory-method="getDescription"/>
+    <bean id="storageFolderLocation" factory-bean="storageFolder" factory-method="getLocation"/>
+
+    <!-- Директория хранения внеменных данных -->
+    <util:constant id="tempFolder" static-field="ru.hflabs.rcd.Directories.TMP_FOLDER"/>
+    <bean id="tempFolderKey" factory-bean="tempFolder" factory-method="getKey"/>
+    <bean id="tempFolderDescription" factory-bean="tempFolder" factory-method="getDescription"/>
+    <bean id="tempFolderLocation" factory-bean="tempFolder" factory-method="getLocation"/>
+
+</beans>

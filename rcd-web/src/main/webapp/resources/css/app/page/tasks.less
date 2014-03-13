@@ -1,0 +1,158 @@
+@import "../common/const";
+@import "../common/elements";
+
+@state-icon-size: 48px;
+
+[data-page="tasks"] {
+    table {
+        table-layout: fixed;
+        width: 100%;
+    }
+    tbody {
+        border-top: 1px dotted #CCCCCC;
+        &:first-child {
+            border-top-style: none;
+            tr {
+                &:first-child {
+                    td {
+                        &:first-child {
+                            .border-radius(0, 0, 0, @common-border-radius);
+                        }
+                    }
+                }
+            }
+        }
+        &:last-child {
+            tr {
+                &:last-child {
+                     td {
+                         &:first-child {
+                             .border-radius(0, 0, @common-border-radius, 0);
+                         }
+                     }
+                 }
+            }
+
+        }
+        tr {
+            &:first-child {
+                td {
+                    padding: 30px @common-spacing 0;
+                    &:first-child {
+                        padding-left: @content-left-ledge;
+                        height: 140px;
+                        width: (@state-icon-size + @content-left-ledge + @common-spacing);
+                    }
+                }
+            }
+            &:last-child {
+                td {
+                    &:last-child {
+                        padding: 0 @common-spacing 30px;
+                    }
+                }
+            }
+            &[data-result-error="true"] {
+                td {
+                    &:not(:last-child) {
+                        background: #fcf2f2
+                    }
+                };
+            }
+
+            &.empty {
+                td {
+                    .empty-message;
+                }
+            }
+        }
+        td {
+            vertical-align: top;
+            .box-sizing(border-box);
+            &:last-child {
+                border-left: 1px solid #f1f1f1;
+                padding: 0 15px 30px;
+                white-space: nowrap;
+                width: 490px;
+                .link-wrapper {
+                    display: inline-block;
+                    padding: 0 15px;
+                    vertical-align: top;
+                    width: 200px;
+                }
+                .schedule {
+                    color: @color-grey;
+                    margin: 4px 0 0 20px;
+                    white-space: normal;
+                    word-break: break-word;
+                }
+            }
+        }
+        .cell-wrapper {
+            position: relative;
+            padding: 0 @common-spacing 30px;
+        }
+        h4 {
+            color: @color-dkgrey;
+            margin: 0 0 @common-spacing;
+            word-break: break-all;
+        }
+        button {
+            float: right;
+            margin: -4px 30px 0 30px;
+            width: 100px;
+            overflow: hidden;
+        }
+        .result-description {
+            color: @color-ltgrey;
+            max-height: 40px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            //white-space: nowrap;
+            word-wrap: break-word;
+        }
+        [data-label="percent"] {
+            color: #bf8c1b;
+            font-size: 18px;
+            float: left;
+            margin-right: 20px;
+            min-width: 40px;
+        }
+        [data-label="step"] {
+            clear: left;
+            color: @color-ltgrey;
+            font-size: 80%;
+            margin-left: 60px;
+        }
+    }
+    .command {
+        color: #578093;
+    }
+    .progress {
+        margin-bottom: 0;
+    }
+    [data-action="delete"] {
+        cursor: pointer;
+        position: absolute;
+        right: 12px;
+        .trash {
+            &:hover {
+                background-position: -32px -32px;
+            }
+        }
+    }
+    [data-action="show-errors"] {
+        cursor: pointer;
+        border-bottom: 1px dashed @color-ltgrey;
+    }
+    .errors-wrapper {
+        max-height: 400px;
+        overflow: auto;
+        word-break: break-word;
+        dd {
+            margin-bottom: 0.5em;
+        }
+    }
+}
+
+

@@ -1,0 +1,16 @@
+<izpack:langpack xmlns:izpack="http://izpack.org/schema/langpack"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://izpack.org/schema/langpack http://izpack.org/schema/5.0/izpack-langpack-5.0.xsd"
+                 version="5.0">
+
+    <!-- RCD -->
+    <str id="db.configuration.pack" txt="Настройка БД"/>
+    <str id="db.configuration.pack.description" txt="Создание пользователя и схемы базы данных"/>
+
+    <str id="jboss.install.pack" txt="Установка и настройка JBoss"/>
+    <str id="jboss.install.pack.description" txt="Установка и настройка оригинального сервера приложений JBoss"/>
+
+    <str id="application.pack" txt="Установка приложения"/>
+    <str id="application.pack.description" txt="Установка приложения на сервер"/>
+
+</izpack:langpack>

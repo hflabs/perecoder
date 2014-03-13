@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Базовый дескриптор удаленного сервиса -->
+    <bean id="remoteServiceDescriptor" class="ru.hflabs.util.spring.remoting.rmi.RemoteServiceDescriptor" abstract="true"/>
+
+    <!-- Сервис аутентификации -->
+    <bean id="authenticationRemoteServiceDescriptor" parent="remoteServiceDescriptor">
+        <property name="serviceName" value="/AuthenticationService"/>
+        <property name="serviceInterface" value="org.springframework.security.authentication.AuthenticationManager"/>
+        <property name="service">
+            <idref bean="authenticationManager"/>
+        </property>
+    </bean>
+
+    <!-- Сервис получения системной информации -->
+    <bean id="versionRemoteServiceDescriptor" parent="remoteServiceDescriptor">
+        <property name="serviceName" value="/VersionService"/>
+        <property name="serviceInterface" value="ru.hflabs.rcd.service.IVersionService"/>
+        <property name="service">
+            <idref bean="versionService"/>
+        </property>
+    </bean>
+
+    <!-- Сервис управления документами -->
+    <bean id="managerRemoteServiceDescriptor" parent="remoteServiceDescriptor">
+        <property name="serviceName" value="/ManagerService"/>
+        <property name="serviceInterface" value="ru.hflabs.rcd.service.IManagerService"/>
+        <property name="service">
+            <idref bean="documentManagerService"/>
+        </property>
+    </bean>
+
+    <!-- Сервис работы с группами справочников -->
+    <bean id="groupRemoteServiceDescriptor" parent="remoteServiceDescriptor">
+        <property name="serviceName" value="/GroupService"/>
+        <property name="serviceInterface" value="ru.hflabs.rcd.service.document.IGroupService"/>
+        <property name="service">
+            <idref bean="groupService"/>
+        </property>
+    </bean>
+
+    <!-- Сервис работы со справочниками -->
+    <bean id="dictionaryRemoteServiceDescriptor" parent="remoteServiceDescriptor">
+        <property name="serviceName" value="/DictionaryService"/>
+        <property name="serviceInterface" value="ru.hflabs.rcd.service.document.IDictionaryService"/>
+        <property name="service">
+            <idref bean="dictionaryService"/>
+        </property>
+    </bean>
+
+    <!-- Сервис работы с МЕТА-полями справочника -->
+    <bean id="metaFieldRemoteServiceDescriptor" parent="remoteServiceDescriptor">
+        <property name="serviceName" value="/MetaFieldService"/>
+        <property name="serviceInterface" value="ru.hflabs.rcd.service.document.IMetaFieldService"/>
+        <property name="service">
+            <idref bean="metaFieldService"/>
+        </property>
+    </bean>
+
+    <!-- Сервис работы с записями справочника -->
+    <bean id="recordRemoteServiceDescriptor" parent="remoteServiceDescriptor">
+        <property name="serviceName" value="/RecordService"/>
+        <property name="serviceInterface" value="ru.hflabs.rcd.service.document.IRecordService"/>
+        <property name="service">
+            <idref bean="recordService"/>
+        </property>
+    </bean>
+
+    <!-- Сервис работы с наборами правил перекодировки -->
+    <bean id="recodeRuleSetRemoteServiceDescriptor" parent="remoteServiceDescriptor">
+        <property name="serviceName" value="/RecodeRuleSet"/>
+        <property name="serviceInterface" value="ru.hflabs.rcd.service.rule.IRecodeRuleSetService"/>
+        <property name="service">
+            <idref bean="recodeRuleSetService"/>
+        </property>
+    </bean>
+
+    <!-- Сервис работы с правилами перекодировки -->
+    <bean id="recodeRuleRemoteServiceDescriptor" parent="remoteServiceDescriptor">
+        <property name="serviceName" value="/RecodeRule"/>
+        <property name="serviceInterface" value="ru.hflabs.rcd.service.IFilterService"/>
+        <property name="service">
+            <idref bean="recodeRuleSetService"/>
+        </property>
+    </bean>
+
+</beans>

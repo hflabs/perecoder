@@ -1,0 +1,53 @@
+<izpack:langpack xmlns:izpack="http://izpack.org/schema/langpack"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://izpack.org/schema/langpack http://izpack.org/schema/5.0/izpack-langpack-5.0.xsd"
+                 version="5.0">
+
+    <!-- RCD -->
+    <str id="izpack.rcd.title" txt="Настройка"/>
+    <str id="izpack.rcd.home" txt="Укажите путь к директории для хранения данных приложения"/>
+
+    <!-- Data input -->
+    <str id="izpack.data.title" txt="Установочные файлы"/>
+    <str id="izpack.data.dir" txt="Укажите путь к директории с установочными файлами"/>
+
+    <!-- JDBC input messages -->
+    <str id="izpack.db.title" txt="Настройка базы данных"/>
+
+    <str id="izpack.jdbc.type" txt="Тип БД"/>
+
+    <str id="izpack.jdbc.host" txt="Адрес: "/>
+    <str id="izpack.jdbc.host.empty" txt="Укажите адрес БД"/>
+
+    <str id="izpack.jdbc.port" txt="Порт: "/>
+    <str id="izpack.jdbc.port.range" txt="Порт должен быть в диапазоне [0..65535]"/>
+    <str id="izpack.jdbc.port.empty" txt="Укажите порт БД"/>
+
+    <str id="izpack.jdbc.sid" txt="SID (oracle): "/>
+
+    <str id="izpack.jdbc.dba.username" txt="Пользователь DBA: "/>
+    <str id="izpack.jdbc.dba.username.invalid" txt="Неправильный логин пользователя DBA"/>
+
+    <str id="izpack.jdbc.dba.password" txt="Пароль DBA: "/>
+
+    <str id="izpack.jdbc.username" txt="Пользователь: "/>
+    <str id="izpack.jdbc.username.invalid" txt="Неправильный логин пользователя"/>
+
+    <str id="izpack.jdbc.password.original" txt="Пароль: "/>
+    <str id="izpack.jdbc.password.retype" txt="Пароль (повтор): "/>
+    <str id="izpack.jdbc.password.notequals" txt="Пароли не совпадают"/>
+    <str id="izpack.jdbc.password.empty" txt="Укажите пароль пользователя"/>
+
+    <!-- JBoss input messages -->
+    <str id="izpack.jboss.install.title" txt="Установка JBoss"/>
+    <str id="izpack.jboss.home" txt="Укажите путь к установленному JBoss-у"/>
+
+    <str id="izpack.jboss.path" txt="Укажите путь к архиву с JBoss-ом"/>
+    <str id="izpack.jboss.path.description" txt="Вы можете скачать архив с официального сайта http://www.jboss.org/jbossas/downloads/"/>
+
+    <str id="izpack.jboss.path.empty" txt="Укажите путь к архиву с JBoss-ом"/>
+    <str id="izpack.jboss.path.md5" txt="Выбранный архив не является оригинальным"/>
+
+    <str id="izpack.jboss.dir" txt="Выберите директорию установки JBoss-а"/>
+
+</izpack:langpack>

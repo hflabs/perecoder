@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="propertyPlaceholderConfigurer.security_memory" parent="propertyPlaceholderConfigurer.file">
+        <property name="placeholderPrefix" value="$security.memory{"/>
+        <property name="location" value="classpath:security_memory.properties"/>
+    </bean>
+
+    <!-- Сервис пользователей -->
+    <bean id="inMemoryUserDetailsService" class="org.springframework.security.provisioning.InMemoryUserDetailsManager">
+        <constructor-arg ref="propertyPlaceholderConfigurer.security_memory"/>
+    </bean>
+
+    <!-- Провайдер аутентификации -->
+    <bean id="inMemoryAuthenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+        <property name="userDetailsService" ref="inMemoryUserDetailsService"/>
+    </bean>
+
+</beans>

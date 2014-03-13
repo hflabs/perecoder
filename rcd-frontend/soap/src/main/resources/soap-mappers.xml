@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Сервис преобразования сущностей XSD в модель -->
+    <bean id="mapper.xsd2model" class="org.dozer.spring.DozerBeanMapperFactoryBean"/>
+
+    <!-- Сервис преобразования сущностей модели в XSD -->
+    <bean id="mapper.model2xsd" class="ru.hflabs.util.spring.core.convert.converter.MapperConverter" abstract="true">
+        <constructor-arg index="0" ref="mapper.xsd2model"/>
+    </bean>
+
+    <!-- Сервис преобразования группы справочников -->
+    <bean id="mapper.model2group" parent="mapper.model2xsd">
+        <constructor-arg index="1" value="ru.hflabs.rcd.soap.model.WGroup"/>
+    </bean>
+    <!-- Сервис преобразования справочника -->
+    <bean id="mapper.model2dictionary" class="ru.hflabs.rcd.soap.binder.ToWDictionaryTransformer" parent="mapper.model2xsd">
+        <property name="toWGroupTransformer" ref="mapper.model2group"/>
+        <property name="toWMetaFieldTransformer" ref="mapper.model2metaField"/>
+    </bean>
+    <!-- Сервис преобразования МЕТА-поля -->
+    <bean id="mapper.model2metaField" class="ru.hflabs.rcd.soap.binder.ToWMetaFieldTransformer" parent="mapper.model2xsd"/>
+    <!-- Сервис преобразования записи справочника -->
+    <bean id="mapper.model2record" class="ru.hflabs.rcd.soap.binder.ToWRecordTransformer"/>
+
+    <!-- Сервис сериализации/десериализации JAXB объектов -->
+    <bean id="mapper.rs2jaxb" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider"/>
+    <!-- Сервис сериализации/десериализации JSON объектов -->
+    <bean id="mapper.rs2json" class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider">
+        <property name="mapper" ref="jacksonObjectMapper"/>
+    </bean>
+
+    <!-- Сервис преобразования ошибок парсинга -->
+    <bean id="mapper.exception.parse" class="com.fasterxml.jackson.jaxrs.base.JsonParseExceptionMapper"/>
+    <!-- Сервис преобразования ошибок мэппинга -->
+    <bean id="mapper.exception.mapping" class="com.fasterxml.jackson.jaxrs.base.JsonMappingExceptionMapper"/>
+    <!-- Сервис преобразования ошибок RS -->
+    <bean id="mapper.exception.web" class="org.apache.cxf.jaxrs.impl.WebApplicationExceptionMapper">
+        <property name="printStackTrace" value="false"/>
+    </bean>
+    <!-- Сервис преобразования SOAP ошибок -->
+    <bean id="mapper.exception.soap" class="ru.hflabs.rcd.soap.mapper.ErrorResponseMapper"/>
+    <!-- Сервис преобразования непредвиденных ошибок -->
+    <bean id="mapper.throwable" class="ru.hflabs.rcd.soap.mapper.ThrowableMapper"/>
+
+</beans>

@@ -1,0 +1,21 @@
+<bindings xmlns="http://java.sun.com/xml/ns/jaxws"
+          xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+          xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+          wsdlLocation="WEB-INF/rcd-ws.wsdl">
+
+    <!-- Default package -->
+    <package name="ru.hflabs.rcd.soap"/>
+
+    <!-- WS model -->
+    <bindings node="wsdl:definitions/wsdl:types/xsd:schema[@targetNamespace='http://hflabs.ru/rcd/soap/1_0']">
+        <jaxb:schemaBindings>
+            <jaxb:package name="ru.hflabs.rcd.soap.model"/>
+        </jaxb:schemaBindings>
+    </bindings>
+
+    <!-- WS service -->
+    <bindings node="wsdl:definitions/wsdl:portType">
+        <class name="WService"/>
+    </bindings>
+
+</bindings>

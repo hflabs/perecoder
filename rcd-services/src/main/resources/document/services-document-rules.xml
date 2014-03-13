@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Базовый валидатор набора правил перекодирования -->
+    <bean id="recodeRuleSetValidator" class="ru.hflabs.rcd.service.document.recodeRuleSet.RecodeRuleSetChangeValidator" parent="existedDocumentValidator" abstract="true">
+        <property name="recodeFieldService" ref="metaFieldService"/>
+        <property name="fieldService" ref="fieldService"/>
+        <property name="recodeRuleSetService" ref="recodeRuleSetService"/>
+    </bean>
+    <!-- Валидатор создания набора правил -->
+    <bean id="recodeRuleSetValidator.create" class="ru.hflabs.rcd.service.document.recodeRuleSet.RecodeRuleSetChangeValidator$Create" parent="recodeRuleSetValidator"/>
+    <!-- Валидатор обновления набора правил -->
+    <bean id="recodeRuleSetValidator.update" class="ru.hflabs.rcd.service.document.recodeRuleSet.RecodeRuleSetChangeValidator$Update" parent="recodeRuleSetValidator"/>
+
+    <!-- Сервис работы с наборами правил перекодирования -->
+    <bean id="recodeRuleSetService" class="ru.hflabs.rcd.service.document.recodeRuleSet.RecodeRuleSetService" parent="documentServiceTemplate">
+        <property name="storageService" ref="recodeRuleSetStorageService"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
+        <property name="metaFieldService" ref="metaFieldService"/>
+        <property name="fieldService" ref="fieldService"/>
+        <property name="recodeRuleService" ref="recodeRuleService"/>
+        <property name="createValidator" ref="recodeRuleSetValidator.create"/>
+        <property name="updateValidator" ref="recodeRuleSetValidator.update"/>
+    </bean>
+
+
+    <!-- Базовый валидатор правила перекодирования -->
+    <bean id="recodeRuleValidator" class="ru.hflabs.rcd.service.document.recodeRule.RecodeRuleChangeValidator" parent="existedDocumentValidator" abstract="true">
+        <property name="recodeFieldService" ref="fieldService"/>
+        <property name="recodeRuleSetService" ref="recodeRuleSetService"/>
+        <property name="recodeRuleService" ref="recodeRuleService"/>
+    </bean>
+    <!-- Валидатор создания правила перекодирования -->
+    <bean id="recodeRuleValidator.create" parent="recodeRuleValidator">
+        <constructor-arg value="false"/>
+    </bean>
+    <!-- Валидатор обновления правила перекодирования -->
+    <bean id="recodeRuleValidator.update" parent="recodeRuleValidator">
+        <constructor-arg value="true"/>
+    </bean>
+
+    <!-- Сервис работы с правилами перекодирования -->
+    <bean id="recodeRuleService" class="ru.hflabs.rcd.service.document.recodeRule.RecodeRuleService" parent="documentServiceTemplate">
+        <property name="storageService" ref="recodeRuleStorageService"/>
+        <property name="recodeRuleSetService" ref="recodeRuleSetService"/>
+        <property name="fieldService" ref="fieldService"/>
+        <property name="createValidator" ref="recodeRuleValidator.create"/>
+        <property name="updateValidator" ref="recodeRuleValidator.update"/>
+    </bean>
+
+</beans>

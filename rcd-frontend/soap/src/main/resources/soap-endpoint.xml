@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:sec="http://cxf.apache.org/spring-security"
+       xmlns:s="http://hflabs.ru/rcd/soap/1_0"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+       http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+       http://cxf.apache.org/spring-security http://cxf-spring-security.googlecode.com/svn/trunk/cxf-spring-security/src/main/resources/schemas/spring-security.xsd">
+
+    <!-- SOAP endpoint -->
+    <jaxws:endpoint id="recodeWS.1_0"
+                    implementorClass="ru.hflabs.rcd.soap.WService"
+                    address="$soap{soap.address}/1_0/RcdWS"
+                    serviceName="s:RcdWS">
+        <jaxws:implementor>
+            <ref bean="recodeWS"/>
+        </jaxws:implementor>
+        <jaxws:inInterceptors>
+            <ref bean="soapAuthenticationProviderInterceptor.operator"/>
+            <ref bean="loggingInInterceptor"/>
+        </jaxws:inInterceptors>
+        <jaxws:outInterceptors>
+            <ref bean="loggingOutInterceptor"/>
+        </jaxws:outInterceptors>
+        <jaxws:features>
+            <sec:spring-security-context-feature/>
+        </jaxws:features>
+        <jaxws:properties>
+            <entry key="schema-validation-enabled" value="BOTH"/>
+        </jaxws:properties>
+    </jaxws:endpoint>
+
+    <!-- REST endpoint -->
+    <jaxrs:server id="recodeRS.1_0"
+                  serviceClass="ru.hflabs.rcd.soap.WService"
+                  address="$soap{soap.address}/1_0/RcdRS">
+        <jaxrs:serviceBeans>
+            <ref bean="recodeWS"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <ref bean="mapper.rs2jaxb"/>
+            <ref bean="mapper.rs2json"/>
+            <ref bean="mapper.exception.parse"/>
+            <ref bean="mapper.exception.mapping"/>
+            <ref bean="mapper.exception.web"/>
+            <ref bean="mapper.exception.soap"/>
+            <ref bean="mapper.throwable"/>
+        </jaxrs:providers>
+        <jaxrs:schemaLocations>
+            <jaxrs:schemaLocation>classpath:/WEB-INF/schema/rcd-model.xsd</jaxrs:schemaLocation>
+            <jaxrs:schemaLocation>classpath:/WEB-INF/schema/rcd-msg.xsd</jaxrs:schemaLocation>
+        </jaxrs:schemaLocations>
+        <jaxrs:inInterceptors>
+            <ref bean="soapAuthenticationProviderInterceptor.operator"/>
+            <ref bean="loggingInInterceptor"/>
+        </jaxrs:inInterceptors>
+        <jaxrs:outInterceptors>
+            <ref bean="loggingOutInterceptor"/>
+        </jaxrs:outInterceptors>
+        <jaxrs:features>
+            <sec:spring-security-context-feature/>
+        </jaxrs:features>
+        <jaxrs:properties>
+            <entry key="schema-validation-enabled" value="BOTH"/>
+        </jaxrs:properties>
+    </jaxrs:server>
+
+</beans>

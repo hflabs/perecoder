@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <!-- Базовый класс сущности -->
+    <class name="ru.hflabs.rcd.model.EssenceTemplate" abstract="true" polymorphism="implicit">
+        <id name="id"/>
+    </class>
+
+    <!-- History -->
+    <union-subclass name="ru.hflabs.rcd.model.change.History" extends="ru.hflabs.rcd.model.EssenceTemplate">
+        <property name="targetId"/>
+        <property name="targetType"/>
+        <property name="eventType">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">ru.hflabs.rcd.model.change.ChangeType</param>
+                <param name="useNamed">true</param>
+            </type>
+        </property>
+        <property name="eventDate"/>
+        <property name="eventAuthor"/>
+    </union-subclass>
+
+</hibernate-mapping>

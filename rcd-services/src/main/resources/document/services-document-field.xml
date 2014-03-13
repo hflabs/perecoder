@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Заглушка сервиса валидации значений полей -->
+    <bean id="fieldValidator" class="ru.hflabs.rcd.service.document.field.FieldChangeValidator" parent="changeValidatorService"/>
+
+    <!-- Сервис работы со значениями полей записи -->
+    <bean id="fieldService" class="ru.hflabs.rcd.service.document.field.FieldService" parent="namedDocumentServiceTemplate">
+        <property name="storageService" ref="fieldStorageService"/>
+        <property name="metaFieldService" ref="metaFieldService"/>
+        <property name="createValidator" ref="fieldValidator"/>
+        <property name="updateValidator" ref="fieldValidator"/>
+    </bean>
+
+</beans>

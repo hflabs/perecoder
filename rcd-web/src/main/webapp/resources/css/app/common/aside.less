@@ -1,0 +1,234 @@
+@import "const";
+@import "elements";
+
+@background-button-cancel: #ccd6d9;
+@button-in-header-width: 235px;
+@dictionary-color: #737b7d;
+@target-label-width: 150px;
+@dropdown-border-color: #6e8088;
+@dropdown-icon-size: 20px;
+@trash-icon-size: 20px;
+
+#right-wrapper {
+
+    [data-aside="list"] & {
+        color: @color-glyph;
+        padding: @common-spacing;
+
+        header {
+            text-align: center;
+            padding: 0 (2 * @common-spacing);
+            margin: 0 0 @common-spacing;
+
+            button {
+                font-size: 16px;
+                line-height: 100%;
+                padding: 6px;
+                display: block;
+                width: 100%;
+                .single-lined;
+                &:hover {
+                    color: @color-glyph-hover;
+                    i {
+                        @icon-size: 16px;
+                        background-position: (-2 * @icon-size) (-15 * @icon-size);
+                    }
+                }
+            }
+        }
+
+        h3 {
+            color: @body-text-color;
+            margin: (2 * @common-spacing) 0;
+        }
+
+        h4 {
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            margin: (2 * @common-spacing) @common-spacing 0;
+        }
+
+        ul.recodes {
+            margin: 0;
+            padding: 0;
+            li {
+                list-style: none;
+                padding: @common-spacing (2 * @common-spacing);
+                word-break: break-all;
+                &:not(:first-child) {
+                    border-top: 1px dashed #aab8bc;
+                }
+
+                a {
+                    color: inherit;
+                }
+            }
+        }
+    }
+
+    [data-aside="new"] & {
+        padding: (3 * @common-spacing);
+
+        header {
+            button {
+                background: @background-button-cancel;
+            }
+        }
+
+        h3 {
+            line-height: 30px;
+            margin: 0;
+        }
+
+        h4 {
+            font-size: 16px;
+            margin: (2 * @common-spacing) 0 @common-spacing
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            &.groups {
+                color: @color-glyph;
+                clear: both;
+            }
+            li {
+                list-style: none;
+                .single-lined;
+            }
+            &.dictionaries {
+                li {
+                    line-height: 18px;
+                    a {
+                        color: @dictionary-color;
+                        cursor: pointer;
+                        &:hover {
+                            color: darken(@dictionary-color, 10%);
+                        }
+                    }
+                }
+            }
+        }
+
+        .command {
+            color: inherit;
+        }
+
+        .searchbar {
+            margin: 0 0 @common-spacing;
+        }
+    }
+
+    [data-aside="recodes"] & {
+        padding: (3 * @common-spacing);
+
+        h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .recode-target-label {
+            float: left;
+            margin: (@common-spacing / 2) 0 0;
+            padding: 0 @common-spacing 0 0;
+            width: @target-label-width;
+            .box-sizing;
+            .single-lined;
+        }
+
+        .recode-target-wrapper {
+            position: relative;
+            margin: 0 (@common-spacing + @trash-icon-size) 0 @target-label-width;
+        }
+
+        .recode-target-trash {
+            float: right;
+            margin: (@common-spacing / 2) 0 0;
+        }
+
+        .recode-target {
+            background: @color-white;
+            border: 1px solid @color-ltgrey;
+            cursor: pointer;
+            padding: (@common-spacing / 2 - 1) (@common-spacing + @dropdown-icon-size) (@common-spacing / 2 - 1) @common-spacing;
+            position: relative;
+            .single-lined;
+            .dropdown-grey {
+                float: right;
+                margin-right: -@dropdown-icon-size;
+            }
+            &:hover {
+                background: @table-hover-color;
+                .dropdown-grey {
+                    background-position: 0 -340px;
+                }
+            }
+        }
+
+        .recode-target-list {
+            display: none;
+            position: absolute;
+            z-index: 3;
+            left: 0;
+            right: 0;
+
+            ul {
+                margin: 0;
+                border: 1px solid @dropdown-border-color;
+            }
+
+            li {
+                background: @color-white;
+                border-top: 1px dashed #b8c4c8;
+                color: #7a9fab;
+                list-style: none;
+                padding: @common-spacing;
+                &:first-child {
+                    border-top: none;
+                }
+                &.current {
+                    background: #e9eced;
+                }
+                a {
+                    color: inherit;
+                    &:hover {
+                        color: #385761;
+                    }
+                }
+            }
+        }
+
+        .settings {
+            position: absolute;
+            left: -18px;
+            margin-top: @common-spacing;
+        }
+
+    }
+
+    .buttons {
+        float: right;
+        margin: 0 0 @common-spacing @common-spacing;
+        width: @button-in-header-width;
+
+        button {
+            color: @color-glyph;
+            font-size: 16px;
+            line-height: 100%;
+            margin: 0 0 (@common-spacing / 2) 0;
+            width: @button-in-header-width;
+
+            &:hover {
+                background: #c7dabd !important;
+                color: #000000 !important;
+            }
+
+            &:first-child {
+                font-size: 20px;
+                padding: 8px;
+            }
+        }
+    }
+
+}

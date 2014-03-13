@@ -1,0 +1,144 @@
+<izpack:userInput xmlns:izpack="http://izpack.org/schema/userinput"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://izpack.org/schema/userinput http://izpack.org/schema/5.0/izpack-userinput-5.0.xsd"
+                  version="5.0">
+
+    <panel id="data.input">
+        <!-- Title -->
+        <field id="izpack.data.title" type="title" bold="true"/>
+        <field type="divider" align="top"/>
+        <field type="space"/>
+        <!-- Path to external data -->
+        <field type="search" variable="izpack.data.dir">
+            <description id="izpack.data.dir"/>
+            <spec type="directory" result="directory">
+                <choice value="${SYSTEM_user_dir}${FILE_SEPARATOR}data"/>
+            </spec>
+        </field>
+    </panel>
+
+    <panel id="db.configuration.input">
+        <createForPack name="Database schema"/>
+
+        <!-- Title -->
+        <field id="izpack.db.title" type="title" bold="true"/>
+        <field type="divider" align="top"/>
+        <field type="space"/>
+
+        <!-- Database type -->
+        <field type="combo" variable="izpack.jdbc.type">
+            <spec id="izpack.jdbc.type">
+                <choice id="izpack.jdbc.type.oracle" txt="Oracle" value="oracle" set="true"/>
+                <choice id="izpack.jdbc.type.mariadb" txt="MariaDB" value="mariadb"/>
+                <choice id="izpack.jdbc.type.mysql" txt="MySQL" value="mysql"/>
+            </spec>
+        </field>
+        <field type="space"/>
+
+        <!-- JDBC host -->
+        <field type="text" bold="true" variable="izpack.jdbc.host">
+            <spec id="izpack.jdbc.host" size="25" set=""/>
+            <validator id="izpack.jdbc.host.empty" class="com.izforge.izpack.panels.userinput.validator.NotEmptyValidator" txt="Host must not be empty"/>
+        </field>
+        <field type="space"/>
+
+        <!-- JDBC port -->
+        <field type="text" bold="true" variable="izpack.jdbc.port">
+            <spec id="izpack.jdbc.port" size="25" set=""/>
+            <validator id="izpack.jdbc.port.range" class="com.izforge.izpack.panels.userinput.validator.IsPortValidator" txt="Port must be in range [0..65535]"/>
+            <validator id="izpack.jdbc.port.empty" class="com.izforge.izpack.panels.userinput.validator.NotEmptyValidator" txt="Port must not be empty"/>
+        </field>
+        <field type="space"/>
+
+        <!-- JDBC SID -->
+        <field type="text" bold="true" variable="izpack.jdbc.sid">
+            <spec id="izpack.jdbc.sid" size="25" set=""/>
+        </field>
+        <field type="space"/>
+
+        <!-- DBA properties -->
+        <field type="divider" align="top"/>
+        <field type="text" bold="true" variable="izpack.jdbc.dba.username">
+            <spec id="izpack.jdbc.dba.username" size="25"/>
+            <validator id="izpack.jdbc.dba.username.invalid" class="com.izforge.izpack.panels.userinput.validator.RegularExpressionValidator" txt="Invalid DBA user name">
+                <param name="pattern" value="[a-zA-Z0-9._-]*"/>
+            </validator>
+        </field>
+        <field type="space"/>
+        <field type="password" bold="true" variable="izpack.jdbc.dba.password">
+            <spec id="izpack.jdbc.dba.password">
+                <pwd id="izpack.jdbc.dba.password" size="25" set=""/>
+            </spec>
+        </field>
+        <field type="space"/>
+
+        <!-- User properties -->
+        <field type="divider" align="top"/>
+        <field type="text" bold="true" variable="izpack.jdbc.username">
+            <spec id="izpack.jdbc.username" size="25"/>
+            <validator id="izpack.jdbc.username.invalid" class="com.izforge.izpack.panels.userinput.validator.RegularExpressionValidator" txt="Invalid user name">
+                <param name="pattern" value="[a-zA-Z0-9._-]+"/>
+            </validator>
+        </field>
+        <field type="space"/>
+        <field type="password" bold="true" variable="izpack.jdbc.password">
+            <spec id="izpack.jdbc.password" allowEmptyValue="false">
+                <pwd id="izpack.jdbc.password.original" size="25" set=""/>
+                <pwd id="izpack.jdbc.password.retype" size="25" set=""/>
+            </spec>
+            <validator id="izpack.jdbc.password.notequals" class="com.izforge.izpack.panels.userinput.validator.PasswordEqualityValidator" txt="Schema passwords must match"/>
+            <validator id="izpack.jdbc.password.empty" class="com.izforge.izpack.panels.userinput.validator.NotEmptyValidator" txt="Schema password must not be empty"/>
+        </field>
+        <field type="space"/>
+    </panel>
+
+    <panel id="jboss.install.input">
+        <createForPack name="Install JBoss"/>
+
+        <!-- Title -->
+        <field id="izpack.jboss.install.title" type="title" bold="true"/>
+        <field type="divider" align="top"/>
+        <field type="space"/>
+
+        <!-- Path to vanilla JBoss -->
+        <field id="izpack.jboss.path" type="staticText" bold="true"/>
+        <field type="file" variable="izpack.jboss.path">
+            <description id="izpack.jboss.path.description"/>
+            <spec txt="" size="40" set="${izpack.data.dir}${FILE_SEPARATOR}${izpack.jboss.zip}" fileext="zip"/>
+            <validator id="izpack.jboss.path.empty" class="com.izforge.izpack.panels.userinput.validator.NotEmptyValidator" txt="URL must not be empty"/>
+            <validator id="izpack.jboss.path.md5" class="ru.hflabs.izpack.validator.MD5Validator" txt="Selected JBoss archive is not vanilla">
+                <param name="md5" value="175c92545454f4e7270821f4b8326c4e"/>
+            </validator>
+        </field>
+        <field type="space"/>
+
+        <!-- Path to JBoss home -->
+        <field id="izpack.jboss.dir" type="staticText" bold="true"/>
+        <field type="dir" variable="izpack.jboss.dir">
+            <spec txt="" size="40" set="${INSTALL_PATH}" mustExist="false" create="true"/>
+        </field>
+
+        <!-- Path to application home -->
+        <field type="space"/>
+        <field id="izpack.rcd.home" type="staticText" bold="true"/>
+        <field type="dir" variable="izpack.rcd.home">
+            <spec txt="" size="40" set="${INSTALL_PATH}${FILE_SEPARATOR}data" mustExist="false" create="true"/>
+        </field>
+    </panel>
+
+    <panel id="jboss.home.input">
+        <!-- Title -->
+        <field id="izpack.rcd.title" type="title" bold="true"/>
+        <field type="divider" align="top"/>
+        <field type="space"/>
+        <!-- Path to JBoss home -->
+        <field type="search" variable="izpack.jboss.home">
+            <description id="izpack.jboss.home"/>
+            <spec checkfilename="bin/hflabs-config.cli" type="directory" result="directory">
+                <choice value="${INSTALL_PATH}${FILE_SEPARATOR}${izpack.jboss.name}"/>
+            </spec>
+        </field>
+
+    </panel>
+
+</izpack:userInput>

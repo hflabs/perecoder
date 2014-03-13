@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.hflabs</groupId>
+        <artifactId>parent</artifactId>
+        <version>8.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>ru.hflabs.rcd</groupId>
+    <artifactId>rcd</artifactId>
+    <version>3.0-SNAPSHOT</version>
+
+    <name>HFLabs RCD</name>
+    <description>
+        Программный комплекс "Перекодер" предназначен для децентрализованного хранения справочной информации
+        и осуществления перекодировок между различными источниками
+    </description>
+    <inceptionYear>2013</inceptionYear>
+    <url>http://hflabs.ru/products-services/perecoder/</url>
+
+    <prerequisites>
+        <maven>3.0</maven>
+    </prerequisites>
+
+    <packaging>pom</packaging>
+
+    <scm>
+        <url>${project.scm.path}</url>
+        <connection>scm:${project.scm.type}:${project.scm.path}</connection>
+        <developerConnection>scm:${project.scm.type}:${project.scm.path}</developerConnection>
+    </scm>
+
+    <issueManagement>
+        <system>Jira</system>
+        <url>http://jira.hflabs.ru/browse/RCD</url>
+    </issueManagement>
+
+    <properties>
+        <!-- ############################################################################ -->
+        <!-- Infrastructure properties -->
+        <!-- ############################################################################ -->
+        <project.scm.type>git</project.scm.type>
+        <project.scm.path>https://github.com/hflabs/perecoder.git</project.scm.path>
+        <project.scm.revision>${buildNumber}</project.scm.revision>
+        <project.title>RCD</project.title>
+
+        <!-- ############################################################################ -->
+        <!-- Build properties -->
+        <!-- ############################################################################ -->
+        <maven.repo.access>public</maven.repo.access>
+        <maven.checkstyle.skip>false</maven.checkstyle.skip>
+        <maven.remoteresources.skip>true</maven.remoteresources.skip>
+
+        <!-- ############################################################################ -->
+        <!-- HFLabs libraries versions -->
+        <!-- ############################################################################ -->
+        <ru.hflabs.parent.version>8.0-SNAPSHOT</ru.hflabs.parent.version>
+        <ru.hflabs.util.version>1.5.10-SNAPSHOT</ru.hflabs.util.version>
+
+        <!-- ############################################################################ -->
+        <!-- Libraries versions -->
+        <!-- ############################################################################ -->
+        <hibernate.version>4.1.10.Final</hibernate.version>
+        <hibernate.validator.version>4.3.1.Final</hibernate.validator.version>
+        <velocity.version>1.7</velocity.version>
+        <jackson.version>2.2.3</jackson.version>
+
+        <!-- ############################################################################ -->
+        <!-- Service properties -->
+        <!-- ############################################################################ -->
+        <service.notification.queueSize>10000</service.notification.queueSize>
+        <service.notification.interval>300</service.notification.interval>
+
+        <service.notification.email.host>email_host</service.notification.email.host>
+        <service.notification.email.port>25</service.notification.email.port>
+        <service.notification.email.protocol>smtp</service.notification.email.protocol>
+        <service.notification.email.username>rcd</service.notification.email.username>
+        <service.notification.email.password>rcd</service.notification.email.password>
+        <service.notification.email.encoding>UTF-8</service.notification.email.encoding>
+        <service.notification.email.timeout>30000</service.notification.email.timeout>
+
+        <service.notification.email.from />
+        <service.notification.email.to />
+        <service.notification.email.cc />
+        <service.notification.email.bcc />
+
+        <!-- ############################################################################ -->
+        <!-- Storage properties -->
+        <!-- ############################################################################ -->
+        <storage.type>storage</storage.type>
+        <storage.name>rcd-dataSource-${storage.type}</storage.name>
+        <storage.username>rcd</storage.username>
+
+        <!-- ############################################################################ -->
+        <!-- SQL storage properties -->
+        <!-- ############################################################################ -->
+        <!-- Driver artifact (MUST BE REPLACED IN PROFILE) -->
+        <storage.driver.groupId>jdbc.groupId</storage.driver.groupId>
+        <storage.driver.artifactId>jdbc.artifactId</storage.driver.artifactId>
+        <storage.driver.version>jdbc.version</storage.driver.version>
+        <!-- Driver settings (MUST BE REPLACED IN PROFILE) -->
+        <storage.jdbc.url>REPLACE_JDBC_URL</storage.jdbc.url>
+        <storage.jdbc.driverClassName>jdbc.driverClassName</storage.jdbc.driverClassName>
+        <!-- Supported JDBC dialects -->
+        <oracle.jdbc.dialect>org.hibernate.dialect.ExtendedOracle10gDialect</oracle.jdbc.dialect>
+        <mariadb.jdbc.dialect>org.hibernate.dialect.MySQLDialect</mariadb.jdbc.dialect>
+        <hsqldb.jdbc.dialect>org.hibernate.dialect.HSQLOracleDialect</hsqldb.jdbc.dialect>
+        <!-- Connection settings -->
+        <storage.jdbc.name>${storage.name}</storage.jdbc.name>
+        <storage.jdbc.username>${storage.username}</storage.jdbc.username>
+        <storage.jdbc.password>rcd</storage.jdbc.password>
+        <storage.jdbc.properties />
+        <!-- Pool settings -->
+        <storage.jdbc.timout>900</storage.jdbc.timout>
+        <storage.jdbc.debug>false</storage.jdbc.debug>
+        <storage.jdbc.batchSize>1000</storage.jdbc.batchSize>
+        <storage.jdbc.initialSize>1</storage.jdbc.initialSize>
+        <storage.jdbc.maxIdle>10</storage.jdbc.maxIdle>
+        <storage.jdbc.maxActive>50</storage.jdbc.maxActive>
+        <storage.jdbc.maxWait>10000</storage.jdbc.maxWait>
+        <storage.jdbc.testOnBorrow>true</storage.jdbc.testOnBorrow>
+        <storage.jdbc.testWhileIdle>false</storage.jdbc.testWhileIdle>
+        <storage.jdbc.autoCommit>false</storage.jdbc.autoCommit>
+        <storage.jdbc.validationQuery />
+
+        <!-- ############################################################################ -->
+        <!-- SQL storage test properties -->
+        <!-- ############################################################################ -->
+        <!-- Driver artifact -->
+        <test_storage.driver.groupId>${hsqldb.groupId}</test_storage.driver.groupId>
+        <test_storage.driver.artifactId>${hsqldb.artifactId}</test_storage.driver.artifactId>
+        <test_storage.driver.version>${hsqldb.version}</test_storage.driver.version>
+        <!-- Driver settings -->
+        <test_storage.jdbc.url><![CDATA[jdbc:hsqldb:mem:${storage.username};shutdown=true;hsqldb.tx=mvcc;sql.syntax_ora=true;sql.unique_nulls=false;]]></test_storage.jdbc.url>
+        <test_storage.jdbc.driverClassName>${hsqldb.driverClassName}</test_storage.jdbc.driverClassName>
+        <!-- Connection settings -->
+        <test_storage.jdbc.username>SA</test_storage.jdbc.username>
+        <test_storage.jdbc.password />
+        <test_storage.jdbc.properties />
+        <!-- Validate settings -->
+        <test_storage.jdbc.validationQuery>SELECT 1 FROM INFORMATION_SCHEMA.SYSTEM_USERS</test_storage.jdbc.validationQuery>
+
+        <!-- ############################################################################ -->
+        <!-- RMI properties -->
+        <!-- ############################################################################ -->
+        <rmi.port.registry>3000</rmi.port.registry>
+        <rmi.port.service>3001</rmi.port.service>
+
+        <!-- ############################################################################ -->
+        <!-- SOAP properties -->
+        <!-- ############################################################################ -->
+        <soap.address />
+
+        <!-- ############################################################################ -->
+        <!-- Security properties -->
+        <!-- ############################################################################ -->
+        <!-- LDAP connection settings -->
+        <security.ldap.url>ldap://domain.controller:389</security.ldap.url>
+        <security.ldap.account>rcd</security.ldap.account>
+        <security.ldap.domain>local.domain</security.ldap.domain>
+        <security.ldap.password>rcd_password</security.ldap.password>
+        <security.ldap.searchBase>dc=local,dc=domain</security.ldap.searchBase>
+        <security.ldap.searchFilter>(sAMAccountName={0})</security.ldap.searchFilter>
+        <security.ldap.groupSearchBase>ou=users,dc=local,dc=domain</security.ldap.groupSearchBase>
+        <!-- LDAP roles mapping -->
+        <security.ldap.roles.ROLE_ADMINISTRATOR>LDAP_ROLE</security.ldap.roles.ROLE_ADMINISTRATOR>
+        <!-- Memory mapping -->
+        <security.memory.administrator.login>admin</security.memory.administrator.login>
+        <security.memory.administrator.password>${project.scm.revision}</security.memory.administrator.password>
+        <security.memory.administrator.properties>${security.memory.administrator.password}, ROLE_ADMINISTRATOR</security.memory.administrator.properties>
+
+        <!-- ############################################################################ -->
+        <!-- WEB properties -->
+        <!-- ############################################################################ -->
+        <web.path.context>rcd</web.path.context>
+        <web.path.servlet>/admin</web.path.servlet>
+        <web.path.rmi>/rmi</web.path.rmi>
+        <web.path.soap>/soap</web.path.soap>
+
+        <!-- View settings -->
+        <web.paging.size>50</web.paging.size>
+        <web.notification.count>5</web.notification.count>
+
+        <!-- ############################################################################ -->
+        <!-- Container properties -->
+        <!-- ############################################################################ -->
+        <container.jboss.name>jboss-as-7.1.1.Final</container.jboss.name>
+        <container.jboss.zip>${container.jboss.name}.zip</container.jboss.zip>
+        <container.jboss.url>http://download.jboss.org/jbossas/7.1/${container.jboss.name}/${container.jboss.zip}</container.jboss.url>
+        <container.jboss.md5>175c92545454f4e7270821f4b8326c4e</container.jboss.md5>
+        <container.jboss.port.servlet>8080</container.jboss.port.servlet>
+        <container.jboss.port.jmx>1091</container.jboss.port.jmx>
+        <container.jboss.port.rmi>1099</container.jboss.port.rmi>
+        <container.jboss.port.management-http>9990</container.jboss.port.management-http>
+        <container.jboss.port.management-native>9999</container.jboss.port.management-native>
+        <container.jboss.JAVA_OPTS_JVM><![CDATA[-server -ea -Xms512m -XX:PermSize=128m -XX:MaxPermSize=256m]]></container.jboss.JAVA_OPTS_JVM>
+        <container.jboss.JAVA_OPTS_RMI><![CDATA[-Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000]]></container.jboss.JAVA_OPTS_RMI>
+        <container.jboss.JAVA_OPTS_GC>
+            <![CDATA[-XX:+UseConcMarkSweepGC -XX:+CMSIncrementalMode -XX:+CMSIncrementalPacing -XX:+CMSClassUnloadingEnabled -XX:CMSIncrementalDutyCycleMin=0 -XX:CMSIncrementalDutyCycle=10]]>
+        </container.jboss.JAVA_OPTS_GC>
+        <container.jboss.JAVA_OPTS>${container.jboss.JAVA_OPTS_JVM} ${container.jboss.JAVA_OPTS_GC} ${container.jboss.JAVA_OPTS_RMI}</container.jboss.JAVA_OPTS>
+
+        <!-- ############################################################################ -->
+        <!-- Log properties -->
+        <!-- ############################################################################ -->
+        <log4j.immediateFlush>false</log4j.immediateFlush>
+        <log4j.bufferedIO>true</log4j.bufferedIO>
+
+    </properties>
+
+    <modules>
+        <module>rcd-api</module>
+        <module>rcd-backend</module>
+        <module>rcd-connector</module>
+        <module>rcd-distribution</module>
+        <module>rcd-frontend</module>
+        <module>rcd-security</module>
+        <module>rcd-services</module>
+        <module>rcd-storage</module>
+        <module>rcd-task</module>
+        <module>rcd-web</module>
+    </modules>
+
+    <build>
+
+        <defaultGoal>install</defaultGoal>
+
+        <pluginManagement>
+
+            <plugins>
+
+                <plugin>
+                    <groupId>org.apache.cxf</groupId>
+                    <artifactId>cxf-codegen-plugin</artifactId>
+                    <version>${cxf.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.apache.cxf</groupId>
+                            <artifactId>cxf-rt-bindings-soap</artifactId>
+                            <version>${cxf.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>log4j</groupId>
+                            <artifactId>log4j</artifactId>
+                            <version>${log4j.version}</version>
+                            <scope>runtime</scope>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-remote-resources-plugin</artifactId>
+                    <version>1.5</version>
+                    <configuration>
+                        <skip>${maven.remoteresources.skip}</skip>
+                        <resourceBundles>
+                            <resourceBundle>${project.groupId}:${project.artifactId}:${project.version}</resourceBundle>
+                        </resourceBundles>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>bundle-shared-resources</id>
+                            <goals>
+                                <goal>bundle</goal>
+                            </goals>
+                            <configuration>
+                                <includes>
+                                    <include>**/*.vm</include>
+                                </includes>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>unpack-test-shared-resource</id>
+                            <phase>generate-test-resources</phase>
+                            <goals>
+                                <goal>process</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${project.build.directory}/generated-test-resources</outputDirectory>
+                                <properties>
+                                    <scope>test</scope>
+                                </properties>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>com.google.code.maven-replacer-plugin</groupId>
+                    <artifactId>replacer</artifactId>
+                    <version>1.5.2</version>
+                    <configuration>
+                        <regexFlags>
+                            <regexFlag>CASE_INSENSITIVE</regexFlag>
+                        </regexFlags>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>net.ju-n.maven.plugins</groupId>
+                    <artifactId>checksum-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>artifact-checksum</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>files</goal>
+                            </goals>
+                            <configuration>
+                                <csvSummary>false</csvSummary>
+                                <fileSets>
+                                    <fileSet>
+                                        <directory>${project.build.directory}</directory>
+                                        <includes>
+                                            <include>${project.build.finalName}.${project.packaging}</include>
+                                        </includes>
+                                    </fileSet>
+                                </fileSets>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.springframework</groupId>
+                            <artifactId>spring-instrument</artifactId>
+                            <version>${springframework.version}</version>
+                        </dependency>
+                    </dependencies>
+                    <configuration>
+                        <argLine>
+                            -javaagent:"${settings.localRepository}/org/springframework/spring-instrument/${springframework.version}/spring-instrument-${springframework.version}.jar"
+                            -Dfile.encoding=${project.build.sourceEncoding}
+                            -XX:MaxPermSize=256m
+                        </argLine>
+                        <includes>
+                            <include>**/*Test*.java</include>
+                            <include>**/*FTCase.java</include>
+                        </includes>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <configuration>
+                        <argLine>
+                            -Dfile.encoding=${project.build.sourceEncoding}
+                        </argLine>
+                        <skipTests>true</skipTests>
+                        <trimStackTrace>false</trimStackTrace>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>integration-test</id>
+                            <goals>
+                                <goal>integration-test</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>verify</id>
+                            <goals>
+                                <goal>verify</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+            </plugins>
+
+        </pluginManagement>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-buildnumber</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                        <configuration>
+                            <shortRevisionLength>8</shortRevisionLength>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-remote-resources-plugin</artifactId>
+            </plugin>
+
+        </plugins>
+
+        <resources>
+
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>**/*.properties</exclude>
+                    <exclude>**/log4j.xml</exclude>
+                </excludes>
+                <filtering>false</filtering>
+            </resource>
+
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/log4j.xml</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+
+            <resource>
+                <directory>${project.build.directory}/generated-resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+
+        </resources>
+
+        <testResources>
+
+            <testResource>
+                <directory>src/test/resources</directory>
+                <excludes>
+                    <exclude>*.properties</exclude>
+                    <exclude>**/log4j.xml</exclude>
+                </excludes>
+                <filtering>false</filtering>
+            </testResource>
+
+            <testResource>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>*.properties</include>
+                    <include>**/log4j.xml</include>
+                </includes>
+                <filtering>true</filtering>
+            </testResource>
+
+            <testResource>
+                <directory>${project.build.directory}/generated-test-resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+                <filtering>true</filtering>
+            </testResource>
+
+        </testResources>
+
+    </build>
+
+    <dependencyManagement>
+
+        <dependencies>
+
+            <dependency>
+                <groupId>ru.hflabs</groupId>
+                <artifactId>utils-test</artifactId>
+                <version>${ru.hflabs.util.version}</version>
+            </dependency>
+
+        </dependencies>
+
+    </dependencyManagement>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <artifactId>commons-logging</artifactId>
+            <groupId>commons-logging</groupId>
+            <version>${commons-logging.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>${hsqldb.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.hflabs</groupId>
+            <artifactId>utils-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>

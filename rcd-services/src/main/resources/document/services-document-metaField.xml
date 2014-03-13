@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Базовый валидатор МЕТА-полей -->
+    <bean id="metaFieldValidator" class="ru.hflabs.rcd.service.document.metaField.MetaFieldChangeValidator" parent="existedDocumentValidator" abstract="true">
+        <property name="documentService" ref="metaFieldService"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
+        <property name="fieldService" ref="fieldService"/>
+    </bean>
+    <!-- Валидатор создания МЕТА-поля -->
+    <bean id="metaFieldValidator.create" class="ru.hflabs.rcd.service.document.metaField.MetaFieldChangeValidator$Create" parent="metaFieldValidator"/>
+    <!-- Валидатор обновления МЕТА-поля -->
+    <bean id="metaFieldValidator.update" class="ru.hflabs.rcd.service.document.metaField.MetaFieldChangeValidator$Update" parent="metaFieldValidator"/>
+    <!-- Валидатор закрытия МЕТА-поля -->
+    <bean id="metaFieldValidator.close" class="ru.hflabs.rcd.service.document.metaField.MetaFieldCloseValidator" parent="validatorService">
+        <property name="dictionaryService" ref="dictionaryService"/>
+    </bean>
+
+    <!-- Сервис работы с МЕТА-полями справочников -->
+    <bean id="metaFieldService" class="ru.hflabs.rcd.service.document.metaField.MetaFieldService" parent="namedDocumentServiceTemplate">
+        <property name="storageService" ref="metaFieldStorageService"/>
+        <property name="dictionaryService" ref="dictionaryService"/>
+        <property name="createValidator" ref="metaFieldValidator.create"/>
+        <property name="updateValidator" ref="metaFieldValidator.update"/>
+        <property name="closeValidator" ref="metaFieldValidator.close"/>
+    </bean>
+
+</beans>

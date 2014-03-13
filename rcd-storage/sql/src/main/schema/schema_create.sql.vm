@@ -1,0 +1,222 @@
+-- -----------------------------------------------------
+-- USE SCHEMA ${storage.jdbc.username}
+-- -----------------------------------------------------
+ALTER SESSION SET current_schema = ${storage.jdbc.username};
+
+-- -----------------------------------------------------
+-- Database schema version history
+-- -----------------------------------------------------
+CREATE TABLE schema_version (
+  version         NVARCHAR2(20)  NOT NULL,
+  description     NVARCHAR2(100) NULL,
+  type            NVARCHAR2(10)  NOT NULL,
+  script          NVARCHAR2(200) NOT NULL,
+  checksum        INTEGER        NULL,
+  installed_by    NVARCHAR2(30)  NOT NULL,
+  installed_on    TIMESTAMP      DEFAULT CURRENT_TIMESTAMP,
+  execution_time  INTEGER        NULL,
+  state           NVARCHAR2(15)  NOT NULL,
+  current_version NUMBER(1)      NOT NULL
+);
+
+CREATE UNIQUE INDEX pk_schema_version        ON schema_version (version);
+CREATE UNIQUE INDEX uk_schema_version_script ON schema_version (script);
+CREATE        INDEX idx_schema_version_cv    ON schema_version (current_version);
+
+ALTER TABLE schema_version ADD CONSTRAINT pk_schema_version PRIMARY KEY (version) USING INDEX pk_schema_version;
+
+-- -----------------------------------------------------
+-- History table
+-- -----------------------------------------------------
+CREATE TABLE t_history (
+  id           NVARCHAR2(36) NOT NULL,
+  target_id    NVARCHAR2(36) NOT NULL,
+  target_type  NVARCHAR2(20) NOT NULL,
+  event_type   NVARCHAR2(20) NOT NULL,
+  event_date   TIMESTAMP     NOT NULL,
+  event_author NVARCHAR2(50) NOT NULL
+);
+
+CREATE UNIQUE INDEX pk_history         ON t_history (id);
+CREATE        INDEX idx_history_target ON t_history (target_id, event_type);
+
+ALTER TABLE t_history ADD CONSTRAINT pk_history PRIMARY KEY (id) USING INDEX pk_history;
+
+-- -----------------------------------------------------
+-- Group table
+-- -----------------------------------------------------
+CREATE TABLE t_group (
+ id          NVARCHAR2(36)   NOT NULL,
+ history_id  NVARCHAR2(36)   NOT NULL,
+ name        NVARCHAR2(255)  NOT NULL,
+ description NVARCHAR2(1000) NULL,
+ owner       NVARCHAR2(255)  NULL,
+ permissions INTEGER         NOT NULL
+);
+
+CREATE UNIQUE INDEX pk_group ON t_group (id);
+
+ALTER TABLE t_group ADD CONSTRAINT pk_group            PRIMARY KEY (id)         USING INDEX pk_group;
+ALTER TABLE t_group ADD CONSTRAINT fk_group_history_id FOREIGN KEY (history_id) REFERENCES t_history (id);
+
+-- -----------------------------------------------------
+-- Dictionaries table
+-- -----------------------------------------------------
+CREATE TABLE t_dictionary (
+  id          NVARCHAR2(36)   NOT NULL,
+  group_id    NVARCHAR2(36)   NOT NULL,
+  history_id  NVARCHAR2(36)   NOT NULL,
+  code        NVARCHAR2(255)  NULL,
+  name        NVARCHAR2(255)  NOT NULL,
+  description NVARCHAR2(1000) NULL,
+  version     NVARCHAR2(100)  NULL
+);
+
+CREATE UNIQUE INDEX pk_dictionary         ON t_dictionary (id);
+CREATE UNIQUE INDEX uk_dictionary_version ON t_dictionary (id, version);
+
+ALTER TABLE t_dictionary ADD CONSTRAINT pk_dictionary            PRIMARY KEY (id)          USING INDEX pk_dictionary;
+ALTER TABLE t_dictionary ADD CONSTRAINT fk_group_id              FOREIGN KEY (group_id)    REFERENCES t_group   (id);
+ALTER TABLE t_dictionary ADD CONSTRAINT fk_dictionary_history_id FOREIGN KEY (history_id)  REFERENCES t_history (id);
+
+-- -----------------------------------------------------
+-- MetaField table
+-- -----------------------------------------------------
+CREATE TABLE t_metafield (
+  id            NVARCHAR2(36)   NOT NULL,
+  dictionary_id NVARCHAR2(36)   NOT NULL,
+  history_id    NVARCHAR2(36)   NOT NULL,
+  name          NVARCHAR2(255)  NOT NULL,
+  description   NVARCHAR2(1000) NULL,
+  ordinal       INTEGER         NOT NULL,
+  type          NVARCHAR2(50)   NOT NULL,
+  flags         INTEGER         NOT NULL
+);
+
+CREATE UNIQUE INDEX pk_metafield ON t_metafield (id);
+
+ALTER TABLE t_metafield ADD CONSTRAINT pk_metafield            PRIMARY KEY (id)            USING INDEX pk_metafield;
+ALTER TABLE t_metafield ADD CONSTRAINT fk_dictionary_id        FOREIGN KEY (dictionary_id) REFERENCES t_dictionary (id);
+ALTER TABLE t_metafield ADD CONSTRAINT fk_metafield_history_id FOREIGN KEY (history_id)    REFERENCES t_history    (id);
+
+-- -----------------------------------------------------
+-- Field table
+-- -----------------------------------------------------
+CREATE TABLE t_field (
+  id            NVARCHAR2(36) NOT NULL,
+  meta_field_id NVARCHAR2(36) NOT NULL,
+  history_id    NVARCHAR2(36) NOT NULL,
+  name          NVARCHAR2(36) NOT NULL,
+  value         CLOB          NULL
+);
+
+CREATE UNIQUE INDEX pk_field ON t_field (id);
+
+ALTER TABLE t_field ADD CONSTRAINT pk_field            PRIMARY KEY (id)            USING INDEX pk_field;
+ALTER TABLE t_field ADD CONSTRAINT fk_metafield_id     FOREIGN KEY (meta_field_id) REFERENCES t_metafield (id);
+ALTER TABLE t_field ADD CONSTRAINT fk_field_history_id FOREIGN KEY (history_id)    REFERENCES t_history   (id);
+
+-- -----------------------------------------------------
+-- RuleSet table
+-- -----------------------------------------------------
+CREATE TABLE t_recoderuleset (
+  id               NVARCHAR2(36)  NOT NULL,
+  history_id       NVARCHAR2(36)  NOT NULL,
+  name             NVARCHAR2(255) NOT NULL,
+  from_field_id    NVARCHAR2(36)  NOT NULL,
+  to_field_id      NVARCHAR2(36)  NOT NULL,
+  default_field_id NVARCHAR2(36)  NULL
+);
+
+CREATE UNIQUE INDEX pk_recoderuleset ON t_recoderuleset (id);
+
+ALTER TABLE t_recoderuleset ADD CONSTRAINT pk_recoderuleset            PRIMARY KEY (id)               USING INDEX pk_recoderuleset;
+ALTER TABLE t_recoderuleset ADD CONSTRAINT fk_recoderuleset_history_id FOREIGN KEY (history_id)       REFERENCES t_history   (id);
+ALTER TABLE t_recoderuleset ADD CONSTRAINT fk_from_meta_field_id       FOREIGN KEY (from_field_id)    REFERENCES t_metafield (id);
+ALTER TABLE t_recoderuleset ADD CONSTRAINT fk_to_meta_field_id         FOREIGN KEY (to_field_id)      REFERENCES t_metafield (id);
+ALTER TABLE t_recoderuleset ADD CONSTRAINT fk_default_field_id         FOREIGN KEY (default_field_id) REFERENCES t_field     (id);
+
+-- -----------------------------------------------------
+-- Rule table
+-- -----------------------------------------------------
+CREATE TABLE t_recoderule (
+  id                 NVARCHAR2(36) NOT NULL,
+  recode_rule_set_id NVARCHAR2(36) NOT NULL,
+  history_id         NVARCHAR2(36) NOT NULL,
+  from_field_id      NVARCHAR2(36) NOT NULL,
+  to_field_id        NVARCHAR2(36) NOT NULL
+);
+
+CREATE UNIQUE INDEX pk_recoderule ON t_recoderule (id);
+
+ALTER TABLE t_recoderule ADD CONSTRAINT pk_recoderule            PRIMARY KEY (id)                 USING INDEX pk_recoderule;
+ALTER TABLE t_recoderule ADD CONSTRAINT fk_recode_rule_set_id    FOREIGN KEY (recode_rule_set_id) REFERENCES t_recoderuleset (id);
+ALTER TABLE t_recoderule ADD CONSTRAINT fk_recoderule_history_id FOREIGN KEY (history_id)         REFERENCES t_history       (id);
+ALTER TABLE t_recoderule ADD CONSTRAINT fk_from_field_id         FOREIGN KEY (from_field_id)      REFERENCES t_field         (id);
+ALTER TABLE t_recoderule ADD CONSTRAINT fk_to_field_id           FOREIGN KEY (to_field_id)        REFERENCES t_field         (id);
+
+-- -----------------------------------------------------
+-- Notification table
+-- -----------------------------------------------------
+CREATE TABLE t_notification (
+  id                   NVARCHAR2(36)  NOT NULL,
+  history_id           NVARCHAR2(36)  NOT NULL,
+  start_date           TIMESTAMP      NOT NULL,
+  end_date             TIMESTAMP      NOT NULL,
+  type                 NVARCHAR2(20)  NOT NULL,
+  rule_set_name        NVARCHAR2(255) NULL,
+  from_group_name      NVARCHAR2(255) NULL,
+  from_dictionary_name NVARCHAR2(255) NULL,
+  from_value           CLOB           NULL,
+  to_group_name        NVARCHAR2(255) NULL,
+  to_dictionary_name   NVARCHAR2(255) NULL,
+  count                INTEGER        NOT NULL,
+  processing_date      TIMESTAMP      NULL,
+  processing_state     NVARCHAR2(20)  NOT NULL,
+  processing_author    NVARCHAR2(50)  NULL
+);
+
+CREATE UNIQUE INDEX pk_notification ON t_notification (id);
+
+ALTER TABLE t_notification ADD CONSTRAINT pk_notification            PRIMARY KEY (id)         USING INDEX pk_notification;
+ALTER TABLE t_notification ADD CONSTRAINT fk_notification_history_id FOREIGN KEY (history_id) REFERENCES t_history (id);
+
+-- -----------------------------------------------------
+-- Task descriptor table
+-- -----------------------------------------------------
+CREATE TABLE t_taskdescriptor (
+  id          NVARCHAR2(36)   NOT NULL,
+  history_id  NVARCHAR2(36)   NOT NULL,
+  name        NVARCHAR2(255)  NOT NULL,
+  description NVARCHAR2(1000) NOT NULL,
+  cron        NVARCHAR2(100)  NULL,
+  parameters  BLOB            NULL
+);
+
+CREATE UNIQUE INDEX pk_taskdescriptor ON t_taskdescriptor (id);
+
+ALTER TABLE t_taskdescriptor ADD CONSTRAINT pk_taskdescriptor            PRIMARY KEY (id)         USING INDEX pk_taskdescriptor;
+ALTER TABLE t_taskdescriptor ADD CONSTRAINT fk_taskdescriptor_history_id FOREIGN KEY (history_id) REFERENCES t_history (id);
+
+-- -----------------------------------------------------
+-- Task result table
+-- -----------------------------------------------------
+CREATE TABLE t_taskresult (
+  id                NVARCHAR2(36)   NOT NULL,
+  descriptor_id     NVARCHAR2(36)   NOT NULL,
+  owner             NVARCHAR2(32)   NOT NULL,
+  author            NVARCHAR2(50)   NOT NULL,
+  registration_date TIMESTAMP       NOT NULL,
+  start_date        TIMESTAMP       NOT NULL,
+  end_date          TIMESTAMP       NOT NULL,
+  status            NVARCHAR2(20)   NOT NULL,
+  error_message     NVARCHAR2(2000) NULL,
+  parameters        BLOB            NULL,
+  content           BLOB            NULL
+);
+
+CREATE UNIQUE INDEX pk_taskresult ON t_taskresult (id);
+CREATE UNIQUE INDEX uk_taskresult ON t_taskresult (id, registration_date);
+
+ALTER TABLE t_taskresult ADD CONSTRAINT pk_taskresult               PRIMARY KEY (id)            USING INDEX pk_taskresult;
+ALTER TABLE t_taskresult ADD CONSTRAINT fk_taskresult_descriptor_id FOREIGN KEY (descriptor_id) REFERENCES t_taskdescriptor (id);

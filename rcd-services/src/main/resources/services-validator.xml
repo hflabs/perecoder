@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Валидатор JSR-303 -->
+    <bean id="commonValidator" class="org.springframework.validation.beanvalidation.CustomValidatorBean"/>
+
+    <!-- Базовый сервис валидации сущностей -->
+    <bean id="validatorService" class="ru.hflabs.rcd.service.document.ValidatorService" abstract="true"/>
+
+    <!-- Базовый сервис валидации сущностей при изменении -->
+    <bean id="changeValidatorService" class="ru.hflabs.rcd.service.document.ChangeValidatorService" parent="validatorService" abstract="true">
+        <property name="delegate" ref="commonValidator"/>
+    </bean>
+
+    <!-- Базовый сервис валидации существующих сущностей -->
+    <bean id="existedDocumentValidator" class="ru.hflabs.rcd.service.document.ExistedDocumentChangeValidator" parent="changeValidatorService" abstract="true"/>
+
+</beans>

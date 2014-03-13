@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD//EN" "http://www.eclipse.org/aspectj/dtd/aspectj.dtd">
+<aspectj>
+
+    <!-- Only weave classes in our application-specific packages -->
+    <weaver options="-XnoInline -Xlint:ignore -showWeaveInfo -Xset:weaveJavaPackages=false,weaveJavaxPackages=false -XmessageHandlerClass:org.springframework.aop.aspectj.AspectJWeaverMessageHandler">
+        <include within="ru.hflabs.rcd..*"/>
+    </weaver>
+
+    <!-- Weave in just this aspects -->
+    <aspects>
+        <aspect name="org.springframework.transaction.aspectj.AnnotationTransactionAspect"/>
+    </aspects>
+
+</aspectj>

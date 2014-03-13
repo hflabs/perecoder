@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.0">
+    <deployment>
+        <exclusions>
+            <module name="org.apache.log4j"/>
+            <module name="org.apache.commons.logging"/>
+            <module name="org.slf4j"/>
+            <module name="org.slf4j.impl"/>
+            <module name="org.hibernate"/>
+            <module name="org.hibernate.validator"/>
+            <module name="org.jboss.resteasy.resteasy-jaxrs"/>
+        </exclusions>
+    </deployment>
+</jboss-deployment-structure>

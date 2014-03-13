@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Валидатор модификации записей справочника -->
+    <bean id="recordValidator.modify" class="ru.hflabs.rcd.service.document.record.RecordChangeValidator" parent="changeValidatorService">
+        <property name="metaFieldService" ref="metaFieldService"/>
+        <property name="fieldService" ref="fieldService"/>
+    </bean>
+    <!-- Валидатор закрытия записей справочника -->
+    <bean id="recordValidator.close" class="ru.hflabs.rcd.service.document.record.RecordCloseValidator" parent="validatorService"/>
+
+    <!-- Фасад сервисов работы с записями справочников -->
+    <bean id="recordService" class="ru.hflabs.rcd.service.document.record.RecordService">
+        <property name="metaFieldService" ref="metaFieldService"/>
+        <property name="fieldService" ref="fieldService"/>
+        <property name="changeValidator" ref="recordValidator.modify"/>
+        <property name="closeValidator" ref="recordValidator.close"/>
+    </bean>
+
+</beans>

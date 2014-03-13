@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>ru.hflabs.rcd</groupId>
+        <artifactId>rcd-backend</artifactId>
+        <version>3.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>rcd-backend-console</artifactId>
+
+    <packaging>jar</packaging>
+
+    <name>HFLabs RCD backend console module</name>
+    <description>Модуль реализует консольное приложение для модификации справочников/правил</description>
+
+    <properties>
+        <juniversalchardet.version>1.0.3</juniversalchardet.version>
+        <import.mainClass.dictionaries>ru.hflabs.rcd.backend.console.imports.ImportDictionaries</import.mainClass.dictionaries>
+        <import.mainClass.rules>ru.hflabs.rcd.backend.console.imports.ImportRules</import.mainClass.rules>
+        <export.mainClass.dictionaries>ru.hflabs.rcd.backend.console.exports.ExportDictionaries</export.mainClass.dictionaries>
+        <events.mainClass>ru.hflabs.rcd.backend.console.task.PropagateTaskDescriptor</events.mainClass>
+    </properties>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-data</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/test/data</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate-scripts-impd</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <outputFilePattern>impd.$1</outputFilePattern>
+                            <token>$APPLICATION$</token>
+                            <value>${import.mainClass.dictionaries}</value>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-scripts-impr</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <outputFilePattern>impr.$1</outputFilePattern>
+                            <token>$APPLICATION$</token>
+                            <value>${import.mainClass.rules}</value>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-scripts-expd</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <outputFilePattern>expd.$1</outputFilePattern>
+                            <token>$APPLICATION$</token>
+                            <value>${export.mainClass.dictionaries}</value>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-scripts-manage</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <outputFilePattern>manage.$1</outputFilePattern>
+                            <token>$APPLICATION$</token>
+                            <value>${events.mainClass}</value>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>rcd-backend-console</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <descriptors>
+                                <descriptor>src/main/assembly/assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>net.ju-n.maven.plugins</groupId>
+                <artifactId>checksum-maven-plugin</artifactId>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>ru.hflabs.rcd</groupId>
+            <artifactId>rcd-connector-files</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.hflabs</groupId>
+            <artifactId>utils-security-support</artifactId>
+            <version>${ru.hflabs.util.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${springframework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.juniversalchardet</groupId>
+            <artifactId>juniversalchardet</artifactId>
+            <version>${juniversalchardet.version}</version>
+        </dependency>
+
+    </dependencies>
+
+</project>

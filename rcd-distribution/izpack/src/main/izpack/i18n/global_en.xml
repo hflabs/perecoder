@@ -1,0 +1,26 @@
+<izpack:langpack xmlns:izpack="http://izpack.org/schema/langpack"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://izpack.org/schema/langpack http://izpack.org/schema/5.0/izpack-langpack-5.0.xsd"
+                 version="5.0">
+
+    <!-- Installer messages -->
+    <str id="installer.title" txt="HFLabs - Installation of "/>
+    <str id="installer.madewith" txt="© 2005-2014 HFLabs"/>
+
+    <!-- Validator messages -->
+    <str id="DatabaseValidator.error" txt="Connection validation failed, check connection parameters"/>
+    <str id="DatabaseValidator.error.unsupportedType" txt="Unsupported JDBC type"/>
+    <str id="DatabaseValidator.error.unsupportedDriver" txt="Unsupported JDBC driver"/>
+    <str id="DatabaseValidator.error.connection" txt="Failed to create connection, check host and port parameters"/>
+    <str id="DatabaseValidator.error.authentication" txt="Failed to create connection, check DBA username and password"/>
+    <str id="DatabaseValidator.error.exist.user" txt="User already exist"/>
+    <str id="DatabaseValidator.error.exist.db" txt="Database already exist"/>
+    <str id="DatabaseValidator.error.permission.user" txt="DBA not enough permissions to create user"/>
+    <str id="DatabaseValidator.error.permission.db" txt="DBA not enough permissions to create database"/>
+
+    <!-- Ant JDBC messages -->
+    <str id="ant.database" txt="Failed to create database, something went wrong"/>
+    <str id="ant.jboss.install" txt="Failed to install JBoss application server, something went wrong"/>
+    <str id="ant.jboss.application" txt="Failed to setup application into JBoss application server, something went wrong"/>
+
+</izpack:langpack>

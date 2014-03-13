@@ -1,0 +1,497 @@
+@import "const";
+@import "elements";
+
+@cell-icon-spacing: 4px;
+
+.table-wrapper {
+    background-color: @common-background-color;
+    border: 1px solid @common-border-color;
+    margin: @common-spacing 0;
+    overflow: auto;
+
+    &.rounded {
+        .rounded(@common-border-radius);
+        thead {
+            tr {
+                &:first-child {
+                    th {
+                        &:first-child {
+                            .border-radius(0, 0, 0, @common-border-radius);
+                        }
+                        &:last-child {
+                            .border-radius(@common-border-radius, 0, 0, 0);
+                            border-right: none;
+                        }
+                    }
+                }
+            }
+
+        }
+        tbody {
+            tr {
+                &:last-child {
+                    td {
+                        &:first-child {
+                            .border-radius(0, 0, @common-border-radius, 0);
+                        }
+                        &:last-child {
+                            .border-radius(0, @common-border-radius, 0, 0);
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+}
+
+.table {
+    /* ===================== Table ===================== */
+    margin: 0;
+    &.backgrid {
+        background: @color-white;
+        table-layout: fixed;
+        thead {
+            tr {
+                &.editing {
+                    .editable-header-cell, .add-column-cell, .apply-cell {
+                        background: #628996;
+                        padding: 4px;
+                        vertical-align: middle;
+                    }
+                }
+            }
+        }
+        tbody {
+            tr {
+                &.editing {
+                    background: #d9e7cf;
+                    input {
+                        border-color: #5f7d48;
+                    }
+                    .ready {
+                        cursor: pointer;
+                        float: right;
+                        line-height: 24px;
+                        padding: 0 8px;
+                        &[disabled] {
+                            cursor: default;
+                        }
+                    }
+                }
+            }
+        }
+        tr {
+            &:hover {
+                background: @table-hover-color;
+                cursor: default;
+            }
+        }
+        th {
+            vertical-align: middle;
+            .box-sizing;
+            .column-label {
+                min-height: 16px;
+                .single-lined;
+                .box-sizing;
+                vertical-align: middle;
+
+                &.sortable {
+                    cursor: pointer;
+                    padding-right: 20px;
+                    position: relative;
+                    &:after {
+                        content: '';
+                        display: block;
+                        position: absolute;
+                        height: 16px;
+                        right: 2px;
+                        top: 2px;
+                        width: 16px;
+                        z-index: 10;
+                    }
+                }
+            }
+            &.ascending {
+                & .column-label:after {
+                    background: url("@{imagespath}/sort.png") no-repeat 0 0;
+                }
+            }
+            &.descending {
+                & .column-label:after {
+                    background: url("@{imagespath}/sort.png") no-repeat 0 -16px;
+                }
+            }
+            &.add-header-cell, &.add-column-cell, &.apply-cell {
+                text-align: center;
+            }
+
+            .editable-header-value {
+                position: relative;
+
+                .unique {
+                    position: absolute;
+                    right: 4px;
+                    top: 6px;
+                }
+            }
+            input {
+                @header-input-hpadding: 3px;
+                @header-input-vpadding: 5px;
+                border: 1px solid #2a4350;
+                .rounded(1px);
+                padding: @header-input-vpadding @header-input-hpadding;
+                height: auto;
+                line-height: 100%;
+                .box-sizing;
+
+                &.btn-owner {
+                    @btn-width: 16px;
+                    padding-right: (@header-input-hpadding + @btn-width + @header-input-hpadding);
+                }
+            }
+            span {
+                &.trash {
+                    padding: 4px 4px 0 8px;
+                    float: right;
+                }
+            }
+        }
+        td {
+            padding: 5px;
+            &.delete-cell {
+                vertical-align: middle;
+                text-align: center;
+                padding: 8px;
+            }
+            &.uri-cell {
+                input {
+                    display: inline !important;
+                }
+            }
+            &.select-row-cell {
+                text-align: center;
+                text-overflow: clip;
+            }
+            &.plain-string-cell {
+                padding: (@common-spacing - 1) @common-spacing @common-spacing;
+            }
+        }
+    }
+    th,
+    th > div,
+    td {
+        .single-lined;
+        vertical-align: middle;
+    }
+    th {
+        /* ===================== Header row styling ===================== */
+        .gradient(@header-bottom-color, @header-bottom-color, @header-top-color);
+        border-right: 1px solid @common-border-color;
+        border-bottom: 1px solid @common-border-color;
+        .box-sizing(border-box);
+        color: #797979;
+        font-weight: normal;
+        text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+        &:last-child {
+            border-right-width: 0;
+        }
+        &.is-sortable {
+            /* ===================== Sorting ===================== */
+            & > div {
+                min-height: 16px;
+                padding-right: 20px;
+                position: relative;
+            }
+            &:hover {
+                cursor: pointer;
+            }
+            & > div:after {
+                content: '';
+                display: block;
+                position: absolute;
+                height: 16px;
+                right: 4px;
+                top: 0;
+                width: 16px;
+                z-index: 10;
+            }
+            &.sorting-asc {
+                & > div:after {
+                    background: url("@{imagespath}/sort.png") no-repeat 0 0;
+                }
+            }
+            &.sorting-desc {
+                & > div:after {
+                    background: url("@{imagespath}/sort.png") no-repeat 0 -16px;
+                }
+            }
+        }
+        &.select-all-header-cell {
+            /* ===================== Hover over table content ===================== */
+            text-align: center;
+            text-overflow: clip;
+        }
+        &.selected {
+            background: @table-th-selected-background-color;
+            outline: 2px solid @color-glyph;
+            outline-offset: -2px;
+        }
+    }
+    td {
+        [data-action="edit"] {
+            cursor: pointer;
+        }
+    }
+    thead {
+        &.scrolling {
+            /* ===================== Scrolling ===================== */
+            tr {
+                &:first-child {
+                    th {
+                        border-top: 1px solid @common-border-color !important;
+                        .rounded(0);
+                    }
+                }
+            }
+        }
+    }
+    tbody {
+        &.locked {
+            * {
+                cursor: default !important;
+            }
+        }
+        tr {
+            &:hover {
+                background-color: @table-hover-color;
+                cursor: pointer;
+            }
+            &.checked, &.checked:hover {
+                background-color: @table-checked-color;
+            }
+            &.empty {
+                td {
+                    .empty-message;
+                }
+                &:hover {
+                    background-color: @color-white;
+                    cursor: default;
+                }
+            }
+            &.pinned {
+                td {
+                    &:last-child {
+                        .pin {
+                            display: inline-block !important;
+                        }
+                    }
+                }
+            }
+            .pin {
+                display: none !important;
+                position: absolute;
+                right: -20px;
+            }
+        }
+        td {
+            .user-select();
+        }
+    }
+    /* Override default bootstrap margins for checkboxes */
+    input[type="checkbox"] {
+        margin: 0;
+    }
+    /* ===================== Inline edit ===================== */
+    input[type="text"] {
+        margin: 0;
+        padding-left: 0;
+        padding-right: 0;
+        width: 100%;
+    }
+    .active-edit-row {
+        td {
+            padding-top: 3px;
+            padding-bottom: 3px;
+            text-overflow: clip;
+        }
+    }
+}
+
+.visible-in-hover {
+    display: none;
+    tr:hover & {
+        display: inline;
+    }
+}
+
+.cell-value-inner {
+    display: inline-block;
+    max-width: 100%;
+    .single-lined;
+    vertical-align: top;
+    tr:not(.locked):hover & {
+        max-width: ~"calc(100% - 20px)";
+    }
+}
+
+.cell-icon {
+    float: left;
+    margin: 5px @cell-icon-spacing 5px 0;
+}
+
+.cell-value {
+    color: #606060;
+    line-height: 16px;
+    padding: 5px 3px;
+    .single-lined;
+    &.iconed {
+        margin-left: (16px + @cell-icon-spacing);
+    }
+    .editor & {
+        padding: 0;
+    }
+    i.edit {
+        margin-left: 8px;
+        vertical-align: top;
+    }
+}
+
+.optional-cell {
+    span.edit {
+        &:hover {
+            cursor: pointer;
+            border-bottom: 1px dashed #191919;
+            color: #191919;
+        }
+    }
+    .icon-glyph.add {
+        margin-right: 8px;
+    }
+}
+
+.apply-cell span {
+    color: white;
+    cursor: pointer;
+    &:hover {
+        color: #d4e2e4;
+    }
+    i:hover {
+        @icon-size: 20px;
+        background-position: -(2 * @icon-size) -(9 * @icon-size);
+    }
+}
+
+.empty-cell-text {
+    color: @color-ltgrey;
+    font-style: italic;
+}
+
+.editor {
+    input[type="text"] {
+        border: 1px solid #88a0a7;
+        height: auto;
+        width: 100%;
+        line-height: 100%;
+        padding: 4px 2px;
+        margin: 0;
+        outline: 0;
+        .rounded(0);
+        .box-shadow(none);
+        .box-sizing(border-box);
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+    :focus {
+        outline: 0;
+    }
+}
+
+.pinnable {
+    height: (@pager-inner-height + 2 * @common-spacing);
+}
+
+.paginator {
+    font-size: 16px;
+    text-align: center;
+
+    &.pinned {
+        background: @body-background-color;
+        bottom: @footer-height;
+        position: fixed;
+        z-index: 20;
+    }
+
+    ul {
+        margin: 0;
+        padding: @common-spacing;
+        white-space: nowrap;
+    }
+
+    li {
+        background: #e9eced;
+        border: 1px solid #b2c1c7;
+        color: @color-grey;
+        cursor: pointer;
+        display: inline-block;
+        height: 36px;
+        width: 36px;
+        margin: 2px;
+        padding: 8px 2px;
+        .box-sizing();
+        text-align: center;
+        vertical-align: middle;
+        .user-select;
+
+        &:not([data-page="..."]):not([data-page="prev"]):not([data-page="next"]):not(.active):hover {
+            background: #fcfeff;
+            border: 1px solid #66767b;
+        }
+
+        &.active {
+            background: #66767b;
+            border: 1px solid #66767b;
+            color: white;
+            cursor: default;
+        }
+
+        &.disabled, &[data-page="..."] {
+            cursor: default;
+        }
+
+        &[data-page="prev"], &[data-page="next"] {
+            background: transparent;
+            border-color: transparent;
+            padding: 5px 2px;
+        }
+    }
+
+    .icon-20 {
+        &.prev:hover {
+            background-position: -40px 0px;
+        }
+        &.next:hover {
+            background-position: -40px -20px;
+        }
+    }
+
+}
+
+.upper-paginator {
+    .paginator {
+        float: right;
+        padding-top: 10px;
+
+        ul {
+            padding: 0;
+        }
+        li {
+            height: 28px;
+            width: 28px;
+            padding: 2px;
+            &[data-page="prev"], &[data-page="next"] {
+                padding: 0;
+            }
+        }
+    }
+}

@@ -1,0 +1,151 @@
+@import "const";
+@import "elements";
+
+.navbar {
+    .brand {
+        height: @logo-height;
+        margin: ((@navbar-height - @logo-height)/2) @common-spacing 0 0;
+        padding: 0;
+        width: @logo-width;
+    }
+    /* Need fixed height 'cause navbar is fixed at the top */
+    .navbar-inner {
+         height: @navbar-height;
+         min-width: @body-min-width;
+        .width-wrapper {
+            padding-left: @content-left-ledge;
+        }
+    }
+    /* ===================== User-related block ===================== */
+    /* Float the whole block to the right side */
+    .authentication {
+        float: right;
+        margin: 0;
+        /* While preserving the natural layout order for individual navbar items  */
+        li {
+            float: left;
+            a {
+                padding-right: 0;
+            }
+        }
+        /* Username and username icon */
+        .username {
+            div {
+                padding: 10px 15px 10px;
+                text-shadow: 0 1px 0 #ffffff;
+                &:before {
+                    content: '';
+                    display: inline-block;
+                    width: 16px;
+                    height: 16px;
+                    margin-right: 4px;
+                    vertical-align: middle;
+                }
+            }
+        }
+    }
+    .notifications-toggle {
+        background: transparent url("@{imagespath}/hfl/notif-bg.png") center center repeat-y;
+        .box-sizing;
+        cursor: pointer;
+        float: left;
+        padding: 8px 40px;
+        min-width: 194px;
+        text-align: center;
+        height: @navbar-height;
+        &:focus, &:active {
+            border: none;
+            outline: none;
+        }
+    }
+
+}
+
+/* ===================== Notifications ===================== */
+
+.notifications-container {
+    border-left: 1px solid #5d6b72;
+    border-right: 1px solid #5d6b72;
+    border-bottom: 1px solid #5d6b72;
+    .border-radius(0, 4px, 4px, 0);
+    position: absolute;
+    top: @navbar-outer-height;
+    left: 25%;
+    right: 25%;
+    .items {
+        background: #ffffff;
+        list-style: none;
+        margin: 0;
+        padding: 0 2px;
+
+        li {
+            border-bottom: 1px solid #e5e5e5;
+            padding: 14px 10px 14px 70px;
+            position: relative;
+
+            &:last-child {
+                border-bottom: none;
+            }
+            &>.icon-36 {
+                float: left;
+                margin: 8px 0 0 -56px;
+            }
+        }
+        .close {
+            position: absolute;
+            top: 6px;
+            right: 10px;
+        }
+        header {
+            color: #dfc2c2;
+            font-size: 16px;
+        }
+        time {
+            color: #999999;
+        }
+    }
+}
+
+.notifications-footer {
+    background: #e9e9ea;
+    background: linear-gradient(to bottom, #d6dcde 0%, #e9e9ea 20%);
+    border-top: 1px solid #b7bdbf;
+    .border-radius(0, 4px, 4px, 0);
+    padding: 20px;
+    overflow: hidden;
+    text-align: center;
+    .slideup {
+        color: #5d6b72;
+        cursor: pointer;
+    }
+}
+.notifications-overlay {
+    background: #6e8088;
+    .opacity(0.4);
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: @navbar-outer-height;
+    bottom: @footer-height;
+    z-index: -1;
+}
+
+.alerts-container {
+    .border-radius(0, 4px, 4px, 0);
+    .box-shadow(0 1px 5px rgba(128, 128, 128, 0.5));
+    border-color: #fff1f1;
+    position: absolute;
+    top: @navbar-outer-height;
+    left: 25%;
+    right: 25%;
+    padding: @common-spacing;
+
+    ul {
+        list-style: none;
+        margin: 0;
+    }
+
+    li {
+        margin-bottom: (@common-spacing / 2);
+    }
+}

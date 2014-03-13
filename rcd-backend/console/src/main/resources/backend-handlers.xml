@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <!-- Базовый процессор импорта документов -->
+    <bean id="importProcessorOverFileTemplate" class="ru.hflabs.rcd.backend.console.imports.handlers.ImportProcessorOverFileTemplate" abstract="true"/>
+
+    <!-- Базовый процессор экспорта документов -->
+    <bean id="exportProcessorOverFileTemplate" class="ru.hflabs.rcd.backend.console.exports.handlers.ExportProcessorOverFileTemplate" abstract="true"/>
+
+</beans>

@@ -1,0 +1,57 @@
+<izpack:langpack xmlns:izpack="http://izpack.org/schema/langpack"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://izpack.org/schema/langpack http://izpack.org/schema/5.0/izpack-langpack-5.0.xsd"
+                 version="5.0">
+
+    <!-- ConsolePrompt strings -->
+    <str id="ConsolePrompt.okCancel" txt="Введите 0 для подтверждения, или ОТМЕНА: "/>
+    <str id="ConsolePrompt.yesNo" txt="Введите ДА для подтверждения, или НЕТ: "/>
+    <str id="ConsolePrompt.yesNoCancel" txt="Введите ДА для подтвержения, НЕТ для опровержения, или ОТМЕНА: "/>
+    <str id="ConsolePrompt.ok" txt="0"/>
+    <str id="ConsolePrompt.cancel" txt="ОТМЕНА"/>
+    <str id="ConsolePrompt.yes" txt="ДА"/>
+    <str id="ConsolePrompt.no" txt="НЕТ"/>
+
+    <!-- ConsoleInstaller strings -->
+    <str id="ConsoleInstaller.continueQuitRedisplay" txt="Нажмите 1 для продолжения, 2 для выхода, 3 для повторного сообщения"/>
+    <str id="ConsoleInstaller.acceptRejectRedisplay" txt="Нажмите 1 для подтверждения, 2 для отмены, 3 для повторного вывода сообщения"/>
+    <str id="ConsoleInstaller.redisplayQuit" txt="Нажмите 1 для повторного вывода, 2 для выхода"/>
+
+    <!-- Installer messages -->
+    <str id="installer.title" txt="HFLabs - Установка "/>
+    <str id="installer.madewith" txt="© 2005-2014 HFLabs"/>
+    <str id="installer.Message" txt="Сообщение"/>
+
+    <str id="data.validation.error.title" txt="Ошибка валидации"/>
+    <str id="data.validation.warning.title" txt="Предупреждение валидации"/>
+
+    <str id="UserInputPanel.dir.nodirectory.caption" txt="Директория не выбрана"/>
+    <str id="UserInputPanel.dir.nodirectory.message" txt="Выбранный путь не является директорией"/>
+    <str id="UserInputPanel.dir.notdirectory.caption" txt="Неправильная директория"/>
+    <str id="UserInputPanel.dir.notdirectory.message" txt="Выбранная директория не существует или не подходит"/>
+
+    <str id="UserInputPanel.file.nofile.caption" txt="Файл не выбран"/>
+    <str id="UserInputPanel.file.nofile.message" txt="Выберите файл"/>
+    <str id="UserInputPanel.file.notfile.caption" txt="Неправильный файл"/>
+    <str id="UserInputPanel.file.notfile.message" txt="Выбранный файл не существует или не подходит"/>
+
+    <str id="UserPathPanel.createdir" txt="Будет создана директория: "/>
+    <str id="UserPathPanel.notwritable" txt="Выбранная директория защищена от записи, укажите другую директорию"/>
+
+    <!-- Validator messages -->
+    <str id="DatabaseValidator.error" txt="Не удалось установить соединение с БД, проверьте настройки подключения"/>
+    <str id="DatabaseValidator.error.unsupportedType" txt="Неподдерживаемый тип БД"/>
+    <str id="DatabaseValidator.error.unsupportedDriver" txt="Неподдерживаемый драйвер БД"/>
+    <str id="DatabaseValidator.error.connection" txt="Не удалось установить соединение с БД, проверьте настройки подключения"/>
+    <str id="DatabaseValidator.error.authentication" txt="Не удалось установить соединение с БД, проверьте настройки аутентификации пользователя DBA"/>
+    <str id="DatabaseValidator.error.exist.user" txt="Пользователь уже существует"/>
+    <str id="DatabaseValidator.error.exist.db" txt="База данных уже существует"/>
+    <str id="DatabaseValidator.error.permission.user" txt="DBA не имеет полномочий для создания других пользователей"/>
+    <str id="DatabaseValidator.error.permission.db" txt="DBA не имеет полномочий для создания базы"/>
+
+    <!-- Ant JDBC messages -->
+    <str id="ant.database" txt="Не удалось создать БД, что-то пошло не так :)"/>
+    <str id="ant.jboss.install" txt="Не удалось установить JBoss, что-то пошло не так :)"/>
+    <str id="ant.jboss.application" txt="Не удалось установить приложение, что-то пошло не так :)"/>
+
+</izpack:langpack>
