@@ -21,10 +21,6 @@
     <inceptionYear>2013</inceptionYear>
     <url>http://hflabs.ru/products-services/perecoder/</url>
 
-    <prerequisites>
-        <maven>3.0</maven>
-    </prerequisites>
-
     <packaging>pom</packaging>
 
     <scm>
