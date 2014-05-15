@@ -21,8 +21,8 @@
 ## Узнайте больше
 
 * Описание Перекодера на сайте [hflabs.ru](http://hflabs.ru/products-services/perecoder/).
-* [Руководство по развертыванию](http://confluence.hflabs.ru).
-* [Руководство администратора](http://confluence.hflabs.ru).
+* [Руководство по развертыванию](http://confluence.hflabs.ru/pages/viewpage.action?pageId=103809163).
+* [Руководство администратора](http://confluence.hflabs.ru/pages/viewpage.action?pageId=117670036).
 * [Руководство пользователя](http://confluence.hflabs.ru/pages/viewpage.action?pageId=110886942).
 * [SOAP / REST API](http://confluence.hflabs.ru/display/RCDDOC/API).
 
