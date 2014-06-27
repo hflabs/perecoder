@@ -60,7 +60,7 @@ require.config({
         'text': '../lib/text',
         'underscore': '../../webjars/underscorejs/1.5.2/underscore'
     },
-//    urlArgs: "_=" + new Date().valueOf(),
+    urlArgs: "_=" + new Date().valueOf(),
     catchError: true
 });
 

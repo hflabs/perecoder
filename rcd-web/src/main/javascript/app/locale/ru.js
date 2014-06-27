@@ -162,6 +162,12 @@ define([
             'model.metafield': [null, 'поле', 'поля', 'полей'],
             'model.metafield.unique': [null, 'значения уникальны'],
 
+            'view.login.title': [null, 'Перекодер | Войти'],
+            'view.login.signin': [null, 'Вход в систему'],
+            'view.login.username': [null, 'Имя пользователя'],
+            'view.login.password': [null, 'Пароль'],
+            'view.login.submit': [null, 'Войти'],
+
             'view.error.404': [null, 'Сервер недоступен'],
 
             'view.common.loading': [ null, 'Загрузка...'],

@@ -1,0 +1,27 @@
+<div id="form-login">
+
+    <h1 class="brand"><i></i><span><%- tc('view.login.signin') %></span></h1>
+
+    <form class="form-horizontal login" method="POST" action="<%- formAction %>">
+    <fieldset>
+        <div class="control-group js-control-wrap js-username-control">
+            <input id="j_username" type="text" name="j_username" placeholder="<%- tc('view.login.username') %>" class="input-large"
+                   autofocus required>
+            <span class="help-inline js-username-error js-field-error"></span>
+        </div>
+
+        <div class="control-group js-control-wrap js-password-control">
+            <input id="j_password" type="password" name="j_password" placeholder="<%- tc('view.login.password') %>"
+                   class="input-large" required>
+            <span class="help-inline js-password-error js-field-error"></span>
+        </div>
+
+        <div class="text-error" data-field="error"><%= errorMessage %></div>
+
+        <div class="control-group">
+            <button type="submit" data-login="true" class="btn-login"><%- tc('view.login.submit') %></button>
+        </div>
+    </fieldset>
+    </form>
+
+</div>

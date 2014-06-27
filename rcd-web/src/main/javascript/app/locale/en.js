@@ -162,6 +162,12 @@ define([
             'model.metafield': [null, 'field', 'fields'],
             'model.metafield.unique': [null, 'Unique values'],
 
+            'view.login.title': [null, 'RCD | Login'],
+            'view.login.signin': [null, 'Sign in'],
+            'view.login.username': [null, 'Username'],
+            'view.login.password': [null, 'Password'],
+            'view.login.submit': [null, 'Login'],
+
             'view.error.404': [null, 'Server unavailable'],
 
             'view.common.loading': [ null, 'Loading...'],
