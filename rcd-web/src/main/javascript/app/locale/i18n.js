@@ -19,7 +19,7 @@ define(function(require) {
         },
 
         findLanguageByName: function (name) {
-            var index = _.indexOf(this.getLanguageNames, name);
+            var index = _.indexOf(this.getLanguageNames(), name);
             if (index === -1) {
                 return this.DEFAULT_LANGUAGE;
             } else {
